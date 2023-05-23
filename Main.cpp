@@ -2,13 +2,27 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+namespace WIN
+{
+    const char _BAR[] = "What is this?";
+    const char _NAME[] = "SampleGame";
+
+    const int _HEIGHT = 720 ;
+    const int _WIDTH = 1260;
+}
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
+    RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
+    AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
+    int winW = winRect.right - winRect.left;     
+    int winH = winRect.bottom - winRect.top;
+
   //create window class
     WNDCLASSEX wc;
     wc.cbSize = sizeof(WNDCLASSEX);             //この構造体のサイズ
     wc.hInstance = hInstance;                   //インスタンスハンドル
-    wc.lpszClassName = "SampleGame";            //ウィンドウクラス名
+    wc.lpszClassName = WIN::_NAME;            //ウィンドウクラス名
     wc.lpfnWndProc = WndProc;                   //ウィンドウプロシージャ
     wc.style = CS_VREDRAW | CS_HREDRAW;         //スタイル（デフォルト）
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); //アイコン
@@ -17,19 +31,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     wc.lpszMenuName = NULL;                     //メニュー（なし）
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH); //背景（白）
+    wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH); //背景（白）
 
     RegisterClassEx(&wc);
 
   //create window
     HWND hWnd = CreateWindow(
-        "SampleGame",         //ウィンドウクラス名
-        "サンプルゲーム",     //タイトルバーに表示する内容
+        WIN::_NAME,         //ウィンドウクラス名
+        WIN::_BAR,     //タイトルバーに表示する内容
         WS_OVERLAPPEDWINDOW, //スタイル（普通のウィンドウ）
         CW_USEDEFAULT,       //表示位置左（おまかせ）
         CW_USEDEFAULT,       //表示位置上（おまかせ）
-        800,                 //ウィンドウ幅
-        600,                 //ウィンドウ高さ
+        winW,                 //ウィンドウ幅
+        winH,                 //ウィンドウ高さ
         NULL,                //親ウインドウ（なし）
         NULL,                //メニュー（なし）
         hInstance,           //インスタンス
