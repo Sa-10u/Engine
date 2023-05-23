@@ -3,6 +3,8 @@
 
 #pragma comment(lib, "d3d11.lib")
 
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 void Edit_d3d(HWND hWnd);
 
@@ -22,6 +24,8 @@ namespace WIN
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
+
+
     RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
     AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
     int winW = winRect.right - winRect.left;     
@@ -40,7 +44,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     wc.lpszMenuName = NULL;                     //メニュー（なし）
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH); //背景（白）
+    wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH); //背景（白）
 
     RegisterClassEx(&wc);
 
@@ -83,7 +87,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         {
             //ゲームの処理
 
-            float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };//R,G,B,A
+            float clearColor[4] = { 0.4f, 0.6f, 0.3f, 0.2f };//R,G,B,A
 
             //画面をクリア
             pContext->ClearRenderTargetView(pRenderTargetView, clearColor);
