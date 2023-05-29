@@ -9,4 +9,7 @@ namespace D3D
 	void EndDraw();
 
 	void Release();
+
+
+	void Shader_Initialize();
 }

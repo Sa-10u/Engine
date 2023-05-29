@@ -1,7 +1,9 @@
 #include<d3d11.h>
+#include<d3dcompiler.h>
 #include "D3D.h"
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 namespace D3D
 {
@@ -9,6 +11,12 @@ namespace D3D
 	ID3D11DeviceContext* pContext;		//デバイスコンテキスト
 	IDXGISwapChain* pSwapChain;		//スワップチェイン
 	ID3D11RenderTargetView* pRenderTargetView;
+
+    ID3D11VertexShader* pVertexShader = nullptr;	//頂点シェーダー
+    ID3D11PixelShader* pPixelShader = nullptr;		//ピクセルシェーダー
+    ID3D11InputLayout* pVertexLayout = nullptr;
+
+    ID3D11RasterizerState* pRasterizerState = nullptr;
 }
 
 void D3D::Initialize(int winW ,int winH,HWND hwnd)
@@ -74,6 +82,8 @@ void D3D::Initialize(int winW ,int winH,HWND hwnd)
     pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
     pContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);            // 描画先を設定
     pContext->RSSetViewports(1, &vp);
+
+    Shader_Initialize();
 }
 
 void D3D::BeginDraw()
@@ -101,4 +111,35 @@ void D3D::Release()
 	pSwapChain->Release();
 	pContext->Release();
 	pDevice->Release();
+    pVertexShader->Release();
+    pVertexLayout->Release();
+    pPixelShader->Release();
+    pRasterizerState->Release();
+}
+
+void D3D::Shader_Initialize()
+{
+    ID3DBlob* pCompileVS = nullptr;
+    D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+    pDevice->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
+   
+    D3D11_INPUT_ELEMENT_DESC layout[] = {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
+    };
+    pDevice->CreateInputLayout(layout, 1, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+
+    pCompileVS->Release();
+
+    //-----
+
+    ID3DBlob* pCompilePS = nullptr;
+    D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+    pDevice->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
+    pCompilePS->Release();
+
+    D3D11_RASTERIZER_DESC rdc = {};
+    rdc.CullMode = D3D11_CULL_BACK;
+    rdc.FillMode = D3D11_FILL_SOLID;
+    rdc.FrontCounterClockwise = FALSE;
+    pDevice->CreateRasterizerState(&rdc, &pRasterizerState);
 }
