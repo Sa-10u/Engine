@@ -1,4 +1,9 @@
 #pragma once
+#include<d3d11.h>
+#include<d3dcompiler.h>
+
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 namespace D3D
 {
@@ -10,6 +15,9 @@ namespace D3D
 
 	void Release();
 
-
 	void Shader_Initialize();
+
+	
+	extern ID3D11Device* pDevice;		//デバイス
+	
 }

@@ -1,13 +1,8 @@
-#include<d3d11.h>
-#include<d3dcompiler.h>
 #include "D3D.h"
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dcompiler.lib")
 
 namespace D3D
 {
-	ID3D11Device* pDevice;		//デバイス
+    ID3D11Device* pDevice;
 	ID3D11DeviceContext* pContext;		//デバイスコンテキスト
 	IDXGISwapChain* pSwapChain;		//スワップチェイン
 	ID3D11RenderTargetView* pRenderTargetView;
@@ -137,9 +132,16 @@ void D3D::Shader_Initialize()
     pDevice->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
     pCompilePS->Release();
 
-    D3D11_RASTERIZER_DESC rdc = {};
-    rdc.CullMode = D3D11_CULL_BACK;
-    rdc.FillMode = D3D11_FILL_SOLID;
-    rdc.FrontCounterClockwise = FALSE;
-    pDevice->CreateRasterizerState(&rdc, &pRasterizerState);
+    {
+        D3D11_RASTERIZER_DESC rdc = {};
+        rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
+        rdc.FillMode = D3D11_FILL_SOLID;
+        rdc.FrontCounterClockwise = FALSE;
+        pDevice->CreateRasterizerState(&rdc, &pRasterizerState);
+    }
+
+    pContext->VSSetShader(pVertexShader, NULL, 0);	//頂点シェーダー
+    pContext->PSSetShader(pPixelShader, NULL, 0);	//ピクセルシェーダー
+    pContext->IASetInputLayout(pVertexLayout);	//頂点インプットレイアウト
+    pContext->RSSetState(pRasterizerState);		//ラスタライザー
 }
