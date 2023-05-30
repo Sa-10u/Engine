@@ -19,7 +19,8 @@ void M_Quad::Initialize()
 		XMVectorSet(-1.0f,1.0f,0.0f,0.0f) ,
 		XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),
 		XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),
-		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f)
+		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),
+	
 	};
 
 	
