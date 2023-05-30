@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "D3D.h"
+#include "M_Quad.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -11,6 +12,8 @@ namespace WIN
     const int _HEIGHT = 720 ;
     const int _WIDTH = 1260;
 }
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -60,6 +63,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
     D3D::Initialize(WIN::_WIDTH, WIN::_HEIGHT, hWnd);
 
+    M_Quad* pQmodel_ = new M_Quad();
+    pQmodel_->Initialize();
 
   //message loop (waiting for order some )
     MSG msg;
@@ -78,10 +83,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         {
             //ƒQ[ƒ€‚Ìˆ—
             D3D::BeginDraw();
+            pQmodel_->Draw();
 
+            D3D::EndDraw();
         }
     }
 
+    pQmodel_->Release();
     D3D::Release();
 
 	return 0;

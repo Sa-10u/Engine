@@ -93,11 +93,12 @@ void D3D::BeginDraw()
 
 
     //スワップ（バックバッファを表に表示する）
-    pSwapChain->Present(0, 0);
+  
 }
 
 void D3D::EndDraw()
 {
+    pSwapChain->Present(0, 0);
 }
 
 void D3D::Release()

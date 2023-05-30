@@ -22,6 +22,8 @@ void M_Quad::Initialize()
 		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f)
 	};
 
+	
+
 	{
 		D3D11_BUFFER_DESC bd_vertex;
 		bd_vertex.ByteWidth = sizeof(vx);
@@ -37,6 +39,7 @@ void M_Quad::Initialize()
 
 	{
 		int Ind[] = { 0,1,2 , 0,2,3 };
+		VXs = sizeof(Ind);
 
 		D3D11_BUFFER_DESC   bd;
 		bd.Usage = D3D11_USAGE_DEFAULT;
@@ -71,6 +74,36 @@ void M_Quad::Initialize()
 
 void M_Quad::Draw()
 {
+	//コンスタントバッファに渡す情報
+	XMVECTOR position = { 0, 3, -10, 0 };	//カメラの位置
+	XMVECTOR target = { 0, 0, 0, 0 };	//カメラの焦点
+	XMMATRIX view = XMMatrixLookAtLH(position, target, XMVectorSet(0, 1, 0, 0));	//ビュー行列
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, 800.0f / 600.0f, 0.1f, 100.0f);//射影行列
+
+	CONSTANT_BUFFER cb;
+	cb.VP_matWLD = XMMatrixTranspose(view * proj);
+
+	D3D11_MAPPED_SUBRESOURCE pdata;
+	D3D::pContext->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
+	D3D::pContext->Unmap(pConstBuffer_, 0);	//再開
+
+	UINT stride = sizeof(XMVECTOR);
+	UINT offset = 0;
+	D3D::pContext->IASetVertexBuffers(0, 1, &pVXBuffer_, &stride, &offset);
+
+	// インデックスバッファーをセット
+	stride = sizeof(int);
+	offset = 0;
+	D3D::pContext->IASetIndexBuffer(pIndBuffer_, DXGI_FORMAT_R32_UINT, 0);
+
+	//コンスタントバッファ
+	D3D::pContext->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
+	D3D::pContext->PSSetConstantBuffers(0, 1, &pConstBuffer_);
+
+	
+
+	D3D::pContext->DrawIndexed(VXs, 0, 0);
 }
 
 void M_Quad::Release()

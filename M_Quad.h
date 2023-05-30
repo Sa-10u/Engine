@@ -20,5 +20,7 @@ private:
 	ID3D11Buffer* pVXBuffer_;
 	ID3D11Buffer* pIndBuffer_;
 	ID3D11Buffer* pConstBuffer_;
+
+	int VXs;
 };
 
