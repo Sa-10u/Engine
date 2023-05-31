@@ -1,6 +1,7 @@
 #pragma once
 #include "D3D.h"
 #include <DirectXMath.h>
+#include "MACRO.h"
 
 using namespace DirectX;
 

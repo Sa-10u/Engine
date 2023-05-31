@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClInclude Include="CONSTANT_BUFFER.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="MACRO.h" />
     <ClInclude Include="M_Quad.h" />
   </ItemGroup>
   <ItemGroup>

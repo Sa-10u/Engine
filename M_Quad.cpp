@@ -109,7 +109,7 @@ void M_Quad::Draw()
 
 void M_Quad::Release()
 {
-	pVXBuffer_->Release();
-	pIndBuffer_->Release();
-	pConstBuffer_->Release();
+	SAFE_RELEASE(pVXBuffer_);
+	SAFE_RELEASE(pIndBuffer_);
+	SAFE_RELEASE(pConstBuffer_);
 }

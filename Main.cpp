@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "D3D.h"
 #include "M_Quad.h"
+#include "MACRO.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -89,7 +90,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         }
     }
 
-    pQmodel_->Release();
+    SAFE_RELEASE(pQmodel_);
+    SAFE_DELETE(pQmodel_);
+
     D3D::Release();
 
 	return 0;
