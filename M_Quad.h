@@ -12,7 +12,7 @@ public :
 
 	M_Quad();
 	~M_Quad();
-	void Initialize();
+	HRESULT Initialize();
 	void Draw();
 	void Release();
 

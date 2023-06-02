@@ -61,11 +61,27 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     ShowWindow(hWnd, nCmdShow);
 
     //-----------
+    
+    
+    HRESULT* hr = new HRESULT;
+    *hr = E_FAIL;
+    *hr = D3D::Initialize(WIN::_WIDTH, WIN::_HEIGHT, hWnd);
 
-    D3D::Initialize(WIN::_WIDTH, WIN::_HEIGHT, hWnd);
+    if (*hr != S_OK)
+    {
+        PostQuitMessage(0);
+    }
 
     M_Quad* pQmodel_ = new M_Quad();
-    pQmodel_->Initialize();
+    *hr = pQmodel_->Initialize();
+
+
+    if (*hr != S_OK)
+    {
+        PostQuitMessage(0);
+    }
+
+        delete hr;
 
   //message loop (waiting for order some )
     MSG msg;

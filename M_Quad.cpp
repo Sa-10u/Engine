@@ -12,8 +12,10 @@ M_Quad::~M_Quad()
 {
 }
 
-void M_Quad::Initialize()
+HRESULT M_Quad::Initialize()
 {
+	HRESULT hr = E_FAIL;
+
 	XMVECTOR vx[] =
 	{
 		XMVectorSet(-1.0f,1.0f,0.0f,0.0f) ,
@@ -23,7 +25,6 @@ void M_Quad::Initialize()
 	
 	};
 
-	
 
 	{
 		D3D11_BUFFER_DESC bd_vertex;
@@ -35,7 +36,13 @@ void M_Quad::Initialize()
 		bd_vertex.StructureByteStride = 0;
 		D3D11_SUBRESOURCE_DATA data_vertex;
 		data_vertex.pSysMem = vx;
-		D3D::pDevice->CreateBuffer(&bd_vertex, &data_vertex, &pVXBuffer_);
+		hr = D3D::pDevice->CreateBuffer(&bd_vertex, &data_vertex, &pVXBuffer_);
+
+		if (hr != S_OK)
+		{
+			MessageBox(nullptr, "Buffer_Discription has been Mistook", "ERROR", MB_OK);
+			return hr;
+		}
 	}
 
 	{
@@ -53,7 +60,14 @@ void M_Quad::Initialize()
 		InitData.pSysMem = Ind;
 		InitData.SysMemPitch = 0;
 		InitData.SysMemSlicePitch = 0;
-		D3D::pDevice->CreateBuffer(&bd, &InitData, &pIndBuffer_);
+		hr = D3D::pDevice->CreateBuffer(&bd, &InitData, &pIndBuffer_);
+
+		if (hr != S_OK)
+		{
+			MessageBox(nullptr, "Buffer_Description has been Mistook", "ERROR", MB_OK);
+
+			return hr;
+		}
 	}
 
 	{
@@ -66,11 +80,18 @@ void M_Quad::Initialize()
 		cb.StructureByteStride = 0;
 
 		// コンスタントバッファの作成
-		D3D::pDevice->CreateBuffer(&cb, nullptr, &pConstBuffer_);
+		hr = D3D::pDevice->CreateBuffer(&cb, nullptr, &pConstBuffer_);
+
+		if (hr != S_OK)
+		{
+			MessageBox(nullptr, "Constant_Buffer has been Mistook", "ERROR", MB_OK);
+
+			return hr;
+		}
 	}
 
-
-
+	
+	return S_OK;
 }
 
 void M_Quad::Draw()

@@ -16,8 +16,10 @@ namespace D3D
     ID3D11RasterizerState* pRasterizerState = nullptr;
 }
 
-void D3D::Initialize(int winW ,int winH,HWND hwnd)
+HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 {
+    HRESULT hr = E_FAIL;
+
     DXGI_SWAP_CHAIN_DESC scDesc;
 
     //とりあえず全部0
@@ -58,10 +60,20 @@ void D3D::Initialize(int winW ,int winH,HWND hwnd)
 
     //-----
     ID3D11Texture2D* pBackBuffer;
-    pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    if (hr != S_OK)
+    {
+        MessageBox(nullptr, "SwapChain ungot Buffer", "ERROR", MB_OK);
+        return hr;
+    }
 
     //レンダーターゲットビューを作成
-    pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+    hr = pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+    if (hr != S_OK)
+    {
+        MessageBox(nullptr, "Cannot Create RTV", "ERROR", MB_OK);
+        return hr;
+    }
 
     //一時的にバックバッファを取得しただけなので解放
     SAFE_RELEASE(pBackBuffer);
@@ -81,6 +93,8 @@ void D3D::Initialize(int winW ,int winH,HWND hwnd)
     pContext->RSSetViewports(1, &vp);
 
     Shader_Initialize();
+
+    return S_OK;
 }
 
 void D3D::BeginDraw()
@@ -100,7 +114,11 @@ void D3D::BeginDraw()
 
 void D3D::EndDraw()
 {
-    pSwapChain->Present(0, 0);
+    if (S_OK != pSwapChain->Present(0, 0))
+    {
+        MessageBox(nullptr, "SwapChainner is not work", "ERROR", MB_OK);
+        PostQuitMessage(0);
+    }
 }
 
 void D3D::Release()

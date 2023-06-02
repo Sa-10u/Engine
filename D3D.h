@@ -7,7 +7,7 @@
 
 namespace D3D
 {
-	void Initialize(int winW, int winH, HWND hwnd);
+	HRESULT Initialize(int winW, int winH, HWND hwnd);
 
 	void BeginDraw();
 
