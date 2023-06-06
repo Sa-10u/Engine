@@ -2,6 +2,7 @@
 #include "D3D.h"
 #include "M_Quad.h"
 #include "MACRO.h"
+#include "CAM.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -10,8 +11,8 @@ namespace WIN
     const char _BAR[] = "What is this?";
     const char _NAME[] = "SampleGame";
 
-    const int _HEIGHT = 720 ;
-    const int _WIDTH = 1260;
+    const int _HEIGHT = 600 ;
+    const int _WIDTH = 800;
 }
 
 
@@ -65,6 +66,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     
     HRESULT* hr = new HRESULT;
     *hr = E_FAIL;
+    CAM::Initialize();
     *hr = D3D::Initialize(WIN::_WIDTH, WIN::_HEIGHT, hWnd);
 
     if (*hr != S_OK)
@@ -99,6 +101,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         else
         {
             //ƒQ[ƒ€‚Ìˆ—
+
+            CAM::Update();
             D3D::BeginDraw();
             pQmodel_->Draw();
 

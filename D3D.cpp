@@ -19,6 +19,7 @@ namespace D3D
 HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 {
     HRESULT hr = E_FAIL;
+    
 
     DXGI_SWAP_CHAIN_DESC scDesc;
 
@@ -99,6 +100,8 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 
 void D3D::BeginDraw()
 {
+    
+
     float clearColor[4] = { 0.4f, 0.6f, 0.3f, 0.2f };//R,G,B,A
 
     //‰æ–Ê‚ðƒNƒŠƒA

@@ -2,6 +2,7 @@
 #include "D3D.h"
 #include <DirectXMath.h>
 #include "MACRO.h"
+#include "CAM.h"
 
 using namespace DirectX;
 

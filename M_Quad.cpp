@@ -96,14 +96,9 @@ HRESULT M_Quad::Initialize()
 
 void M_Quad::Draw()
 {
-	//コンスタントバッファに渡す情報
-	XMVECTOR position = { 0, 3, -10, 0 };	//カメラの位置
-	XMVECTOR target = { 0, 0, 0, 0 };	//カメラの焦点
-	XMMATRIX view = XMMatrixLookAtLH(position, target, XMVectorSet(0, 1, 0, 0));	//ビュー行列
-	XMMATRIX proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, 800.0f / 600.0f, 0.1f, 100.0f);//射影行列
-
+	
 	CONSTANT_BUFFER cb;
-	cb.VP_matWLD = XMMatrixTranspose(view * proj);
+	cb.VP_matWLD = XMMatrixTranspose(CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める

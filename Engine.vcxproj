@@ -129,11 +129,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CAM.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_Quad.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CAM.h" />
     <ClInclude Include="CONSTANT_BUFFER.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="MACRO.h" />

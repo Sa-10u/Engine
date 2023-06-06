@@ -23,4 +23,4 @@ inline void SAFE_RELEASE(tgt* p)
 
 
 
-//void(*Absolute[2])(bool i) = {};
+static void(*Process[2])(bool i) = {};
