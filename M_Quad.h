@@ -14,7 +14,7 @@ public :
 	M_Quad();
 	~M_Quad();
 	HRESULT Initialize();
-	void Draw();
+	void Draw(XMMATRIX* worldMatrix);
 	void Release();
 
 private:

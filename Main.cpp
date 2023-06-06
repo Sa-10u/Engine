@@ -6,6 +6,9 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+#define fsin(val) static_cast<float>(sin(val))
+#define fcos(val) static_cast<float>(cos(val))
+
 namespace WIN
 {
     const char _BAR[] = "What is this?";
@@ -85,6 +88,24 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
         delete hr;
 
+        XMMATRIX matG =
+        {
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1,
+        };
+
+        XMMATRIX matS =
+        {
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1,
+        };
+
+        float i = 0;
+
   //message loop (waiting for order some )
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
@@ -100,11 +121,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         //メッセージなし
         else
         {
+          i =  fmod(i+=0.02, XM_PI);
+
+            XMMATRIX matR =
+            {
+                fsin((i+ - XM_PI) / 3),fcos((i + -XM_PI) / 3),0,0,
+                -fcos((i + -XM_PI) / 3),fsin((i + -XM_PI) / 3),0,0,
+                0,0,1,0,
+                0,0,0,1,
+            };
+
+            XMMATRIX mat = matG * matR * matS;
             //ゲームの処理
 
             CAM::Update();
             D3D::BeginDraw();
-            pQmodel_->Draw();
+            pQmodel_->Draw(&mat);
 
             D3D::EndDraw();
         }

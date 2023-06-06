@@ -27,9 +27,28 @@ void CAM::SetPosition(XMVECTOR position)
 	pos_ = position;
 }
 
+void CAM::SetPosition(XMFLOAT3 position)
+{
+	SetPosition(XMLoadFloat3(&position));
+}
+
 void CAM::SetTarget(XMVECTOR target)
 {
 	tgt_ = target;
+}
+
+void CAM::SetTarget(XMFLOAT3 target)
+{
+	SetTarget(XMLoadFloat3(&target));
+}
+
+void CAM::SetFOV(float fov)
+{
+}
+
+float CAM::GetFOV()
+{
+	return 0.0f;
 }
 
 XMMATRIX CAM::GetViewMatrix()
