@@ -6,9 +6,6 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define fsin(val) static_cast<float>(sin(val))
-#define fcos(val) static_cast<float>(cos(val))
-
 namespace WIN
 {
     const char _BAR[] = "What is this?";
@@ -125,8 +122,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
             XMMATRIX matR =
             {
-                fsin((i+ - XM_PI) / 3),fcos((i + -XM_PI) / 3),0,0,
-                -fcos((i + -XM_PI) / 3),fsin((i + -XM_PI) / 3),0,0,
+                sinf((i+ - XM_PI) / 3),cosf((i + -XM_PI) / 3),0,0,
+                -cosf((i + -XM_PI) / 3),sinf((i + -XM_PI) / 3),0,0,
                 0,0,1,0,
                 0,0,0,1,
             };
