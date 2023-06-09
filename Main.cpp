@@ -19,8 +19,6 @@ namespace WIN
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
-
-
     RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
     AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
     int winW = winRect.right - winRect.left;     
@@ -74,8 +72,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-    M_Quad* pQmodel_ = new M_Quad();
-    *hr = pQmodel_->Initialize();
+   // M_Quad* pQmodel_ = new M_Quad();
+   // *hr = pQmodel_->Initialize();
 
 
     if (*hr != S_OK)
@@ -118,12 +116,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         //メッセージなし
         else
         {
-          i =  fmod(i+=0.02, XM_PI);
+         i =  fmod(i+=0.008, XM_PI*2);
 
             XMMATRIX matR =
             {
-                sinf((i+ - XM_PI) / 3),cosf((i + -XM_PI) / 3),0,0,
-                -cosf((i + -XM_PI) / 3),sinf((i + -XM_PI) / 3),0,0,
+                sinf((i) ),cosf((i) ),0,0,
+                -cosf((i) ),sinf((i) ),0,0,
                 0,0,1,0,
                 0,0,0,1,
             };
@@ -133,14 +131,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
             CAM::Update();
             D3D::BeginDraw();
-            pQmodel_->Draw(&mat);
+           // pQmodel_->Draw(&mat);
 
             D3D::EndDraw();
         }
     }
 
-    SAFE_RELEASE(pQmodel_);
-    SAFE_DELETE(pQmodel_);
+    //SAFE_RELEASE(pQmodel_);
+   // SAFE_DELETE(pQmodel_);
 
     D3D::Release();
 

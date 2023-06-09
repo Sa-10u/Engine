@@ -12,6 +12,9 @@ public:
 	HRESULT Load(std::string fileName);
 	void Release();
 
+	ID3D11SamplerState* GetSampler();
+	ID3D11ShaderResourceView* GetResourceV();
+
 private:
 	ID3D11SamplerState* pSampler_;
 	ID3D11ShaderResourceView* pSRV_;

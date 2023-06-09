@@ -7,7 +7,7 @@
 
 
 
-Texture::Texture()
+Texture::Texture():pSRV_(nullptr),pSampler_(nullptr)
 {
 }
 
@@ -40,14 +40,14 @@ HRESULT Texture::Load(std::string fileName)
 	SamDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	D3D::pDevice->CreateSamplerState(&SamDesc, &pSampler_);
+	D3D::pDevice_->CreateSamplerState(&SamDesc, &pSampler_);
 
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};
 	srv.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	srv.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srv.Texture2D.MipLevels = 1;
-	res = CreateShaderResourceView(D3D::pDevice, image_.GetImages(), image_.GetImageCount(), metadata_, &pSRV_);
+	res = CreateShaderResourceView(D3D::pDevice_, image_.GetImages(), image_.GetImageCount(), metadata_, &pSRV_);
 	if (FAILED(res))
 	{
 		return E_FAIL;
@@ -60,4 +60,14 @@ void Texture::Release()
 {
 	SAFE_RELEASE(pSRV_);
 	SAFE_RELEASE(pSampler_);
+}
+
+ID3D11SamplerState* Texture::GetSampler()
+{
+	return pSampler_;
+}
+
+ID3D11ShaderResourceView* Texture::GetResourceV()
+{
+	return pSRV_;
 }

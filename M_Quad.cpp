@@ -3,7 +3,7 @@
 
 //#pragma comment(lib, "d3d11.lib")
 
-M_Quad::M_Quad():pVXBuffer_(nullptr),pIndBuffer_(nullptr),pConstBuffer_(nullptr)
+M_Quad::M_Quad():pVXBuffer_(nullptr),pIndBuffer_(nullptr),pConstBuffer_(nullptr),VCs(NULL),pTex_(nullptr)
 {
 	
 }
@@ -12,31 +12,21 @@ M_Quad::~M_Quad()
 {
 }
 
-HRESULT M_Quad::Initialize()
+HRESULT M_Quad::Initialize(VERTEX vcs[], string pic, int index[])
 {
 	HRESULT hr = E_FAIL;
 
-	XMVECTOR vx[] =
-	{
-		XMVectorSet(-1.0f,1.0f,0.0f,0.0f) ,
-		XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),
-		XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),
-		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),
-	
-	};
-
-
 	{
 		D3D11_BUFFER_DESC bd_vertex;
-		bd_vertex.ByteWidth = sizeof(vx);
+		bd_vertex.ByteWidth = sizeof(vcs);
 		bd_vertex.Usage = D3D11_USAGE_DEFAULT;
 		bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd_vertex.CPUAccessFlags = 0;
 		bd_vertex.MiscFlags = 0;
 		bd_vertex.StructureByteStride = 0;
 		D3D11_SUBRESOURCE_DATA data_vertex;
-		data_vertex.pSysMem = vx;
-		hr = D3D::pDevice->CreateBuffer(&bd_vertex, &data_vertex, &pVXBuffer_);
+		data_vertex.pSysMem = vcs;
+		hr = D3D::pDevice_->CreateBuffer(&bd_vertex, &data_vertex, &pVXBuffer_);
 
 		if (hr != S_OK)
 		{
@@ -46,21 +36,21 @@ HRESULT M_Quad::Initialize()
 	}
 
 	{
-		int Ind[] = { 0,1,2 , 0,2,3 };
-		VXs = sizeof(Ind);
+		
+		VCs = sizeof(index);
 
 		D3D11_BUFFER_DESC   bd;
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(Ind);
+		bd.ByteWidth = sizeof(index);
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 		bd.MiscFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData;
-		InitData.pSysMem = Ind;
+		InitData.pSysMem = index;
 		InitData.SysMemPitch = 0;
 		InitData.SysMemSlicePitch = 0;
-		hr = D3D::pDevice->CreateBuffer(&bd, &InitData, &pIndBuffer_);
+		hr = D3D::pDevice_->CreateBuffer(&bd, &InitData, &pIndBuffer_);
 
 		if (hr != S_OK)
 		{
@@ -80,7 +70,7 @@ HRESULT M_Quad::Initialize()
 		cb.StructureByteStride = 0;
 
 		// コンスタントバッファの作成
-		hr = D3D::pDevice->CreateBuffer(&cb, nullptr, &pConstBuffer_);
+		hr = D3D::pDevice_->CreateBuffer(&cb, nullptr, &pConstBuffer_);
 
 		if (hr != S_OK)
 		{
@@ -90,8 +80,28 @@ HRESULT M_Quad::Initialize()
 		}
 	}
 
+	pTex_ = new Texture();
+	hr = pTex_->Load(pic);
+
+	if (FAILED(hr))return hr;
 	
 	return S_OK;
+}
+
+HRESULT M_Quad::Initialize()
+{
+	XMVECTOR vx[] =
+	{
+		XMVectorSet(-1.0f,1.0f,0.0f,0.0f) ,
+		XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),
+		XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),
+		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),
+
+	};
+
+	int Ind[] = { 0,1,2 , 0,2,3 };
+
+	this->Initialize(vx,"Assets/dice.png",Ind);
 }
 
 void M_Quad::Draw(XMMATRIX* wldMat)
@@ -101,26 +111,34 @@ void M_Quad::Draw(XMMATRIX* wldMat)
 	cb.VP_matWLD = XMMatrixTranspose(*wldMat * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
-	D3D::pContext->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-	D3D::pContext->Unmap(pConstBuffer_, 0);	//再開
+	D3D::pContext_->Unmap(pConstBuffer_, 0);	//再開
 
-	UINT stride = sizeof(XMVECTOR);
+	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
-	D3D::pContext->IASetVertexBuffers(0, 1, &pVXBuffer_, &stride, &offset);
+	D3D::pContext_->IASetVertexBuffers(0, 1, &pVXBuffer_, &stride, &offset);
 
 	// インデックスバッファーをセット
 	stride = sizeof(int);
 	offset = 0;
-	D3D::pContext->IASetIndexBuffer(pIndBuffer_, DXGI_FORMAT_R32_UINT, 0);
+	D3D::pContext_->IASetIndexBuffer(pIndBuffer_, DXGI_FORMAT_R32_UINT, 0);
 
 	//コンスタントバッファ
-	D3D::pContext->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
-	D3D::pContext->PSSetConstantBuffers(0, 1, &pConstBuffer_);
-
+	D3D::pContext_->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
+	D3D::pContext_->PSSetConstantBuffers(0, 1, &pConstBuffer_);
 	
+	ID3D11SamplerState* pSampler = pTex_->GetSampler();
 
-	D3D::pContext->DrawIndexed(VXs, 0, 0);
+	D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
+
+
+
+	ID3D11ShaderResourceView* pSRV = pTex_->GetResourceV();
+
+	D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
+
+	D3D::pContext_->DrawIndexed(VCs, 0, 0);
 }
 
 void M_Quad::Release()
@@ -128,4 +146,5 @@ void M_Quad::Release()
 	SAFE_RELEASE(pVXBuffer_);
 	SAFE_RELEASE(pIndBuffer_);
 	SAFE_RELEASE(pConstBuffer_);
+	SAFE_RELEASE(pTex_);
 }

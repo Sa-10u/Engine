@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="CAM.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="Dice.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_Quad.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="CAM.h" />
     <ClInclude Include="CONSTANT_BUFFER.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="Dice.h" />
     <ClInclude Include="MACRO.h" />
     <ClInclude Include="M_Quad.h" />
     <ClInclude Include="Texture.h" />

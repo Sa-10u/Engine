@@ -4,10 +4,10 @@
 
 namespace D3D
 {
-    ID3D11Device* pDevice;
-	ID3D11DeviceContext* pContext;		//デバイスコンテキスト
-	IDXGISwapChain* pSwapChain;		//スワップチェイン
-	ID3D11RenderTargetView* pRenderTargetView;
+    ID3D11Device* pDevice_;
+	ID3D11DeviceContext* pContext_;		//デバイスコンテキスト
+	IDXGISwapChain* pSwapChain_;		//スワップチェイン
+	ID3D11RenderTargetView* pRenderTargetView_;
 
     ID3D11VertexShader* pVertexShader = nullptr;	//頂点シェーダー
     ID3D11PixelShader* pPixelShader = nullptr;		//ピクセルシェーダー
@@ -54,14 +54,14 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
         0,					// 上の引数でレベルを何個指定したか
         D3D11_SDK_VERSION,			// SDKのバージョン。必ずこの値
         &scDesc,				// 上でいろいろ設定した構造体
-        &pSwapChain,				// 無事完成したSwapChainのアドレスが返ってくる
-        &pDevice,				// 無事完成したDeviceアドレスが返ってくる
+        &pSwapChain_,				// 無事完成したSwapChainのアドレスが返ってくる
+        &pDevice_,				// 無事完成したDeviceアドレスが返ってくる
         &level,					// 無事完成したDevice、Contextのレベルが返ってくる
-        &pContext);
+        &pContext_);
 
     //-----
     ID3D11Texture2D* pBackBuffer;
-    hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    hr = pSwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
     if (hr != S_OK)
     {
         MessageBox(nullptr, "SwapChain ungot Buffer", "ERROR", MB_OK);
@@ -69,7 +69,7 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
     }
 
     //レンダーターゲットビューを作成
-    hr = pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+    hr = pDevice_->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView_);
     if (hr != S_OK)
     {
         MessageBox(nullptr, "Cannot Create RTV", "ERROR", MB_OK);
@@ -89,9 +89,9 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
     vp.TopLeftY = 0;	//上
 
     //データを画面に描画するための一通りの設定（パイプライン）
-    pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
-    pContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);            // 描画先を設定
-    pContext->RSSetViewports(1, &vp);
+    pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
+    pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);            // 描画先を設定
+    pContext_->RSSetViewports(1, &vp);
 
     Shader_Initialize();
 
@@ -102,22 +102,15 @@ void D3D::BeginDraw()
 {
     
 
-    float clearColor[4] = { 0.4f, 0.6f, 0.3f, 0.2f };//R,G,B,A
+    float clearColor[4] = { 0.4f, 0.6f, 0.5f, 0.2f };//R,G,B,A
 
     //画面をクリア
-    pContext->ClearRenderTargetView(pRenderTargetView, clearColor);
-
-
-    //描画処理
-
-
-    //スワップ（バックバッファを表に表示する）
-  
+    pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);
 }
 
 void D3D::EndDraw()
 {
-    if (S_OK != pSwapChain->Present(0, 0))
+    if (S_OK != pSwapChain_->Present(0, 0))
     {
         MessageBox(nullptr, "SwapChainner is not work", "ERROR", MB_OK);
         PostQuitMessage(0);
@@ -126,10 +119,10 @@ void D3D::EndDraw()
 
 void D3D::Release()
 {
-    SAFE_RELEASE(pRenderTargetView);
-    SAFE_RELEASE(pSwapChain);
-    SAFE_RELEASE(pContext);
-    SAFE_RELEASE(pDevice);
+    SAFE_RELEASE(pRenderTargetView_);
+    SAFE_RELEASE(pSwapChain_);
+    SAFE_RELEASE(pContext_);
+    SAFE_RELEASE(pDevice_);
     SAFE_RELEASE(pVertexShader);
     SAFE_RELEASE(pVertexLayout);
     SAFE_RELEASE(pPixelShader);
@@ -143,12 +136,13 @@ void D3D::Shader_Initialize()
     ID3DBlob* pCompileVS = nullptr;
     D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
     assert(pCompileVS != nullptr);
-    pDevice->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
+    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
 
     D3D11_INPUT_ELEMENT_DESC layout[] = {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
+        {"TEXCOORD" ,0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0}
     };
-    pDevice->CreateInputLayout(layout, 1, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+    pDevice_->CreateInputLayout(layout, 2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
 
     SAFE_RELEASE(pCompileVS);
 
@@ -157,7 +151,7 @@ void D3D::Shader_Initialize()
     ID3DBlob* pCompilePS = nullptr;
     D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
     assert(pCompilePS != nullptr);
-    pDevice->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
+    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
     SAFE_RELEASE(pCompilePS);
 
     {
@@ -165,11 +159,11 @@ void D3D::Shader_Initialize()
         rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
         rdc.FillMode = D3D11_FILL_SOLID;
         rdc.FrontCounterClockwise = FALSE;
-        pDevice->CreateRasterizerState(&rdc, &pRasterizerState);
+        pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
     }
 
-    pContext->VSSetShader(pVertexShader, NULL, 0);	//頂点シェーダー
-    pContext->PSSetShader(pPixelShader, NULL, 0);	//ピクセルシェーダー
-    pContext->IASetInputLayout(pVertexLayout);	//頂点インプットレイアウト
-    pContext->RSSetState(pRasterizerState);		//ラスタライザー
+    pContext_->VSSetShader(pVertexShader, NULL, 0);	//頂点シェーダー
+    pContext_->PSSetShader(pPixelShader, NULL, 0);	//ピクセルシェーダー
+    pContext_->IASetInputLayout(pVertexLayout);	//頂点インプットレイアウト
+    pContext_->RSSetState(pRasterizerState);		//ラスタライザー
 }
