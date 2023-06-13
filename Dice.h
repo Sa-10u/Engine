@@ -9,8 +9,7 @@
 
 class Dice : public M_Quad
 {
+public:
 	HRESULT Initialize();
-
-
 };
 

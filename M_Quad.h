@@ -5,6 +5,7 @@
 #include "CAM.h"
 #include "Texture.h"
 #include<string>
+#include "CONSTANT_BUFFER.h"
 
 using namespace DirectX;
 using std::string;
@@ -16,8 +17,8 @@ public :
 
 	M_Quad();
 	~M_Quad();
-	HRESULT Initialize(VERTEX vcs[], string pic , int index[]);
-	HRESULT Initialize();
+	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
+	virtual HRESULT Initialize(void);
 	void Draw(XMMATRIX* worldMatrix);
 	void Release();
 

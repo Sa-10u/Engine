@@ -1,5 +1,5 @@
 #include "M_Quad.h"
-#include "CONSTANT_BUFFER.h"
+
 
 //#pragma comment(lib, "d3d11.lib")
 
@@ -12,20 +12,50 @@ M_Quad::~M_Quad()
 {
 }
 
-HRESULT M_Quad::Initialize(VERTEX vcs[], string pic, int index[])
+HRESULT M_Quad::Initialize(VERTEX vcs[],int vcw, string pic, int index[] , int inds)
 {
 	HRESULT hr = E_FAIL;
 
+	//-----
+	VERTEX v[] =
+	{
+		{XMVectorSet(1,0,0,0) , XMVectorSet(0,0,0,0)},
+		{XMVectorSet(1,1,0,0) , XMVectorSet(0.25,0,0,0)},
+		{XMVectorSet(0,1,0,0) , XMVectorSet(0.25,0.5,0,0)},		//1*
+		{XMVectorSet(0,0,0,0) , XMVectorSet(0,0.5,0,0)},
+
+		{XMVectorSet(1,1,1,0) , XMVectorSet(0.5,0,0,0)},		//2*
+		{XMVectorSet(0,1,1,0) , XMVectorSet(0.5,0.5,0,0)},
+
+		{XMVectorSet(1,0,1,0) , XMVectorSet(0.75,0,0,0)},
+		{XMVectorSet(0,0,1,0) , XMVectorSet(0.75,0.5,0,0)},		//3*
+
+		{XMVectorSet(1,0,0,0) , XMVectorSet(1,0,0,0)},
+		{XMVectorSet(0,0,0,0) , XMVectorSet(1,0.5,0,0)},		//4*
+
+		{XMVectorSet(0,0,0,0) , XMVectorSet(0,1,0,0)},			//5
+		{XMVectorSet(0,0,0,0) , XMVectorSet(0.25,1,0,0)},
+
+		{XMVectorSet(0,0,1,0) , XMVectorSet(0.5,1,0,0)},		//6
+
+	};
+
+	int i[] =
+	{
+		0,1,2, 0,2,3, 1,4,5, 1,5,2, 4,6,7, 4,7,5, 6,8,9, 6,9,7, 3,2,11, 3,11,10 ,2,5,12, 2,12,11
+	};
+	//-----
+
 	{
 		D3D11_BUFFER_DESC bd_vertex;
-		bd_vertex.ByteWidth = sizeof(vcs);
+		bd_vertex.ByteWidth =vcw;
 		bd_vertex.Usage = D3D11_USAGE_DEFAULT;
 		bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd_vertex.CPUAccessFlags = 0;
 		bd_vertex.MiscFlags = 0;
 		bd_vertex.StructureByteStride = 0;
 		D3D11_SUBRESOURCE_DATA data_vertex;
-		data_vertex.pSysMem = vcs;
+		data_vertex.pSysMem = v;
 		hr = D3D::pDevice_->CreateBuffer(&bd_vertex, &data_vertex, &pVXBuffer_);
 
 		if (hr != S_OK)
@@ -37,17 +67,17 @@ HRESULT M_Quad::Initialize(VERTEX vcs[], string pic, int index[])
 
 	{
 		
-		VCs = sizeof(index);
+		VCs = inds;
 
 		D3D11_BUFFER_DESC   bd;
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(index);
+		bd.ByteWidth = inds;
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 		bd.MiscFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData;
-		InitData.pSysMem = index;
+		InitData.pSysMem = i;
 		InitData.SysMemPitch = 0;
 		InitData.SysMemSlicePitch = 0;
 		hr = D3D::pDevice_->CreateBuffer(&bd, &InitData, &pIndBuffer_);
@@ -90,7 +120,7 @@ HRESULT M_Quad::Initialize(VERTEX vcs[], string pic, int index[])
 
 HRESULT M_Quad::Initialize()
 {
-	XMVECTOR vx[] =
+	VERTEX vx[] =
 	{
 		XMVectorSet(-1.0f,1.0f,0.0f,0.0f) ,
 		XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),
@@ -101,7 +131,11 @@ HRESULT M_Quad::Initialize()
 
 	int Ind[] = { 0,1,2 , 0,2,3 };
 
-	this->Initialize(vx,"Assets/dice.png",Ind);
+	HRESULT res;
+
+	res = this->Initialize(ARRAY_WITH_SIZE(vx), "Assets/dice.png", ARRAY_WITH_SIZE(Ind));
+
+	return res;
 }
 
 void M_Quad::Draw(XMMATRIX* wldMat)

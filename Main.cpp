@@ -3,6 +3,7 @@
 #include "M_Quad.h"
 #include "MACRO.h"
 #include "CAM.h"
+#include "Dice.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -72,9 +73,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-   // M_Quad* pQmodel_ = new M_Quad();
-   // *hr = pQmodel_->Initialize();
-
+  // M_Quad* pQmodel_ = new M_Quad();
+   //Z*hr = pQmodel_->Initialize();
+    Dice* dice = new Dice();
+  *hr = dice->Initialize();
 
     if (*hr != S_OK)
     {
@@ -100,6 +102,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         };
 
         float i = 0;
+        float j = 0;
 
   //message loop (waiting for order some )
     MSG msg;
@@ -117,8 +120,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         else
         {
          i =  fmod(i+=0.008, XM_PI*2);
+         j = fmod(j += 0.004, XM_PI * 2);
 
-            XMMATRIX matR =
+            XMMATRIX matRZ =
             {
                 sinf((i) ),cosf((i) ),0,0,
                 -cosf((i) ),sinf((i) ),0,0,
@@ -126,19 +130,31 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
                 0,0,0,1,
             };
 
-            XMMATRIX mat = matG * matR * matS;
+            XMMATRIX matRY =
+            {
+                cosf(j),0,-sinf(j),0,
+                0,1,0,0,
+                sinf(j),0,cosf(j),0,
+                0,0,0,1,
+            };
+
+            XMMATRIX mat = matG * matRZ* matRY * matS;
             //ƒQ[ƒ€‚Ìˆ—
 
             CAM::Update();
             D3D::BeginDraw();
-           // pQmodel_->Draw(&mat);
+
+          //  pQmodel_->Draw(&mat);
+            dice->Draw(&mat);
 
             D3D::EndDraw();
         }
     }
 
-    //SAFE_RELEASE(pQmodel_);
-   // SAFE_DELETE(pQmodel_);
+  // SAFE_RELEASE(pQmodel_);
+   //SAFE_DELETE(pQmodel_);
+  SAFE_RELEASE(dice);
+   SAFE_DELETE(dice);
 
     D3D::Release();
 
