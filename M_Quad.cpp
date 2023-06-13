@@ -16,36 +16,6 @@ HRESULT M_Quad::Initialize(VERTEX vcs[],int vcw, string pic, int index[] , int i
 {
 	HRESULT hr = E_FAIL;
 
-	//-----
-	//VERTEX v[] =
-	//{
-	//	{XMVectorSet(1,0,0,0) , XMVectorSet(0,0,0,0)},
-	//	{XMVectorSet(1,1,0,0) , XMVectorSet(0.25,0,0,0)},
-	//	{XMVectorSet(0,1,0,0) , XMVectorSet(0.25,0.5,0,0)},		//1*
-	//	{XMVectorSet(0,0,0,0) , XMVectorSet(0,0.5,0,0)},
-
-	//	{XMVectorSet(1,1,1,0) , XMVectorSet(0.5,0,0,0)},		//2*
-	//	{XMVectorSet(0,1,1,0) , XMVectorSet(0.5,0.5,0,0)},
-
-	//	{XMVectorSet(1,0,1,0) , XMVectorSet(0.75,0,0,0)},
-	//	{XMVectorSet(0,0,1,0) , XMVectorSet(0.75,0.5,0,0)},		//3*
-
-	//	{XMVectorSet(1,0,0,0) , XMVectorSet(1,0,0,0)},
-	//	{XMVectorSet(0,0,0,0) , XMVectorSet(1,0.5,0,0)},		//4*
-
-	//	{XMVectorSet(0,0,0,0) , XMVectorSet(0,1,0,0)},			//5
-	//	{XMVectorSet(0,0,0,0) , XMVectorSet(0.25,1,0,0)},
-
-	//	{XMVectorSet(0,0,1,0) , XMVectorSet(0.5,1,0,0)},		//6
-
-	//};
-
-	//int i[] =
-	//{
-	//	0,1,2, 0,2,3, 1,4,5, 1,5,2, 4,6,7, 4,7,5, 6,8,9, 6,9,7, 3,2,11, 3,11,10 ,2,5,12, 2,12,11
-	//};
-	////-----
-
 	{
 		D3D11_BUFFER_DESC bd_vertex;
 		bd_vertex.ByteWidth =vcw;
