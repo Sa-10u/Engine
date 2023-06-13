@@ -73,10 +73,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-  // M_Quad* pQmodel_ = new M_Quad();
-   //Z*hr = pQmodel_->Initialize();
-    Dice* dice = new Dice();
-  *hr = dice->Initialize();
+    M_Quad* pQmodel_ = new M_Quad();
+    *hr = pQmodel_->Initialize();
+    //Dice* dice = new Dice();
+  // *hr = dice->Initialize();
 
     if (*hr != S_OK)
     {
@@ -119,8 +119,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         //メッセージなし
         else
         {
-         i =  fmod(i+=0.008, XM_PI*2);
-         j = fmod(j += 0.004, XM_PI * 2);
+         i =  fmod(i+=0.0008, XM_PI*2);
+         j = fmod(j += 0.0004, XM_PI * 2);
 
             XMMATRIX matRZ =
             {
@@ -138,23 +138,23 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
                 0,0,0,1,
             };
 
-            XMMATRIX mat = matG * matRZ* matRY * matS;
+            XMMATRIX mat = matG  * matS;
             //ゲームの処理
 
             CAM::Update();
             D3D::BeginDraw();
 
-          //  pQmodel_->Draw(&mat);
-            dice->Draw(&mat);
+           pQmodel_->Draw(&mat);
+         //   dice->Draw(&mat);
 
             D3D::EndDraw();
         }
     }
 
-  // SAFE_RELEASE(pQmodel_);
-   //SAFE_DELETE(pQmodel_);
-  SAFE_RELEASE(dice);
-   SAFE_DELETE(dice);
+    SAFE_RELEASE(pQmodel_);
+    SAFE_DELETE(pQmodel_);
+  //SAFE_RELEASE(dice);
+  //SAFE_DELETE(dice);
 
     D3D::Release();
 
