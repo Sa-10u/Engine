@@ -19,7 +19,7 @@ public :
 	~M_Quad();
 	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
 	virtual HRESULT Initialize(void);
-	void Draw(XMMATRIX* worldMatrix);
+	void Draw(XMMATRIX* worldMatrix , XMFLOAT4* wldLGT);
 	void Release();
 
 private:

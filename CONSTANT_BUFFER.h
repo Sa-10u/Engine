@@ -7,6 +7,8 @@ struct CONSTANT_BUFFER
 {
 	XMMATRIX VP_matWLD;
 	XMMATRIX matW;
+
+	XMFLOAT4 matLGT;
 };
 
 struct VERTEX

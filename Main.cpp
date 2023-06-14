@@ -73,10 +73,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-    M_Quad* pQmodel_ = new M_Quad();
-    *hr = pQmodel_->Initialize();
-    //Dice* dice = new Dice();
-  // *hr = dice->Initialize();
+  //  M_Quad* pQmodel_ = new M_Quad();
+  //  *hr = pQmodel_->Initialize();
+    Dice* dice = new Dice();
+    *hr = dice->Initialize();
 
     if (*hr != S_OK)
     {
@@ -103,6 +103,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
         float i = 0;
         float j = 0;
+
+        XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
 
   //message loop (waiting for order some )
     MSG msg;
@@ -138,23 +140,23 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
                 0,0,0,1,
             };
 
-            XMMATRIX mat = matG  * matS;
+            XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ƒQ[ƒ€‚Ìˆ—
 
             CAM::Update();
             D3D::BeginDraw();
 
-           pQmodel_->Draw(&mat);
-         //   dice->Draw(&mat);
+          // pQmodel_->Draw(&matRY , &WorldLight);
+           dice->Draw(&mat , & WorldLight);
 
             D3D::EndDraw();
         }
     }
 
-    SAFE_RELEASE(pQmodel_);
-    SAFE_DELETE(pQmodel_);
-  //SAFE_RELEASE(dice);
-  //SAFE_DELETE(dice);
+  //  SAFE_RELEASE(pQmodel_);
+   // SAFE_DELETE(pQmodel_);
+     SAFE_RELEASE(dice);
+    SAFE_DELETE(dice);
 
     D3D::Release();
 

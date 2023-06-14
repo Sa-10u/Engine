@@ -108,12 +108,13 @@ HRESULT M_Quad::Initialize()
 	return res;
 }
 
-void M_Quad::Draw(XMMATRIX* wldMat)
+void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
 {
 	
 	CONSTANT_BUFFER cb;
 	cb.VP_matWLD = XMMatrixTranspose(*wldMat * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 	cb.matW = XMMatrixTranspose(*wldMat);
+	cb.matLGT = *wldLGT;
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
