@@ -47,7 +47,7 @@ HRESULT Dice::Initialize()
 
 	HRESULT res;
 
-	res = M_Quad::Initialize(ARRAY_WITH_SIZE(vcs), "Assets/dice.png", ARRAY_WITH_SIZE(index));
+	res = Sprite::Initialize(ARRAY_WITH_SIZE(vcs), "Assets/dice.png", ARRAY_WITH_SIZE(index));
 
 	assert(res == S_OK);
 

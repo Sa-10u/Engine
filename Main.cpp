@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include "D3D.h"
-#include "M_Quad.h"
+#include "Sprite.h"
 #include "MACRO.h"
 #include "CAM.h"
 #include "Dice.h"
@@ -73,7 +73,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-  //  M_Quad* pQmodel_ = new M_Quad();
+  //  Sprite* pQmodel_ = new Sprite();
   //  *hr = pQmodel_->Initialize();
     Dice* dice = new Dice();
     *hr = dice->Initialize();
@@ -95,9 +95,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
         XMMATRIX matS =
         {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
+            2,0,0,0,
+            0,2,0,0,
+            0,0,2,0,
             0,0,0,1,
         };
 

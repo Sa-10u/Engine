@@ -4,22 +4,19 @@
 #include "MACRO.h"
 #include "CAM.h"
 #include "Texture.h"
-#include<string>
+#include <string>
 #include "CONSTANT_BUFFER.h"
 
-using namespace DirectX;
 using std::string;
 
 
 class Sprite
 {
-public :
-
 	Sprite();
 	~Sprite();
-	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
+	HRESULT Initialize(VERTEX vcs[], int vcw, string pic, int index[], int inds);
 	virtual HRESULT Initialize(void);
-	void Draw(XMMATRIX* worldMatrix , XMFLOAT4* wldLGT);
+	void Draw(XMMATRIX* worldMatrix, XMFLOAT4* wldLGT);
 	void Release();
 
 private:

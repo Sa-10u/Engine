@@ -133,7 +133,41 @@ void D3D::Shader_Initialize()
 {
     HRESULT hr = S_OK;
 
-    ID3DBlob* pCompileVS = nullptr;
+    //--------------------------------3D
+    // 
+    //ID3DBlob* pCompileVS = nullptr;
+    //D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+    //assert(pCompileVS != nullptr);
+    //pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
+
+    //D3D11_INPUT_ELEMENT_DESC layout[] = {
+    //    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
+    //    {"TEXCOORD" ,0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0},
+    //   { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(DirectX::XMVECTOR) * 2 ,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    //};
+    //pDevice_->CreateInputLayout(layout, 3, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+
+    //SAFE_RELEASE(pCompileVS);
+
+    -----
+
+    //ID3DBlob* pCompilePS = nullptr;
+    //D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+    //assert(pCompilePS != nullptr);
+    //pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
+    //SAFE_RELEASE(pCompilePS);
+
+    //{
+    //    D3D11_RASTERIZER_DESC rdc = {};
+    //    rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
+    //    rdc.FillMode = D3D11_FILL_SOLID;
+    //    rdc.FrontCounterClockwise = FALSE;
+    //    pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
+    //}
+
+    //----------------------------------------2D
+
+     ID3DBlob* pCompileVS = nullptr;
     D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
     assert(pCompileVS != nullptr);
     pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
@@ -162,6 +196,8 @@ void D3D::Shader_Initialize()
         rdc.FrontCounterClockwise = FALSE;
         pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
     }
+
+
 
     pContext_->VSSetShader(pVertexShader, NULL, 0);	//頂点シェーダー
     pContext_->PSSetShader(pPixelShader, NULL, 0);	//ピクセルシェーダー

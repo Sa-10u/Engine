@@ -10,6 +10,10 @@ struct CONSTANT_BUFFER
 
 	XMFLOAT4 matLGT;
 };
+struct CONSTANT_BUFFER_SPRITE
+{
+	XMMATRIX matW;
+};
 
 struct VERTEX
 {
@@ -17,4 +21,9 @@ struct VERTEX
 	XMVECTOR uv;
 	XMVECTOR normal;
 
+};
+struct VERTEX_SPRITE
+{
+	XMVECTOR pos;
+	XMVECTOR uv;
 };

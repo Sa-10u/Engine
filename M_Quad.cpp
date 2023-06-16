@@ -1,18 +1,18 @@
-#include "M_Quad.h"
+#include "Sprite.h"
 
 
 //#pragma comment(lib, "d3d11.lib")
 
-M_Quad::M_Quad():pVXBuffer_(nullptr),pIndBuffer_(nullptr),pConstBuffer_(nullptr),VCs(NULL),pTex_(nullptr)
+Sprite::Sprite():pVXBuffer_(nullptr),pIndBuffer_(nullptr),pConstBuffer_(nullptr),VCs(NULL),pTex_(nullptr)
 {
 	
 }
 
-M_Quad::~M_Quad()
+Sprite::~Sprite()
 {
 }
 
-HRESULT M_Quad::Initialize(VERTEX vcs[],int vcw, string pic, int index[] , int inds)
+HRESULT Sprite::Initialize(VERTEX vcs[],int vcw, string pic, int index[] , int inds)
 {
 	HRESULT hr = E_FAIL;
 
@@ -88,7 +88,7 @@ HRESULT M_Quad::Initialize(VERTEX vcs[],int vcw, string pic, int index[] , int i
 	return S_OK;
 }
 
-HRESULT M_Quad::Initialize()
+HRESULT Sprite::Initialize()
 {
 	VERTEX vx[] =
 	{
@@ -108,7 +108,7 @@ HRESULT M_Quad::Initialize()
 	return res;
 }
 
-void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
+void Sprite::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
 {
 	
 	CONSTANT_BUFFER cb;
@@ -147,7 +147,7 @@ void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
 	D3D::pContext_->DrawIndexed(VCs, 0, 0);
 }
 
-void M_Quad::Release()
+void Sprite::Release()
 {
 	SAFE_RELEASE(pVXBuffer_);
 	SAFE_RELEASE(pIndBuffer_);
