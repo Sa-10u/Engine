@@ -88,14 +88,14 @@ HRESULT Sprite::Initialize(UINT const winH, UINT const winW)
 {
 	VERTEX vx[] =
 	{
-		{XMVectorSet((0*2 - winW*1.0)/winW  ,(0 *2 - winH * -1.0) / winH  ,0.0f,0.0f) ,XMVectorSet(0,0,0,0)},
-		{XMVectorSet((400*2 - winW*1.0) / winW , (0 *2.0- winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(1,0,0,0)},
-		{XMVectorSet((400*2 - winW*1.0) / winW , (-800 *2.0- winH * -1.0) / winH , 0.0f , 0.0f),XMVectorSet(1,1,0,0)},
-		{XMVectorSet((0*2 - winW*1.0) / winW, (-800*2.0  - winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(0,1,0,0)},
-
+		{XMVectorSet((0*2 - winW*1.0)/winW  ,(0 *-2 - winH * -1.0) / winH  ,0.0f,0.0f) ,XMVectorSet(0,0,0,0)},
+		{XMVectorSet((400*2.0 - winW*1.0) / winW , (0 *-2.0- winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(1,0,0,0)},
+		{XMVectorSet((400*2.0 - winW*1.0) / winW , (winH *-2.0- winH * -1.0) / winH , 0.0f , 0.0f),XMVectorSet(1,1,0,0)},
+		{XMVectorSet((0*2.0 - winW*1.0) / winW, (winH*-2.0  - winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(0,1,0,0)},
+		
 	};
 
-	float tes = (winW - winW * 1.0) / winW;
+	//float tes = (winH * -2.0 - winH * -1.0) / winH;
 
 	int Ind[] = { 0,1,2 , 0,2,3 };
 
