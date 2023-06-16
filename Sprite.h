@@ -16,8 +16,8 @@ public:
 	Sprite();
 	~Sprite();
 	HRESULT Initialize(VERTEX vcs[], int vcw, string pic, int index[], int inds);
-	virtual HRESULT Initialize(void);
-	void Draw(XMMATRIX* worldMatrix, XMFLOAT4* wldLGT);
+	virtual HRESULT Initialize(UINT const winH, UINT const winW);
+	void Draw(XMMATRIX* worldMatrix);
 	void Release();
 
 protected:
@@ -28,15 +28,5 @@ protected:
 	ID3D11Buffer* pConstBuffer_;
 	Texture* pTex_;
 
-private:
-
-	virtual void Vertex_Initialize();
-	HRESULT CreateVertexBuffer();
-	virtual void IndexData_Initialize();
-	HRESULT CreateConstantBuffer();
-	HRESULT LoadTexture();
-
-	void PassDataToCB(DirectX::XMMATRIX& wldmat);
-	void SetBufferToPipeline();
 };
 

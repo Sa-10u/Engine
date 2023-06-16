@@ -4,6 +4,7 @@
 #include "MACRO.h"
 #include "CAM.h"
 #include "Dice.h"
+#include "Sprite.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -75,8 +76,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
   //  M_Quad* pQmodel_ = new Sprite();
   //  *hr = pQmodel_->Initialize();
-    Dice* dice = new Dice();
-    *hr = dice->Initialize();
+  //  Dice* dice = new Dice();
+  //  *hr = dice->Initialize();
+    Sprite* spr = new Sprite;
+    *hr = spr->Initialize(winW,winH);
 
     if (*hr != S_OK)
     {
@@ -147,7 +150,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             D3D::BeginDraw();
 
           // pQmodel_->Draw(&matRY , &WorldLight);
-           dice->Draw(&mat , & WorldLight);
+           //dice->Draw(&mat , & WorldLight);
+            spr->Draw(&matG);
 
             D3D::EndDraw();
         }
@@ -155,8 +159,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
   //  SAFE_RELEASE(pQmodel_);
    // SAFE_DELETE(pQmodel_);
-     SAFE_RELEASE(dice);
-    SAFE_DELETE(dice);
+    // SAFE_RELEASE(dice);
+   // SAFE_DELETE(dice);
+    SAFE_RELEASE(spr);
+    SAFE_DELETE(spr);
 
     D3D::Release();
 
