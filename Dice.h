@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Sprite.h"
+#include "M_Quad.h"
 
-class Dice : public Sprite
+class Dice : public M_Quad
 {
 public:
 	HRESULT Initialize();

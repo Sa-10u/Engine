@@ -9,9 +9,10 @@
 
 using std::string;
 
-
 class Sprite
 {
+
+public:
 	Sprite();
 	~Sprite();
 	HRESULT Initialize(VERTEX vcs[], int vcw, string pic, int index[], int inds);
@@ -19,13 +20,23 @@ class Sprite
 	void Draw(XMMATRIX* worldMatrix, XMFLOAT4* wldLGT);
 	void Release();
 
-private:
+protected:
 
+	UINT64 VCs;
 	ID3D11Buffer* pVXBuffer_;
 	ID3D11Buffer* pIndBuffer_;
 	ID3D11Buffer* pConstBuffer_;
 	Texture* pTex_;
 
-	int VCs;
+private:
+
+	virtual void Vertex_Initialize();
+	HRESULT CreateVertexBuffer();
+	virtual void IndexData_Initialize();
+	HRESULT CreateConstantBuffer();
+	HRESULT LoadTexture();
+
+	void PassDataToCB(DirectX::XMMATRIX& wldmat);
+	void SetBufferToPipeline();
 };
 

@@ -73,7 +73,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
-  //  Sprite* pQmodel_ = new Sprite();
+  //  M_Quad* pQmodel_ = new Sprite();
   //  *hr = pQmodel_->Initialize();
     Dice* dice = new Dice();
     *hr = dice->Initialize();

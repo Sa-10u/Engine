@@ -11,12 +11,12 @@ using namespace DirectX;
 using std::string;
 
 
-class Sprite
+class M_Quad
 {
 public :
 
-	Sprite();
-	~Sprite();
+	M_Quad();
+	~M_Quad();
 	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
 	virtual HRESULT Initialize(void);
 	void Draw(XMMATRIX* worldMatrix , XMFLOAT4* wldLGT);
