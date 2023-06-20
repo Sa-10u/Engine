@@ -106,12 +106,50 @@ HRESULT Sprite::Initialize(UINT const winH, UINT const winW)
 	return res;
 }
 
-void Sprite::Draw(XMMATRIX* wldMat)
+void Sprite::Draw(Trans* wldMat)
 {
 	D3D::SetShader(SHADER_TYPE::SHADER_2D);
 
 	CONSTANT_BUFFER_SPRITE cb;
-	cb.matW = XMMatrixTranspose(*wldMat);
+	cb.matW = XMMatrixTranspose(wldMat->GetWorldMatrix());
+
+	D3D11_MAPPED_SUBRESOURCE pdata;
+	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
+	D3D::pContext_->Unmap(pConstBuffer_, 0);	//再開
+
+	UINT stride = sizeof(VERTEX);
+	UINT offset = 0;
+	D3D::pContext_->IASetVertexBuffers(0, 1, &pVXBuffer_, &stride, &offset);
+
+	// インデックスバッファーをセット
+	stride = sizeof(int);
+	offset = 0;
+	D3D::pContext_->IASetIndexBuffer(pIndBuffer_, DXGI_FORMAT_R32_UINT, 0);
+
+	//コンスタントバッファ
+	D3D::pContext_->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
+	D3D::pContext_->PSSetConstantBuffers(0, 1, &pConstBuffer_);
+
+	ID3D11SamplerState* pSampler = pTex_->GetSampler();
+
+	D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
+
+
+
+	ID3D11ShaderResourceView* pSRV = pTex_->GetResourceV();
+
+	D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
+
+	D3D::pContext_->DrawIndexed(VCs, 0, 0);
+}
+
+void Sprite::Draw(XMMATRIX* worldMatrix)
+{
+	D3D::SetShader(SHADER_TYPE::SHADER_2D);
+
+	CONSTANT_BUFFER_SPRITE cb;
+	cb.matW = XMMatrixTranspose(*worldMatrix);
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める

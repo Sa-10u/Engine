@@ -108,13 +108,13 @@ HRESULT M_Quad::Initialize()
 	return res;
 }
 
-void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
+void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT)
 {
 	D3D::SetShader(SHADER_TYPE::SHADER_3D);
 
 	CONSTANT_BUFFER cb;
-	cb.VP_matWLD = XMMatrixTranspose(*wldMat * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
-	cb.matW = XMMatrixTranspose(*wldMat);
+	cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
+	cb.matW = XMMatrixTranspose(wldMat->GetWorldMatrix());
 	cb.matLGT = *wldLGT;
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
@@ -135,6 +135,46 @@ void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
 	D3D::pContext_->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
 	D3D::pContext_->PSSetConstantBuffers(0, 1, &pConstBuffer_);
 	
+	ID3D11SamplerState* pSampler = pTex_->GetSampler();
+
+	D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
+
+
+
+	ID3D11ShaderResourceView* pSRV = pTex_->GetResourceV();
+
+	D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
+
+	D3D::pContext_->DrawIndexed(VCs, 0, 0);
+}
+
+void M_Quad::Draw(XMMATRIX* trans, XMFLOAT4* wldLGT)
+{
+	D3D::SetShader(SHADER_TYPE::SHADER_3D);
+
+	CONSTANT_BUFFER cb;
+	cb.VP_matWLD = XMMatrixTranspose(*trans * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
+	cb.matW = XMMatrixTranspose(*trans);
+	cb.matLGT = *wldLGT;
+
+	D3D11_MAPPED_SUBRESOURCE pdata;
+	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
+	D3D::pContext_->Unmap(pConstBuffer_, 0);	//再開
+
+	UINT stride = sizeof(VERTEX);
+	UINT offset = 0;
+	D3D::pContext_->IASetVertexBuffers(0, 1, &pVXBuffer_, &stride, &offset);
+
+	// インデックスバッファーをセット
+	stride = sizeof(int);
+	offset = 0;
+	D3D::pContext_->IASetIndexBuffer(pIndBuffer_, DXGI_FORMAT_R32_UINT, 0);
+
+	//コンスタントバッファ
+	D3D::pContext_->VSSetConstantBuffers(0, 1, &pConstBuffer_);	//頂点シェーダー用	
+	D3D::pContext_->PSSetConstantBuffers(0, 1, &pConstBuffer_);
+
 	ID3D11SamplerState* pSampler = pTex_->GetSampler();
 
 	D3D::pContext_->PSSetSamplers(0, 1, &pSampler);

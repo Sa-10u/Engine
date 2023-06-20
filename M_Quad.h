@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include<string>
 #include "CONSTANT_BUFFER.h"
+#include "Trans.h"
 
 using namespace DirectX;
 using std::string;
@@ -19,7 +20,8 @@ public :
 	~M_Quad();
 	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
 	virtual HRESULT Initialize(void);
-	void Draw(XMMATRIX* worldMatrix , XMFLOAT4* wldLGT);
+	void Draw(Trans* trans , XMFLOAT4* wldLGT);
+	void Draw(XMMATRIX* trans, XMFLOAT4* wldLGT);
 	void Release();
 
 private:
@@ -28,6 +30,7 @@ private:
 	ID3D11Buffer* pIndBuffer_;
 	ID3D11Buffer* pConstBuffer_;
 	Texture* pTex_;
+	//Trans trans;
 
 	int VCs;
 };

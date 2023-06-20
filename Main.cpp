@@ -143,6 +143,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
                 0,0,0,1,
             };
 
+            Trans trans;
+            trans.rot = XMFLOAT3(i, i, i);
+
+            Trans sptra;
+            sptra.rot.y = i;
+
             XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ƒQ[ƒ€‚Ìˆ—
 
@@ -150,8 +156,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             D3D::BeginDraw();
 
           // pQmodel_->Draw(&matRY , &WorldLight);
-            dice->Draw(&mat , & WorldLight);
-            spr->Draw(&matG);
+            dice->Draw(&trans , &WorldLight);
+            spr->Draw(&sptra );
 
             D3D::EndDraw();
         }

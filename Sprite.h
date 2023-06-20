@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include <string>
 #include "CONSTANT_BUFFER.h"
+#include"Trans.h"
 
 using std::string;
 
@@ -17,6 +18,7 @@ public:
 	~Sprite();
 	HRESULT Initialize(VERTEX vcs[], int vcw, string pic, int index[], int inds);
 	virtual HRESULT Initialize(UINT const winH, UINT const winW);
+	void Draw(Trans* worldMatrix);
 	void Draw(XMMATRIX* worldMatrix);
 	void Release();
 
