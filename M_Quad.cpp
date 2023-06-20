@@ -110,7 +110,8 @@ HRESULT M_Quad::Initialize()
 
 void M_Quad::Draw(XMMATRIX* wldMat , XMFLOAT4* wldLGT)
 {
-	
+	D3D::SetShader(SHADER_TYPE::SHADER_3D);
+
 	CONSTANT_BUFFER cb;
 	cb.VP_matWLD = XMMatrixTranspose(*wldMat * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 	cb.matW = XMMatrixTranspose(*wldMat);

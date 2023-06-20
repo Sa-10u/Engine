@@ -88,10 +88,10 @@ HRESULT Sprite::Initialize(UINT const winH, UINT const winW)
 {
 	VERTEX vx[] =
 	{
-		{XMVectorSet((0*2 - winW*1.0)/winW  ,(0 *-2 - winH * -1.0) / winH  ,0.0f,0.0f) ,XMVectorSet(0,0,0,0)},
-		{XMVectorSet((400*2.0 - winW*1.0) / winW , (0 *-2.0- winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(1,0,0,0)},
-		{XMVectorSet((400*2.0 - winW*1.0) / winW , (winH *-2.0- winH * -1.0) / winH , 0.0f , 0.0f),XMVectorSet(1,1,0,0)},
-		{XMVectorSet((0*2.0 - winW*1.0) / winW, (winH*-2.0  - winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(0,1,0,0)},
+		{XMVectorSet((10*2 - winW*1.0)/winW  ,(0 *-2 - winH * -1.0) / winH  ,0.0f,0.0f) ,XMVectorSet(0,0,0,0)},
+		{XMVectorSet((100*2.0 - winW*1.0) / winW , (0 *-2.0- winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(1,0,0,0)},
+		{XMVectorSet((100*2.0 - winW*1.0) / winW , (80 *-2.0- winH * -1.0) / winH , 0.0f , 0.0f),XMVectorSet(1,1,0,0)},
+		{XMVectorSet((10*2.0 - winW*1.0) / winW, (80*-2.0  - winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(0,1,0,0)},
 		
 	};
 
@@ -108,9 +108,10 @@ HRESULT Sprite::Initialize(UINT const winH, UINT const winW)
 
 void Sprite::Draw(XMMATRIX* wldMat)
 {
+	D3D::SetShader(SHADER_TYPE::SHADER_2D);
+
 	CONSTANT_BUFFER_SPRITE cb;
 	cb.matW = XMMatrixTranspose(*wldMat);
-
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める

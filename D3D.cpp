@@ -9,12 +9,16 @@ namespace D3D
 	IDXGISwapChain* pSwapChain_;		//スワップチェイン
 	ID3D11RenderTargetView* pRenderTargetView_;
 
-    ID3D11VertexShader* pVertexShader = nullptr;	//頂点シェーダー
-    ID3D11PixelShader* pPixelShader = nullptr;		//ピクセルシェーダー
-    ID3D11InputLayout* pVertexLayout = nullptr;
-
-    ID3D11RasterizerState* pRasterizerState = nullptr;
+    struct SHADER_BUNDLE
+    {
+        ID3D11VertexShader* vs = nullptr;
+        ID3D11PixelShader* ps = nullptr;
+        ID3D11InputLayout* lo = nullptr;
+        ID3D11RasterizerState* rs = nullptr;
+    }shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_AMMOUNT)];
 }
+
+
 
 HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 {
@@ -93,7 +97,8 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
     pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);            // 描画先を設定
     pContext_->RSSetViewports(1, &vp);
 
-    Shader_Initialize();
+    Shader_Initialize2D();
+    Shader_Initialize3D();
 
     return S_OK;
 }
@@ -123,66 +128,35 @@ void D3D::Release()
     SAFE_RELEASE(pSwapChain_);
     SAFE_RELEASE(pContext_);
     SAFE_RELEASE(pDevice_);
-    SAFE_RELEASE(pVertexShader);
-    SAFE_RELEASE(pVertexLayout);
-    SAFE_RELEASE(pPixelShader);
-    SAFE_RELEASE(pRasterizerState);
+
+    for (int i = 0; i < static_cast<int>(SHADER_TYPE::SHADER_AMMOUNT); i++) {
+
+        SAFE_RELEASE(shader_bundle[i].vs);
+        SAFE_RELEASE(shader_bundle[i].ps);
+        SAFE_RELEASE(shader_bundle[i].lo);
+        SAFE_RELEASE(shader_bundle[i].rs);
+    }
 }
 
-void D3D::Shader_Initialize()
+void D3D::Shader_Initialize2D()
 {
-    HRESULT hr = S_OK;
-
-    //--------------------------------3D
-    //ID3DBlob* pCompileVS = nullptr;
-    //D3DCompileFromFile(L"Simple2D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
-    //assert(pCompileVS != nullptr);
-    //pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
-
-    //D3D11_INPUT_ELEMENT_DESC layout[] = {
-    //    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
-    //    {"TEXCOORD" ,0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0},
-    //      { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(DirectX::XMVECTOR) * 2 ,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //}
-    //};
-    //pDevice_->CreateInputLayout(layout, (sizeof(layout) / sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
-
-    //SAFE_RELEASE(pCompileVS);
-
-
-    //ID3DBlob* pCompilePS = nullptr;
-    //D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
-    //assert(pCompilePS != nullptr);
-    //pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
-    //SAFE_RELEASE(pCompilePS);
-
-    //{
-    //    D3D11_RASTERIZER_DESC rdc = {};
-    //    rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
-    //    rdc.FillMode = D3D11_FILL_SOLID;
-    //    rdc.FrontCounterClockwise = FALSE;
-    //    pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
-    //}
-
-    //----------------------------------------2D
-
     ID3DBlob* pCompileVS = nullptr;
     D3DCompileFromFile(L"Simple2D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
     assert(pCompileVS != nullptr);
-    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &pVertexShader);
+    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_2D)].vs);
 
     D3D11_INPUT_ELEMENT_DESC layout[] = {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
         {"TEXCOORD" ,0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0},
-       };
-    pDevice_->CreateInputLayout(layout, (sizeof(layout)/sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+    };
+    pDevice_->CreateInputLayout(layout, (sizeof(layout) / sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_2D)].lo);
 
     SAFE_RELEASE(pCompileVS);
 
     ID3DBlob* pCompilePS = nullptr;
     D3DCompileFromFile(L"Simple2D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
     assert(pCompilePS != nullptr);
-    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &pPixelShader);
+    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_2D)].ps);
     SAFE_RELEASE(pCompilePS);
 
     {
@@ -190,13 +164,50 @@ void D3D::Shader_Initialize()
         rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
         rdc.FillMode = D3D11_FILL_SOLID;
         rdc.FrontCounterClockwise = FALSE;
-        pDevice_->CreateRasterizerState(&rdc, &pRasterizerState);
+        pDevice_->CreateRasterizerState(&rdc, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_2D)].rs);
     }
+}
+
+void D3D::Shader_Initialize3D()
+{
+    HRESULT hr = S_OK;
+
+   
+    ID3DBlob* pCompileVS = nullptr;
+    D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+    assert(pCompileVS != nullptr);
+    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].vs);
+
+    D3D11_INPUT_ELEMENT_DESC layout[] = {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
+        {"TEXCOORD" ,0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0},
+          { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(DirectX::XMVECTOR) * 2 ,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    };
+ 
+     pDevice_->CreateInputLayout(layout, (sizeof(layout) / sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].lo);
+
+    SAFE_RELEASE(pCompileVS);
 
 
+    ID3DBlob* pCompilePS = nullptr;
+    D3DCompileFromFile(L"Simple3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+    assert(pCompilePS != nullptr);
+    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].ps);
+    SAFE_RELEASE(pCompilePS);
 
-    pContext_->VSSetShader(pVertexShader, NULL, 0);	//頂点シェーダー
-    pContext_->PSSetShader(pPixelShader, NULL, 0);	//ピクセルシェーダー
-    pContext_->IASetInputLayout(pVertexLayout);	//頂点インプットレイアウト
-    pContext_->RSSetState(pRasterizerState);		//ラスタライザー
+    {
+        D3D11_RASTERIZER_DESC rdc = {};
+        rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
+        rdc.FillMode = D3D11_FILL_SOLID;
+        rdc.FrontCounterClockwise = FALSE;
+        pDevice_->CreateRasterizerState(&rdc, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].rs);
+    }
+ }
+
+void D3D::SetShader(SHADER_TYPE type)
+{
+    pContext_->VSSetShader(shader_bundle[static_cast<int>(type)].vs,NULL, 0);	//頂点シェーダー
+    pContext_->PSSetShader(shader_bundle[static_cast<int>(type)].ps, NULL, 0);	//ピクセルシェーダー
+    pContext_->IASetInputLayout(shader_bundle[static_cast<int>(type)].lo);	//頂点インプットレイアウト
+    pContext_->RSSetState(shader_bundle[static_cast<int>(type)].rs);		//ラスタライザー
 }

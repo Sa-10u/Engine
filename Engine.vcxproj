@@ -136,6 +136,7 @@
     <ClCompile Include="M_Quad.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Trans.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAM.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="M_Quad.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Trans.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Simple3D.hlsl">
