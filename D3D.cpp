@@ -161,7 +161,7 @@ void D3D::Shader_Initialize2D()
 
     {
         D3D11_RASTERIZER_DESC rdc = {};
-        rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
+        rdc.CullMode = D3D11_CULL_NONE;     //CULL_MODE
         rdc.FillMode = D3D11_FILL_SOLID;
         rdc.FrontCounterClockwise = FALSE;
         pDevice_->CreateRasterizerState(&rdc, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_2D)].rs);

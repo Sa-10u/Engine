@@ -92,7 +92,6 @@ HRESULT Sprite::Initialize(UINT const winH, UINT const winW)
 		{XMVectorSet((100*2.0 - winW*1.0) / winW , (0 *-2.0- winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(1,0,0,0)},
 		{XMVectorSet((100*2.0 - winW*1.0) / winW , (80 *-2.0- winH * -1.0) / winH , 0.0f , 0.0f),XMVectorSet(1,1,0,0)},
 		{XMVectorSet((10*2.0 - winW*1.0) / winW, (80*-2.0  - winH * -1.0) / winH , 0.0f, 0.0f),XMVectorSet(0,1,0,0)},
-		
 	};
 
 	//float tes = (winH * -2.0 - winH * -1.0) / winH;

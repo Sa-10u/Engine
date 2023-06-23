@@ -114,7 +114,7 @@ void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT)
 
 	CONSTANT_BUFFER cb;
 	cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
-	cb.matW = XMMatrixTranspose(wldMat->GetWorldMatrix());
+	cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
 	cb.matLGT = *wldLGT;
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
