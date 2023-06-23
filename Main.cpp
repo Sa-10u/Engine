@@ -5,6 +5,7 @@
 #include "CAM.h"
 #include "Dice.h"
 #include "Sprite.h"
+#include "FBX.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -80,6 +81,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
      *hr = dice->Initialize();
     Sprite* spr = new Sprite;
     *hr = spr->Initialize(winW,winH);
+    Fbx* model = new Fbx;
+    model->Load("O-DEN.fbx");
 
     if (*hr != S_OK)
     {
@@ -144,7 +147,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             };
 
             Trans trans;
-            trans.rot = XMFLOAT3(i, i, i);
+            trans.rot = XMFLOAT3(0, i, 0);
 
             Trans sptra;
             sptra.rot.y = i;
@@ -156,8 +159,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             D3D::BeginDraw();
 
           // pQmodel_->Draw(&matRY , &WorldLight);
-            dice->Draw(&trans , &WorldLight);
-            spr->Draw(&sptra );
+            model->Draw(&trans, WorldLight);
 
             D3D::EndDraw();
         }
