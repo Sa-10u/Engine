@@ -82,7 +82,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     Sprite* spr = new Sprite;
     *hr = spr->Initialize(winW,winH);
     Fbx* model = new Fbx;
-    model->Load("O-DEN.fbx");
+    model->Load("Assets/O-DEN.fbx");
 
     if (*hr != S_OK)
     {
@@ -154,6 +154,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
             XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ÉQÅ[ÉÄÇÃèàóù
+
+       
 
             CAM::Update();
             D3D::BeginDraw();

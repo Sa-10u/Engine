@@ -26,12 +26,11 @@ HRESULT Fbx::Load(std::string fileName)
 
 	vertex = Fmesh->GetControlPointsCount();
 	polygon = Fmesh->GetPolygonCount();
-
-	tex_ = new Texture();
-	tex_->Load("Assets/dice.png");
+	material = child->GetMaterialCount();
 
 	InitVerticies(Fmesh);
 	InitIndexes(Fmesh);
+	InitMaterial(child);
 
 	InitCB();
 
@@ -66,21 +65,29 @@ void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight)
 	D3D::pContext_->VSSetConstantBuffers(0, 1, &(this->cb));	//頂点シェーダー用	
 	D3D::pContext_->PSSetConstantBuffers(0, 1, &(this->cb));
 
-	ID3D11SamplerState* pSampler = tex_->GetSampler();
+	ID3D11SamplerState* pSampler = list_material->tex->GetSampler();
 
 	D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
 
 
 
-	ID3D11ShaderResourceView* pSRV = tex_->GetResourceV();
+	ID3D11ShaderResourceView* pSRV = list_material->tex->GetResourceV();
 
 	D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 
-	D3D::pContext_->DrawIndexed(vertex, 0, 0);
+	D3D::pContext_->DrawIndexed(vertex * 3, 0, 0);
 }
 
 void Fbx::Release()
 {
+	SAFE_RELEASE(vb);
+	SAFE_RELEASE(ib);
+	SAFE_RELEASE(pb);
+	SAFE_RELEASE(cb);
+
+	SAFE_DELETE(list_material);
+
+	//SAFE_RELEASE(tex_);
 }
 
 HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
@@ -101,7 +108,7 @@ HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 
 	{
 		D3D11_BUFFER_DESC bd_vertex;
-		bd_vertex.ByteWidth = sizeof(vertex);
+		bd_vertex.ByteWidth = vertex * sizeof(VERTEX);
 		bd_vertex.Usage = D3D11_USAGE_DEFAULT;
 		bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd_vertex.CPUAccessFlags = 0;
@@ -138,7 +145,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 
 	D3D11_BUFFER_DESC   bd;
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ind);
+	bd.ByteWidth = sizeof(int) * vertex;
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
@@ -152,6 +159,47 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 	if (FAILED(hr))
 	{
 		return hr;
+	}
+
+	return S_OK;
+}
+
+HRESULT Fbx::InitMaterial(fbxsdk::FbxNode* Fmesh)
+{
+	list_material = new MATERIAL[material];
+
+	for (int i = 0; i < material; i++)
+	{
+		FbxSurfaceMaterial* pMaterial = Fmesh->GetMaterial(i);
+
+		//テクスチャ情報
+		FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
+
+		//テクスチャの数数
+		int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
+
+		//テクスチャあり
+		if (fileTextureCount > 0)
+		{
+
+			FbxFileTexture* textureInfo = lProperty.GetSrcObject<FbxFileTexture>(0);
+			const char* textureFilePath = textureInfo->GetRelativeFileName();
+
+			char name[_MAX_FNAME];	//ファイル名
+			char ext[_MAX_EXT];	//拡張子
+			_splitpath_s(textureFilePath, nullptr, 0, nullptr, 0, name, _MAX_FNAME, ext, _MAX_EXT);
+			wsprintf(name, "%s%s", name, ext);
+
+			//ファイルからテクスチャ作成
+			list_material[i].tex = new Texture;
+			list_material[i].tex->Texture::Load(textureFilePath);
+		}
+
+		//テクスチャ無し
+		else
+		{
+			list_material[i].tex = nullptr;
+		}
 	}
 
 	return S_OK;

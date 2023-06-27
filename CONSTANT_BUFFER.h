@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include <fbxsdk.h>
 
 using namespace DirectX;
 
@@ -27,3 +28,8 @@ struct VERTEX_SPRITE
 	XMVECTOR pos;
 	XMVECTOR uv;
 };
+
+//struct MATERIAL
+//{
+//	Texture* tex;
+//};

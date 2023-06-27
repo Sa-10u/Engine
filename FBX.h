@@ -12,6 +12,11 @@
 #pragma comment(lib, "LibXml2-Md.lib")
 #pragma comment(lib, "zlib-Md.lib")
 
+struct MATERIAL
+{
+	Texture* tex;
+};
+
 class Fbx
 {
 public:
@@ -23,6 +28,7 @@ public:
 
 	HRESULT InitVerticies(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitIndexes(fbxsdk::FbxMesh* Fmesh);
+	HRESULT InitMaterial(fbxsdk::FbxNode* Fmesh);
 	
 	void InitCB();
 
@@ -30,12 +36,12 @@ private:
 
 	int polygon;
 	int vertex;
+	int material;
 
 	ID3D11Buffer* vb;
 	ID3D11Buffer* ib;
 	ID3D11Buffer* pb;
 	ID3D11Buffer* cb;
-
-	Texture* tex_;
+	MATERIAL* list_material;
 	
 };
