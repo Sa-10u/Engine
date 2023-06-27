@@ -148,6 +148,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
             Trans trans;
             trans.rot = XMFLOAT3(0, i, 0);
+            trans.pos = XMFLOAT3(0, -1, 0);
 
             Trans sptra;
             sptra.rot.y = i;

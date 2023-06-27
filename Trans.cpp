@@ -19,10 +19,10 @@ void Trans::Calc()
     
     matgra =
     {
-        1,0,0,pos.x,
-        0,1,0,pos.y,
-        0,0,1,pos.z,
-        0,0,0,1
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        pos.x,pos.y,pos.z,1
     };
     
     XMMATRIX matrot_x =
@@ -59,7 +59,7 @@ void Trans::Calc()
 
     matrot = matrot_z * matrot_y * matrot_x;
 
-    mat = matgra * matrot * matsc;
+    mat = matsc * matrot * matgra;
     
 }
 

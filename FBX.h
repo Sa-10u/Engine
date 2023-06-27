@@ -39,9 +39,10 @@ private:
 	int material;
 
 	ID3D11Buffer* vb;
-	ID3D11Buffer* ib;
+	ID3D11Buffer** ib;
 	ID3D11Buffer* pb;
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
+
 	
 };
