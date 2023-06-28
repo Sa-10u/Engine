@@ -12,11 +12,7 @@
 #pragma comment(lib, "LibXml2-Md.lib")
 #pragma comment(lib, "zlib-Md.lib")
 
-struct MATERIAL
-{
-	Texture* tex;
-	XMFLOAT4 diffuse;
-};
+
 
 class Fbx
 {

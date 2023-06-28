@@ -4,6 +4,8 @@
 
 using namespace DirectX;
 
+class Texture;
+
 struct CONSTANT_BUFFER
 {
 	XMMATRIX VP_matWLD;
@@ -33,3 +35,8 @@ struct VERTEX_SPRITE
 //{
 //	Texture* tex;
 //};
+struct MATERIAL
+{
+	Texture* tex;
+	XMFLOAT4 diffuse;
+};
