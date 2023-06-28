@@ -1,4 +1,3 @@
-
 Texture2D	g_texture : register(t0);	
 SamplerState	g_sampler : register(s0);
 
@@ -7,6 +6,9 @@ cbuffer global
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
 	float4		matLGT;
+
+	float4 difcol;
+	bool istex;
 };
 
 //───────────────────────────────────────
@@ -34,7 +36,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD ,float4 normal : NORMAL)
 
 	normal = mul(normal, matW);
 
-	float4 light = float4(1, 0.5, -0.7, 0);
+	float4 light = float4(0, 0.5, -0.7, 0);
 	light = normalize(light); 
 	outData.color = clamp(dot(normal, light), 0, 1);
 
@@ -47,8 +49,8 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD ,float4 normal : NORMAL)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
-	float4 diffuse = matLGT * g_texture.Sample(g_sampler, inData.uv) * inData.color;
-	float4 ambient = matLGT * g_texture.Sample(g_sampler, inData.uv) * float4(0.1, 0.1, 0.1, 0);
+	float4 diffuse[2] = {matLGT * g_texture.Sample(g_sampler, inData.uv) * inData.color , difcol};
+	float4 ambient[2] = { matLGT * g_texture.Sample(g_sampler, inData.uv) * float4(0.3, 0.3, 0.3, 0) , difcol };
 
-	return diffuse + ambient;
+	return diffuse[istex] + ambient[istex];
 }

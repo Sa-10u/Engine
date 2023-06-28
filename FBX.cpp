@@ -2,7 +2,7 @@
 
 const short TRIANGLE = 3;
 
-Fbx::Fbx():polygon(0),vertex(0)
+Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 {
 }
 
@@ -51,26 +51,26 @@ HRESULT Fbx::Load(std::string fileName)
 void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight)
 {
 	
-		D3D::SetShader(SHADER_TYPE::SHADER_2D);
+		D3D::SetShader(SHADER_TYPE::SHADER_3D);
 
 		CONSTANT_BUFFER cb;
 		cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 		cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
 		cb.matLGT = WorldLight;
 
-		D3D11_MAPPED_SUBRESOURCE pdata;
-		D3D::pContext_->Map(this->cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
-		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-		D3D::pContext_->Unmap(this->cb, 0);	//再開
-
-		UINT stride = sizeof(VERTEX);
-		UINT offset = 0;
-		D3D::pContext_->IASetVertexBuffers(0, 1, &this->vb, &stride, &offset);
-
-		// インデックスバッファーをセット
-		stride = sizeof(int);
-		offset = 0;
 		for (int i = 0; i < material; i++) {
+			D3D11_MAPPED_SUBRESOURCE pdata;
+			D3D::pContext_->Map(this->cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+			memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
+			D3D::pContext_->Unmap(this->cb, 0);	//再開
+
+			UINT stride = sizeof(VERTEX);
+			UINT offset = 0;
+			D3D::pContext_->IASetVertexBuffers(0, 1, &this->vb, &stride, &offset);
+
+			// インデックスバッファーをセット
+			stride = sizeof(int);
+			offset = 0;
 
 			D3D::pContext_->IASetIndexBuffer(ib[i], DXGI_FORMAT_R32_UINT, 0);
 
@@ -79,19 +79,18 @@ void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight)
 			D3D::pContext_->VSSetConstantBuffers(0, 1, &(this->cb));	//頂点シェーダー用	
 			D3D::pContext_->PSSetConstantBuffers(0, 1, &(this->cb));
 
-			ID3D11SamplerState* pSampler = list_material->tex->GetSampler();
+			if (list_material[i].tex)
+			{
+				ID3D11SamplerState* pSampler = list_material[i].tex->GetSampler();
+				D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
 
-			D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
+				ID3D11ShaderResourceView* pSRV = list_material[i].tex->GetResourceV();
+				D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
+			}
 
-			ID3D11ShaderResourceView* pSRV = list_material->tex->GetResourceV();
+			D3D::pContext_->DrawIndexed(indcnt_[i], 0, 0);
 
-			D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 		}
-
-		D3D::pContext_->DrawIndexed(vertex * 3, 0, 0);
-		
-	
-	
 }
 
 void Fbx::Release()
@@ -103,6 +102,7 @@ void Fbx::Release()
 
 	SAFE_DELETE(list_material);
 	SAFE_DELETE(ib);
+	SAFE_DELETE(indcnt_);
 }
 
 HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
@@ -118,12 +118,16 @@ HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 			vx[index].pos = XMVectorSet((float)pos[0], (float)pos[1], (float)pos[2], 0.0f);
 
 			FbxLayerElementUV* pUV = Fmesh->GetLayer(0)->GetUVs();
-			int uvIndex = Fmesh->GetTextureUVIndex(i, vertex, FbxLayerElement::eTextureDiffuse);
+			int uvIndex = Fmesh->GetTextureUVIndex(i, j, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
 			vx[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0 - uv.mData[1]), 0.0f, 0.0f);
-		}
-	}
 
+			FbxVector4 Normal;
+			Fmesh->GetPolygonVertexNormal(i, j, Normal);	//ｉ番目のポリゴンの、ｊ番目の頂点の法線をゲット
+			vx[index].normal = XMVectorSet((float)Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
+		}
+
+	}
 	//---------------
 
 	{
@@ -145,6 +149,7 @@ HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 		}
 	}
 
+
 	return S_OK;
 }
 
@@ -152,7 +157,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 {
 	ib = new ID3D11Buffer* [material];
 
-
+	indcnt_ = new int[material];
 	int* ind = new int[polygon * 3];
 
 	for (int i = 0; i < material; i++) {
@@ -162,7 +167,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 		for (uint32_t j = 0; j < polygon; j++) {
 
 			FbxLayerElementMaterial* mtl = Fmesh->GetLayer(0)->GetMaterials();
-			int mtlId = mtl->GetIndexArray().GetAt(i);
+			int mtlId = mtl->GetIndexArray().GetAt(j);
 
 			if (mtlId == i)
 			{
@@ -171,35 +176,35 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 					cnt++;
 				}
 			}
-			
 		}
-	}
-
+		indcnt_[i] = cnt;
 
 		//-------
 
-	D3D11_BUFFER_DESC   bd;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(int) * vertex;
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
+		D3D11_BUFFER_DESC   bd;
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(int) * vertex;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		bd.MiscFlags = 0;
 
-	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = ind;
-	InitData.SysMemPitch = 0;
-	InitData.SysMemSlicePitch = 0;
+		D3D11_SUBRESOURCE_DATA InitData;
+		InitData.pSysMem = ind;
+		InitData.SysMemPitch = 0;
+		InitData.SysMemSlicePitch = 0;
 
-	HRESULT hr = S_OK;
+		HRESULT hr = S_OK;
 
-	for (int i = 0; i < material; i++) {
 		hr = D3D::pDevice_->CreateBuffer(&bd, &InitData, &ib[i]);
-	}
+		
 
-	if (FAILED(hr))
-	{
-		return hr;
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+
 	}
+	delete ind;
 
 	return S_OK;
 	
@@ -233,7 +238,7 @@ HRESULT Fbx::InitMaterial(fbxsdk::FbxNode* Fmesh)
 
 			//ファイルからテクスチャ作成
 			list_material[i].tex = new Texture;
-			HRESULT hr = list_material[i].tex->Load(textureFilePath);
+			HRESULT hr = list_material[i].tex->Load(name);
 
 			assert(hr == S_OK);
 		}
@@ -242,7 +247,10 @@ HRESULT Fbx::InitMaterial(fbxsdk::FbxNode* Fmesh)
 		else
 		{
 			list_material[i].tex = nullptr;
-			assert(0);
+
+			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)Fmesh->GetMaterial(i);
+			FbxDouble3  diffuse = pMaterial->Diffuse;
+			list_material[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 		}
 	}
 

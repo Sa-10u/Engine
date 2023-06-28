@@ -15,6 +15,7 @@
 struct MATERIAL
 {
 	Texture* tex;
+	XMFLOAT4 diffuse;
 };
 
 class Fbx
@@ -23,13 +24,13 @@ public:
 
 	Fbx();
 	HRESULT Load(std::string fileName);
-	void    Draw(Trans* transform , XMFLOAT4 WorldLight);
+	void    Draw(Trans* transform, XMFLOAT4 WorldLight);
 	void    Release();
 
 	HRESULT InitVerticies(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitIndexes(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitMaterial(fbxsdk::FbxNode* Fmesh);
-	
+
 	void InitCB();
 
 private:
@@ -44,5 +45,5 @@ private:
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
 
-	
+	int* indcnt_;
 };
