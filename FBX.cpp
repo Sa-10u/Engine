@@ -51,7 +51,7 @@ HRESULT Fbx::Load(std::string fileName)
 void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight , XMFLOAT4 LightPos)
 {
 	
-		D3D::SetShader(SHADER_TYPE::SHADER_3D);
+		D3D::SetShader(SHADER_TYPE::SHADER_LENGTH3D);
 
 		for (int i = 0; i < material; i++) {
 

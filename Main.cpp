@@ -116,11 +116,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             0,0,0,1,
         };
 
-        float i = 0;
-        float j = 0;
+        float i = 1;
+        float j = fmod(i,360) + 1;
 
-        XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
-        XMFLOAT4 WorldLightPos(0, 0.5, -0.7, 0);
+      
 
   //message loop (waiting for order some )
     MSG msg;
@@ -140,6 +139,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
          i =  fmod(i+=0.0008, XM_PI*2);
          j = fmod(j += 0.0004, XM_PI * 2);
 
+         XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
+         XMFLOAT4 WorldLightPos(sinf(j)*10 , 0, 0, 0);
+
             XMMATRIX matRZ =
             {
                 sinf((i) ),cosf((i) ),0,0,
@@ -157,13 +159,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             };
 
             Trans trans;
-            trans.rot = XMFLOAT3(0, i, 0);
+            trans.rot = XMFLOAT3(0, 0, 0);
             trans.pos = XMFLOAT3(0, -1, 0);
 
             Trans sptra;
             sptra.rot.y = i;
 
-            XMMATRIX mat = matRY * matRZ *matG  * matS; 
+           // XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ÉQÅ[ÉÄÇÃèàóù
 
             CAM::Update();

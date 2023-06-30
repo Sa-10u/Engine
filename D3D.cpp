@@ -118,6 +118,7 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 
     Shader_Initialize2D();
     Shader_Initialize3D();
+    Shader_InitializeLengh3D();
 
     return S_OK;
 }
@@ -233,7 +234,7 @@ void D3D::Shader_InitializeLengh3D()
     ID3DBlob* pCompileVS = nullptr;
     D3DCompileFromFile(L"Length3D.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
     assert(pCompileVS != nullptr);
-    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].vs);
+    pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_LENGTH3D)].vs);
 
     D3D11_INPUT_ELEMENT_DESC layout[] = {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//ˆÊ’u
@@ -241,7 +242,7 @@ void D3D::Shader_InitializeLengh3D()
           { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(DirectX::XMVECTOR) * 2 ,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    pDevice_->CreateInputLayout(layout, (sizeof(layout) / sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].lo);
+    pDevice_->CreateInputLayout(layout, (sizeof(layout) / sizeof(layout[0])), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_LENGTH3D)].lo);
 
     SAFE_RELEASE(pCompileVS);
 
@@ -249,7 +250,7 @@ void D3D::Shader_InitializeLengh3D()
     ID3DBlob* pCompilePS = nullptr;
     D3DCompileFromFile(L"Length3D.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
     assert(pCompilePS != nullptr);
-    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].ps);
+    pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_LENGTH3D)].ps);
     SAFE_RELEASE(pCompilePS);
 
     {
@@ -257,7 +258,7 @@ void D3D::Shader_InitializeLengh3D()
         rdc.CullMode = D3D11_CULL_BACK;     //CULL_MODE
         rdc.FillMode = D3D11_FILL_SOLID;
         rdc.FrontCounterClockwise = FALSE;
-        pDevice_->CreateRasterizerState(&rdc, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_3D)].rs);
+        pDevice_->CreateRasterizerState(&rdc, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_LENGTH3D)].rs);
     }
 }
 
