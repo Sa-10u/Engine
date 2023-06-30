@@ -11,6 +11,7 @@ enum class SHADER_TYPE
 	SHADER_2D = 0,
 	SHADER_3D,
 	SHADER_POINT3D,
+	SHADER_TOON3D,
 	SHADER_AMMOUNT,
 };
 
@@ -27,6 +28,7 @@ namespace D3D
 	void Shader_Initialize2D();
 	void Shader_Initialize3D();
 	void Shader_InitializePoint3D();
+	void Shader_InitializeToon3D();
 
 	void SetShader(SHADER_TYPE type);
 	

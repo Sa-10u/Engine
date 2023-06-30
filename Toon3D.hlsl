@@ -36,7 +36,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 
 	float4 light = matLGTpos;
 	light = normalize(light);
-	outData.color = clamp(dot(normal, light) , 0 , 1);
+	outData.color = clamp(dot(normal, light), 0, 1);
 
 	return outData;
 }
@@ -47,8 +47,10 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 float4 PS(VS_OUT inData) : SV_Target
 {
 	float len = length(matLGTpos.xyz - (mul(inData.capos,matW).xyz));
-		
-	float4 diffuse[2] = {(matLGT  * g_texture.Sample(g_sampler, inData.uv) * inData.color) / len ,	(difcol * matLGT * inData.color * 3) /len };
+	//len = saturate(len);
+	len = (int)(len + 0.5);
+
+	float4 diffuse[2] = {(matLGT * g_texture.Sample(g_sampler, inData.uv) * inData.color) / len ,	(difcol * matLGT * inData.color * 3) / len };
 	float4 ambient[2] = {matLGT * g_texture.Sample(g_sampler, inData.uv) * float4(0.3, 0.3, 0.3, 0) ,	difcol * matLGT * float4(0.1, 0.1, 0.1, 0) };
 
 	return diffuse[!istex] + ambient[!istex];

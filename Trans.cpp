@@ -59,7 +59,7 @@ void Trans::Calc()
 
     matrot = matrot_z * matrot_y * matrot_x;
 
-    mat = matsc * matrot * matgra;
+    mat = matrot * matsc * matgra;
     
 }
 
@@ -72,5 +72,5 @@ XMMATRIX Trans::GetWorldMatrix()
 XMMATRIX Trans::GetNormalMatrix()
 {
     Calc();
-    return  mat * XMMatrixInverse(nullptr,matsc);
+    return  matrot * XMMatrixInverse(nullptr,matsc);
 }
