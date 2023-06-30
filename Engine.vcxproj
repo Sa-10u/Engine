@@ -162,7 +162,7 @@
     <ClInclude Include="Trans.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Length3D.hlsl">
+    <FxCompile Include="Point3D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

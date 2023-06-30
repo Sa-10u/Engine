@@ -140,7 +140,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
          j = fmod(j += 0.0004, XM_PI * 2);
 
          XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
-         XMFLOAT4 WorldLightPos(sinf(j)*10 , 0, 0, 0);
+         XMFLOAT4 WorldLightPos(sinf(j)*10 , 0,-2, 0);
 
             XMMATRIX matRZ =
             {
@@ -159,7 +159,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             };
 
             Trans trans;
-            trans.rot = XMFLOAT3(0, 0, 0);
+            trans.rot = XMFLOAT3(0, 45, 0);
             trans.pos = XMFLOAT3(0, -1, 0);
 
             Trans sptra;
