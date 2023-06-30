@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "D3D.h"
+#include "DInput.h"
 #include "Sprite.h"
 #include "MACRO.h"
 #include "CAM.h"
@@ -75,6 +76,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         PostQuitMessage(0);
     }
 
+    *hr =  Input::Initialize(hWnd);
+
+    if (*hr != S_OK)
+    {
+        PostQuitMessage(0);
+    }
+
+    //----------------------------------------
   //  M_Quad* pQmodel_ = new Sprite();
   //  *hr = pQmodel_->Initialize();
       Dice* dice = new Dice();
@@ -111,6 +120,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         float j = 0;
 
         XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
+        XMFLOAT4 WorldLightPos(0, 0.5, -0.7, 0);
 
   //message loop (waiting for order some )
     MSG msg;
@@ -156,13 +166,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ƒQ[ƒ€‚Ìˆ—
 
-       
-
             CAM::Update();
             D3D::BeginDraw();
 
           // pQmodel_->Draw(&matRY , &WorldLight);
-            model->Draw(&trans, WorldLight);
+            model->Draw(&trans, WorldLight , WorldLightPos);
+
+            Input::Update();
+
+            if (Input::IsKey(DIK_ESCAPE))
+            {
+                PostQuitMessage(0);
+            }
 
             D3D::EndDraw();
         }
@@ -176,6 +191,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     SAFE_DELETE(spr);
 
     D3D::Release();
+    Input::Release();
 
 	return 0;
 }

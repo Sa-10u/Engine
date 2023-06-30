@@ -12,6 +12,10 @@ struct CONSTANT_BUFFER
 	XMMATRIX matW;
 
 	XMFLOAT4 matLGT;
+	XMFLOAT4 matLGTpos;
+
+	XMFLOAT4 diffuse;
+	int isTex;
 };
 struct CONSTANT_BUFFER_SPRITE
 {

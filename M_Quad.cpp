@@ -108,7 +108,7 @@ HRESULT M_Quad::Initialize()
 	return res;
 }
 
-void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT)
+void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT , XMFLOAT4 LightPos)
 {
 	D3D::SetShader(SHADER_TYPE::SHADER_3D);
 
@@ -116,6 +116,7 @@ void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT)
 	cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 	cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
 	cb.matLGT = *wldLGT;
+	cb.matLGTpos = LightPos;
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
@@ -148,7 +149,7 @@ void M_Quad::Draw(Trans* wldMat , XMFLOAT4* wldLGT)
 	D3D::pContext_->DrawIndexed(VCs, 0, 0);
 }
 
-void M_Quad::Draw(XMMATRIX* trans, XMFLOAT4* wldLGT)
+void M_Quad::Draw(XMMATRIX* trans, XMFLOAT4* wldLGT , XMFLOAT4 LightPos)
 {
 	D3D::SetShader(SHADER_TYPE::SHADER_3D);
 
@@ -156,6 +157,7 @@ void M_Quad::Draw(XMMATRIX* trans, XMFLOAT4* wldLGT)
 	cb.VP_matWLD = XMMatrixTranspose(*trans * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 	cb.matW = XMMatrixTranspose(*trans);
 	cb.matLGT = *wldLGT;
+	cb.matLGTpos = LightPos;
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	D3D::pContext_->Map(pConstBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める

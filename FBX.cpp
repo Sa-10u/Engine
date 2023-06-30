@@ -48,17 +48,21 @@ HRESULT Fbx::Load(std::string fileName)
 	return S_OK;
 }
 
-void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight)
+void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight , XMFLOAT4 LightPos)
 {
 	
 		D3D::SetShader(SHADER_TYPE::SHADER_3D);
 
-		CONSTANT_BUFFER cb;
-		cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
-		cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
-		cb.matLGT = WorldLight;
-
 		for (int i = 0; i < material; i++) {
+
+			CONSTANT_BUFFER cb;
+			cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
+			cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
+			cb.matLGT = WorldLight;
+			cb.matLGTpos = LightPos;
+			cb.diffuse = list_material[i].diffuse;
+			cb.isTex = list_material[i].tex != nullptr;
+
 			D3D11_MAPPED_SUBRESOURCE pdata;
 			D3D::pContext_->Map(this->cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 			memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
@@ -204,7 +208,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 		}
 
 	}
-	delete ind;
+	delete[] ind;
 
 	return S_OK;
 	

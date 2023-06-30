@@ -20,7 +20,7 @@ public:
 
 	Fbx();
 	HRESULT Load(std::string fileName);
-	void    Draw(Trans* transform, XMFLOAT4 WorldLight);
+	void    Draw(Trans* transform, XMFLOAT4 WorldLight , XMFLOAT4 LightPos);
 	void    Release();
 
 	HRESULT InitVerticies(fbxsdk::FbxMesh* Fmesh);

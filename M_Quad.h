@@ -20,8 +20,8 @@ public :
 	~M_Quad();
 	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
 	virtual HRESULT Initialize(void);
-	void Draw(Trans* trans , XMFLOAT4* wldLGT);
-	void Draw(XMMATRIX* trans, XMFLOAT4* wldLGT);
+	void Draw(Trans* trans , XMFLOAT4* wldLGT , XMFLOAT4 LightPos);
+	void Draw(XMMATRIX* trans, XMFLOAT4* wldLGT , XMFLOAT4 LightPos);
 	void Release();
 
 private:
