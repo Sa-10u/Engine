@@ -12,6 +12,9 @@ enum class SHADER_TYPE
 	SHADER_3D,
 	SHADER_POINT3D,
 	SHADER_TOON3D,
+	SHADER_CELL3D,
+	SHADER_FRENEL3D,
+
 	SHADER_AMMOUNT,
 };
 
@@ -29,6 +32,8 @@ namespace D3D
 	void Shader_Initialize3D();
 	void Shader_InitializePoint3D();
 	void Shader_InitializeToon3D();
+	void Shader_InitializeCell3D();
+	void Shader_InitializeFrenel3D();
 
 	void SetShader(SHADER_TYPE type);
 	
