@@ -44,6 +44,9 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 float4 PS(VS_OUT inData) : SV_Target
 {
-	float vec = acos(float3(inData.color.x,inData.color.y,inData.color.z));
-	return float4(1 - vec, 1 - vec,1 - vec, 1);
+	float4 normal = (0,0,-1,0);
+
+	float vec = dot(normal.xyz, normalize(inData.color.xyz))  ;
+
+	return float4(vec,vec,vec, 1);
 }
