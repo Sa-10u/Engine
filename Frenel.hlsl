@@ -49,5 +49,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 view = -normalize(mul(inData.capos , matWV));
 	float theta = dot(normalize(inData.color.xyz ), view.xyz)  ;
 
-	return view;
+	float F0 = 0.04;
+	float fresnel = F0 + (1.0 - F0) * pow(1.0 - theta, 5.0);
+
+	return fresnel;
 }

@@ -128,9 +128,7 @@ HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 
 void D3D::BeginDraw()
 {
-    
-
-    float clearColor[4] = { 0.4f, 0.6f, 0.5f, 0.2f };//R,G,B,A
+    float clearColor[4] = { 0.0f, 0.2f, 0.5f, 1.0f };//R,G,B,A
 
     //‰æ–Ê‚ðƒNƒŠƒA
     pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);

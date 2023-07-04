@@ -1,12 +1,9 @@
 #include <Windows.h>
 #include "D3D.h"
-#include "DInput.h"
-#include "Sprite.h"
-#include "MACRO.h"
-#include "CAM.h"
-#include "Dice.h"
-#include "Sprite.h"
-#include "FBX.h"
+#include "Engine/DInput.h"
+#include "Engine/MACRO.h"
+#include "Engine/CAM.h"
+#include "Engine/RootOBJ.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -19,8 +16,6 @@ namespace WIN
     const int _WIDTH = 800;
 }
 
-
-
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
     RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
@@ -28,7 +23,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     int winW = winRect.right - winRect.left;     
     int winH = winRect.bottom - winRect.top;
 
-  //create window class
     WNDCLASSEX wc;
     wc.cbSize = sizeof(WNDCLASSEX);             //この構造体のサイズ
     wc.hInstance = hInstance;                   //インスタンスハンドル
@@ -45,7 +39,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
     RegisterClassEx(&wc);
 
-  //create window
     HWND hWnd = CreateWindow(
         WIN::_NAME,         //ウィンドウクラス名
         WIN::_BAR,     //タイトルバーに表示する内容
@@ -60,163 +53,35 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         NULL                 //パラメータ（なし）
     );
 
-  //output window
     ShowWindow(hWnd, nCmdShow);
 
-    //-----------
-    
-    
-    HRESULT* hr = new HRESULT;
-    *hr = E_FAIL;
+    //---------------
+    D3D::Initialize(WIN::_WIDTH,WIN::_HEIGHT,hWnd);
     CAM::Initialize();
-    *hr = D3D::Initialize(WIN::_WIDTH, WIN::_HEIGHT, hWnd);
+    Input::Initialize(hWnd);
 
-    if (*hr != S_OK)
-    {
-        PostQuitMessage(0);
-    }
 
-    *hr =  Input::Initialize(hWnd);
 
-    if (*hr != S_OK)
-    {
-        PostQuitMessage(0);
-    }
-
-    //----------------------------------------
-  //  M_Quad* pQmodel_ = new Sprite();
-  //  *hr = pQmodel_->Initialize();
-   //   Dice* dice = new Dice();
-    // *hr = dice->Initialize();
-  //  Sprite* spr = new Sprite;
-  //  *hr = spr->Initialize(winW,winH);
-    Fbx* model = new Fbx;
-    model->Load("Assets/Sphere.fbx");
-
-    Fbx* sub= new Fbx;
-    sub->Load("Assets/O-DEN.fbx");
-
-    if (*hr != S_OK)
-    {
-        PostQuitMessage(0);
-    }
-
-        delete hr;
-
-        XMMATRIX matG =
-        {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1,
-        };
-
-        XMMATRIX matS =
-        {
-            2,0,0,0,
-            0,2,0,0,
-            0,0,2,0,
-            0,0,0,1,
-        };
-
-        float i = 1;
-        float j = fmod(i,360) + 1;
-        float k = 2;
-
-        int cnt = 0;
-
-  //message loop (waiting for order some )
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT)
     {
-        //メッセージあり
         if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
 
-        //メッセージなし
         else
         {
-         i =  fmod(i+=0.0008, XM_PI*2);
-
-         j = fmod(j += 0.0004, XM_PI * 2);
-
-        
-
-         XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
-         XMFLOAT4 WorldLightPos(sinf(i), 0,-0.5, 0);
-
-            XMMATRIX matRZ =
-            {
-                sinf((i) ),cosf((i) ),0,0,
-                -cosf((i) ),sinf((i) ),0,0,
-                0,0,1,0,
-                0,0,0,1,
-            };
-
-            XMMATRIX matRY =
-            {
-                cosf(j),0,-sinf(j),0,
-                0,1,0,0,
-                sinf(j),0,cosf(j),0,
-                0,0,0,1,
-            };
-
-            Trans trans;
-            trans.rot = XMFLOAT3(0, 3.14/2, 0);
-            trans.pos = XMFLOAT3(cosf(i) * 3, -1, 0);
-            trans.size = XMFLOAT3(0.5, 0.5, 0.5);
-
-            Trans sptra;
-            sptra.rot = XMFLOAT3(0, 3.14/2, 0);
-
-            if (Input::IsKey(DIK_A))
-            {
-                k -= 0.01;
-            }
-            if (Input::IsKey(DIK_D))
-            {
-                k += 0.01;
-            }
-            sptra.pos = XMFLOAT3(k, -1, 0);
-            sptra.size = XMFLOAT3(0.5, 0.5, 0.5);
-
-           // XMMATRIX mat = matRY * matRZ *matG  * matS; 
-            //ゲームの処理
-
-            CAM::Update();
             D3D::BeginDraw();
-
-          // pQmodel_->Draw(&matRY , &WorldLight);
-            model->Draw(&trans, WorldLight , WorldLightPos);
-            sub->Draw(&sptra, WorldLight, WorldLightPos);
+            CAM::Update();
             Input::Update();
 
-            if (Input::IsKeyUp(DIK_ESCAPE))
-            {
-                cnt++;
-              
-                if (cnt >= 3)      PostQuitMessage(0);
-            }
-
-         
-            
 
             D3D::EndDraw();
         }
     }
-
-  //  SAFE_RELEASE(pQmodel_);
-   // SAFE_DELETE(pQmodel_);
-   // SAFE_RELEASE(dice);
-   // SAFE_DELETE(dice);
-   // SAFE_RELEASE(spr);
-  //  SAFE_DELETE(spr);
-    SAFE_RELEASE(model);
-    SAFE_RELEASE(sub);
 
     D3D::Release();
     Input::Release();
@@ -229,7 +94,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_DESTROY:
-        PostQuitMessage(0);  //プログラム終了
+        PostQuitMessage(0);  
         return 0;
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);

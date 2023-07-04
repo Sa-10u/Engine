@@ -65,7 +65,6 @@ HRESULT Sprite::Initialize(VERTEX vcs[], int vcw, string pic, int index[], int i
 		cb.MiscFlags = 0;
 		cb.StructureByteStride = 0;
 
-		// コンスタントバッファの作成
 		hr = D3D::pDevice_->CreateBuffer(&cb, nullptr, &pConstBuffer_);
 
 		if (hr != S_OK)

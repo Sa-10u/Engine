@@ -22,7 +22,6 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;
 	float4 color : COLOR;
 	float4 capos: POSITION;
-
 };
 
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
