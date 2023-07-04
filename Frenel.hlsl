@@ -5,8 +5,10 @@ cbuffer global
 {
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
+	float4x4	matWV;
 	float4		matLGT;
 	float4		matLGTpos;
+	
 
 	float4 difcol;
 	bool istex;
@@ -21,6 +23,7 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;
 	float4 color : COLOR;
 	float4 capos: POSITION;
+
 };
 
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
@@ -44,9 +47,8 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
-	float4 normal = (0,0,-1,0);
+	float4 view = -normalize(mul(inData.capos , matWV));
+	float vec = dot(normalize(inData.color.xyz ), view.xyz)  ;
 
-	float vec = dot(normal.xyz, normalize(inData.color.xyz))  ;
-
-	return float4(vec,vec,vec, 1);
+	return view;
 }

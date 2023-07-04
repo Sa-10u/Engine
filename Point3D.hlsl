@@ -5,6 +5,7 @@ cbuffer global
 {
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
+	float4x4	matWV;
 	float4		matLGT;
 	float4		matLGTpos;
 
@@ -21,6 +22,7 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;
 	float4 color : COLOR;
 	float4 capos: POSITION;
+
 };
 
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
@@ -49,7 +51,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float len = length(matLGTpos.xyz - (mul(inData.capos,matW).xyz));
 		
 	float4 diffuse[2] = {(matLGT  * g_texture.Sample(g_sampler, inData.uv) * inData.color) / len ,	(difcol * matLGT * inData.color * 3) /len };
-	float4 ambient[2] = {matLGT * g_texture.Sample(g_sampler, inData.uv) * float4(0.3, 0.3, 0.3, 0) ,	difcol * matLGT * float4(0.1, 0.1, 0.1, 0) };
+	float4 ambient[2] = {matLGT * g_texture.Sample(g_sampler, inData.uv) * float4(0.3, 0.3, 0.3, 1) ,	difcol * matLGT * float4(0.1, 0.1, 0.1, 1) };
 
-	return diffuse[!istex] + ambient[!istex];
+	return (diffuse[!istex] )+ ambient[!istex];
 }

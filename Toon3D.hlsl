@@ -5,6 +5,7 @@ cbuffer global
 {
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
+	float4x4	matWV;
 	float4		matLGT;
 	float4		matLGTpos;
 
@@ -21,6 +22,7 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;
 	float4 color : COLOR;
 	float4 capos: POSITION;
+
 };
 
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)

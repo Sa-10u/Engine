@@ -86,12 +86,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     //----------------------------------------
   //  M_Quad* pQmodel_ = new Sprite();
   //  *hr = pQmodel_->Initialize();
-      Dice* dice = new Dice();
-     *hr = dice->Initialize();
-    Sprite* spr = new Sprite;
-    *hr = spr->Initialize(winW,winH);
+   //   Dice* dice = new Dice();
+    // *hr = dice->Initialize();
+  //  Sprite* spr = new Sprite;
+  //  *hr = spr->Initialize(winW,winH);
     Fbx* model = new Fbx;
-    model->Load("Assets/O-DEN.fbx");
+    model->Load("Assets/Sphere.fbx");
+
+    Fbx* sub= new Fbx;
+    sub->Load("Assets/O-DEN.fbx");
 
     if (*hr != S_OK)
     {
@@ -119,7 +122,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         float i = 1;
         float j = fmod(i,360) + 1;
 
-      
+        int cnt = 0;
 
   //message loop (waiting for order some )
     MSG msg;
@@ -137,10 +140,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         else
         {
          i =  fmod(i+=0.0008, XM_PI*2);
+
          j = fmod(j += 0.0004, XM_PI * 2);
 
          XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
-         XMFLOAT4 WorldLightPos(0, 0,-2, 0);
+         XMFLOAT4 WorldLightPos(sinf(i), 0,-0.5, 0);
 
             XMMATRIX matRZ =
             {
@@ -159,11 +163,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             };
 
             Trans trans;
-            trans.rot = XMFLOAT3(0, i, 0);
-            trans.pos = XMFLOAT3(0, -1, 0);
+            trans.rot = XMFLOAT3(0, 3.14/2, 0);
+            trans.pos = XMFLOAT3(cosf(i) * 3, -1, 0);
+            trans.size = XMFLOAT3(0.5, 0.5, 0.5);
 
             Trans sptra;
-            sptra.rot.y = i;
+            sptra.rot = XMFLOAT3(0, 3.14/2, 0);
+            sptra.pos = XMFLOAT3(-2, -1, 0);
+            sptra.size = XMFLOAT3(0.5, 0.5, 0.5);
 
            // XMMATRIX mat = matRY * matRZ *matG  * matS; 
             //ƒQ[ƒ€‚Ìˆ—
@@ -173,13 +180,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
           // pQmodel_->Draw(&matRY , &WorldLight);
             model->Draw(&trans, WorldLight , WorldLightPos);
-
+            model->Draw(&sptra, WorldLight, WorldLightPos);
             Input::Update();
 
-            if (Input::IsKey(DIK_ESCAPE))
+            if (Input::IsKeyUp(DIK_ESCAPE))
             {
-                PostQuitMessage(0);
+                cnt++;
+              
+                if (cnt >= 3)      PostQuitMessage(0);
             }
+            
 
             D3D::EndDraw();
         }
@@ -187,10 +197,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
   //  SAFE_RELEASE(pQmodel_);
    // SAFE_DELETE(pQmodel_);
-    SAFE_RELEASE(dice);
-    SAFE_DELETE(dice);
-    SAFE_RELEASE(spr);
-    SAFE_DELETE(spr);
+   // SAFE_RELEASE(dice);
+   // SAFE_DELETE(dice);
+   // SAFE_RELEASE(spr);
+  //  SAFE_DELETE(spr);
 
     D3D::Release();
     Input::Release();

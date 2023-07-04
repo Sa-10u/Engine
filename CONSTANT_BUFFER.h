@@ -10,6 +10,7 @@ struct CONSTANT_BUFFER
 {
 	XMMATRIX VP_matWLD;
 	XMMATRIX matW;
+	XMMATRIX matWV;
 
 	XMFLOAT4 matLGT;
 	XMFLOAT4 matLGTpos;
@@ -17,6 +18,7 @@ struct CONSTANT_BUFFER
 	XMFLOAT4 diffuse;
 	int isTex;
 };
+
 struct CONSTANT_BUFFER_SPRITE
 {
 	XMMATRIX matW;
@@ -43,4 +45,18 @@ struct MATERIAL
 {
 	Texture* tex;
 	XMFLOAT4 diffuse;
+};
+
+struct P_LIGHT 
+{
+	XMFLOAT3 pos;
+	XMFLOAT4 color;
+	float strength;
+};
+
+struct S_LIGHT
+{
+	XMFLOAT3 pos;
+	XMFLOAT4 color;
+	float strength;
 };

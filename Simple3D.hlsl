@@ -5,6 +5,7 @@ cbuffer global
 {
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
+	float4x4	matWV;
 	float4		matLGT;
 	float4		matLGTpos;
 

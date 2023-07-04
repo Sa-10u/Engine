@@ -72,5 +72,5 @@ XMMATRIX Trans::GetWorldMatrix()
 XMMATRIX Trans::GetNormalMatrix()
 {
     Calc();
-    return  matrot * XMMatrixInverse(nullptr,matsc);
+    return  mat;
 }

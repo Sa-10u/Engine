@@ -58,6 +58,7 @@ void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight , XMFLOAT4 LightPos)
 			CONSTANT_BUFFER cb;
 			cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 			cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
+			cb.matWV = XMMatrixTranspose(CAM::GetViewMatrix());
 			cb.matLGT = WorldLight;
 			cb.matLGTpos = LightPos;
 			cb.diffuse = list_material[i].diffuse;

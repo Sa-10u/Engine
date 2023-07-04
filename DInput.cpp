@@ -4,7 +4,8 @@ namespace Input
 {
     LPDIRECTINPUT8   pDInput = nullptr;
     LPDIRECTINPUTDEVICE8 pKeyDevice = nullptr;
-    char keyState[256] = { 0 };
+    char keyState[256] = {};
+    char prev_keyState[256] = {};
 
     HRESULT Input::Initialize(HWND hWnd)
     {
@@ -25,13 +26,25 @@ namespace Input
 
     void Input::Update()
     {
+        memcpy(prev_keyState, keyState, sizeof(keyState));
+
         pKeyDevice->Acquire();
         pKeyDevice->GetDeviceState(sizeof(keyState), &keyState);
     }
 
     bool Input::IsKey(int code)
     {
-        return static_cast<bool>((keyState[code] & 0b10000000));
+        return static_cast<bool>(keyState[code] & 0b10000000);
+    }
+
+    bool IsKeyDown(int code)
+    {
+        return static_cast<bool>((keyState[code] & 0b10000000) & (~(prev_keyState[code]) & 0b10000000));
+    }
+
+    bool IsKeyUp(int code)
+    {
+        return static_cast<bool>(~(keyState[code] & 0b10000000) & ((prev_keyState[code]) & 0b10000000));
     }
 
     void Input::Release()
