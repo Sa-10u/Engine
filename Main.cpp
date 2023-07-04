@@ -121,6 +121,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
         float i = 1;
         float j = fmod(i,360) + 1;
+        float k = 2;
 
         int cnt = 0;
 
@@ -142,6 +143,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
          i =  fmod(i+=0.0008, XM_PI*2);
 
          j = fmod(j += 0.0004, XM_PI * 2);
+
+        
 
          XMFLOAT4 WorldLight(1.5, 1.5, 2.0, 0);
          XMFLOAT4 WorldLightPos(sinf(i), 0,-0.5, 0);
@@ -169,7 +172,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
             Trans sptra;
             sptra.rot = XMFLOAT3(0, 3.14/2, 0);
-            sptra.pos = XMFLOAT3(-2, -1, 0);
+
+            if (Input::IsKey(DIK_A))
+            {
+                k -= 0.01;
+            }
+            if (Input::IsKey(DIK_D))
+            {
+                k += 0.01;
+            }
+            sptra.pos = XMFLOAT3(k, -1, 0);
             sptra.size = XMFLOAT3(0.5, 0.5, 0.5);
 
            // XMMATRIX mat = matRY * matRZ *matG  * matS; 
@@ -180,7 +192,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
           // pQmodel_->Draw(&matRY , &WorldLight);
             model->Draw(&trans, WorldLight , WorldLightPos);
-            model->Draw(&sptra, WorldLight, WorldLightPos);
+            sub->Draw(&sptra, WorldLight, WorldLightPos);
             Input::Update();
 
             if (Input::IsKeyUp(DIK_ESCAPE))
@@ -189,6 +201,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
               
                 if (cnt >= 3)      PostQuitMessage(0);
             }
+
+         
             
 
             D3D::EndDraw();
@@ -201,6 +215,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
    // SAFE_DELETE(dice);
    // SAFE_RELEASE(spr);
   //  SAFE_DELETE(spr);
+    SAFE_RELEASE(model);
+    SAFE_RELEASE(sub);
 
     D3D::Release();
     Input::Release();

@@ -8,7 +8,6 @@ cbuffer global
 	float4x4	matWV;
 	float4		matLGT;
 	float4		matLGTpos;
-	
 
 	float4 difcol;
 	bool istex;
@@ -48,7 +47,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 float4 PS(VS_OUT inData) : SV_Target
 {
 	float4 view = -normalize(mul(inData.capos , matWV));
-	float vec = dot(normalize(inData.color.xyz ), view.xyz)  ;
+	float theta = dot(normalize(inData.color.xyz ), view.xyz)  ;
 
 	return view;
 }
