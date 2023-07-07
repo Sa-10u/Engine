@@ -8,6 +8,24 @@ GOBJ::GOBJ():parent_(this),name_(nullptr),state_(NULL)
 {
 }
 
+void GOBJ::UpdateALL()
+{
+	Update();
+	for (auto itr : children) {
+
+		itr->UpdateALL();
+	}
+}
+
+void GOBJ::DrawALL()
+{
+	Draw();
+	for (auto itr : children) {
+
+		itr->DrawALL();
+	}
+}
+
 void GOBJ::KillMe()
 {
 	state_ |= static_cast<int>(OBJ_STATE::KILL);

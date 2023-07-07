@@ -9,7 +9,7 @@ public:
 	~RootOBJ();
 
 	void Initialize()	override;
-	void UpDate()		override;
+	void Update()		override;
 	void Draw()			override;
 	void Release()		override;
 

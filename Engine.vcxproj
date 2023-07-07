@@ -148,6 +148,7 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Trans.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\packages.config" />
+    <None Include="HEADER.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CAM.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Engine\Sprite.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Trans.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

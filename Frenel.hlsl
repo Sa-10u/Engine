@@ -13,6 +13,7 @@ cbuffer global
 	bool istex;
 };
 
+
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
 //───────────────────────────────────────
@@ -22,7 +23,6 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;
 	float4 color : COLOR;
 	float4 capos: POSITION;
-
 };
 
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
@@ -34,7 +34,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	outData.pos = mul(pos, matWVP);
 	outData.uv = uv;
 
-	normal = mul(normal, matW);
+	normal = mul(normal, matWV);
 
 	outData.color = normal;
 

@@ -1,14 +1,14 @@
 #pragma once
-#include "Engine/GOBJ.h"
-
+#include"Engine/GOBJ.h"
 class Fbx;
 
-class PlayScene	: public GOBJ
+class Player : public GOBJ
 {
-public: 
-	PlayScene()= delete;
-	PlayScene(GOBJ* parent,const char* name);
-	~PlayScene();
+public:
+
+	Player() = delete;
+	Player(GOBJ* parent );
+	~Player();
 
 	void Initialize()	override;
 	void Update()		override;
@@ -16,6 +16,8 @@ public:
 	void Release()		override;
 
 private:
+
+	Fbx* model_;
 
 };
 
