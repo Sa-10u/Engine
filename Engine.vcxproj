@@ -113,6 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,6 +129,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="child.cpp" />
     <ClCompile Include="Engine\CAM.cpp" />
     <ClCompile Include="Engine\D3D.cpp" />
     <ClCompile Include="Engine\DInput.cpp" />
@@ -194,6 +197,7 @@
     <None Include="Engine\packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="child.h" />
     <ClInclude Include="Engine\CAM.h" />
     <ClInclude Include="Engine\CONSTANT_BUFFER.h" />
     <ClInclude Include="Engine\D3D.h" />

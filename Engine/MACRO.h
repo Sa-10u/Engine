@@ -23,4 +23,4 @@ inline void SAFE_RELEASE(tgt* p)
 	
 }
 
-#define ARRAY_WITH_SIZE(vx)  vx , (int)(sizeof(vx))
+#define ARRAY_WITH_SIZE(vx)  vx , static_cast<int>(sizeof(vx))

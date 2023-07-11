@@ -63,6 +63,9 @@
     <ClCompile Include="Engine\Light.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="child.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
@@ -134,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Light.h">
       <Filter>Header\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="child.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

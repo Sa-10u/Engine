@@ -31,14 +31,13 @@ void GOBJ::DrawALL()
 
 void GOBJ::ReleaseALL()
 {
-	this->Release();
-
 	for (auto itr = children.begin(); itr != children.end();itr++) {
 
 		(*itr)->ReleaseALL();
 		SAFE_DELETE(*itr);
 	}
 	
+	this->Release();
 	children.clear();
 
 }
@@ -68,7 +67,8 @@ void GOBJ::Disposal()
 		{
 			(*itr)->ReleaseALL();
 			SAFE_DELETE(*itr);
-			itr = children.erase(itr);
+			itr = children.erase(itr); //itr++ is error !
+
 		}
 		else
 		{

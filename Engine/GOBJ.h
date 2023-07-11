@@ -21,10 +21,14 @@ public:
 	GOBJ();
 	virtual ~GOBJ() {};
 
+
 	virtual void Initialize()	= 0;
 	virtual void Update()		= 0;
 	virtual void Draw()			= 0;
 	virtual void Release()		= 0;
+
+
+
 	void UpdateALL();
 	void DrawALL();
 	void ReleaseALL();
@@ -45,11 +49,13 @@ public:
 	void (GOBJ::* IsDoDisposal[2])() = {&GOBJ::EmptyWork ,&GOBJ::Disposal};
 
 	template<class T>
-	void Make(GOBJ* parent)
+	T* Make(GOBJ* parent)
 	{
-		T* obj = new T(this);
+		T* obj = new T (parent);
 		obj->Initialize();
 		parent->children.push_back(obj);
+
+		return obj;
 	}
 	
 
