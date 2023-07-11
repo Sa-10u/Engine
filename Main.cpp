@@ -124,6 +124,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
         }
     }
 
+
+
     D3D::Release();
     Input::Release();
     ROBJ->Release();

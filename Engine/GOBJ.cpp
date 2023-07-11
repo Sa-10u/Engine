@@ -31,21 +31,23 @@ void GOBJ::DrawALL()
 
 void GOBJ::ReleaseALL()
 {
-	for (auto itr : children) {
+	this->Release();
 
-		itr->ReleaseALL();
-		
-		
+	for (auto itr = children.begin(); itr != children.end();itr++) {
+
+		(*itr)->ReleaseALL();
+		SAFE_DELETE(*itr);
 	}
 	
-	this->Release();
-	this->GetParent()->children.remove(this);
+	children.clear();
+
 }
 
 void GOBJ::KillMe()
 {
 	state_ |= static_cast<int>(OBJ_STATE::KILL);
 	GOBJ::DoDelProc_ = true;
+
 }
 
 void GOBJ::Stop()
@@ -61,10 +63,12 @@ void GOBJ::Disposal()
 {
 	for (auto itr = children.begin(); itr != children.end(); true ) {
 		(*itr)->Disposal();
-		
+
 		if ((*itr)->IsDead())
 		{
 			(*itr)->ReleaseALL();
+			SAFE_DELETE(*itr);
+			itr = children.erase(itr);
 		}
 		else
 		{

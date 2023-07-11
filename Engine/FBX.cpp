@@ -7,6 +7,10 @@ Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 	drwtype_ = SHADER_TYPE::SHADER_POINT3D;
 }
 
+Fbx::~Fbx()
+{
+}
+
 HRESULT Fbx::Load(std::string fileName)
 {
 	FbxManager* Fmng = FbxManager::Create();
@@ -101,14 +105,6 @@ void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight , XMFLOAT4 LightPos)
 
 void Fbx::Release()
 {
-	SAFE_RELEASE(vb);
-	SAFE_RELEASE(*ib);
-	SAFE_RELEASE(pb);
-	SAFE_RELEASE(cb);
-
-	SAFE_DELETE(list_material);
-	SAFE_DELETE(ib);
-	SAFE_DELETE(indcnt_);
 }
 
 void Fbx::SetShaderType(SHADER_TYPE type_)

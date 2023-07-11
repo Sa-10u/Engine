@@ -20,7 +20,7 @@ inline void SAFE_RELEASE(tgt* p)
 		p->Release();
 		p = nullptr;
 	}
-
+	
 }
 
 #define ARRAY_WITH_SIZE(vx)  vx , (int)(sizeof(vx))

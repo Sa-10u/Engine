@@ -19,6 +19,7 @@ class Fbx
 public:
 
 	Fbx();
+	~Fbx();
 	HRESULT Load(std::string fileName);
 	void    Draw(Trans* transform, XMFLOAT4 WorldLight , XMFLOAT4 LightPos);
 	void    Release();

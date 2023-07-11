@@ -27,6 +27,7 @@ void Player::Update()
 	trans.rot.y += 0.1 ;
 
 	if (Input::IsKey(DIK_A))	KillMe();
+	if (Input::IsKey(DIK_W))	PostQuitMessage(0);
 }
 
 void Player::Draw()
@@ -37,4 +38,5 @@ void Player::Draw()
 void Player::Release()
 {
 	model_->Release();
+	delete model_;
 }
