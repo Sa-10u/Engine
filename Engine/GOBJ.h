@@ -2,6 +2,7 @@
 #include <list>
 #include "Trans.h"
 #include"MACRO.h"
+#include "D3D.h"
 
 using std::list;
 
@@ -26,12 +27,22 @@ public:
 	virtual void Release()		= 0;
 	void UpdateALL();
 	void DrawALL();
+	void ReleaseALL();
 
 	virtual void KillMe();
 	virtual void Stop();
 	virtual void DelCol();
+	virtual void Disposal();
 
 	virtual list<GOBJ*> GetChildren();
+	GOBJ* GetParent();
+
+	bool IsDead();
+	bool IsDisposal();
+	void EndDisposal();
+	void EmptyWork();
+
+	void (GOBJ::* IsDoDisposal[2])() = {&GOBJ::EmptyWork ,&GOBJ::Disposal};
 
 	template<class T>
 	void Make(GOBJ* parent)
@@ -53,5 +64,7 @@ protected:
 	GOBJ*			parent_;
 
 	char			state_;
+	static bool		DoDelProc_ ;
+
 };
 

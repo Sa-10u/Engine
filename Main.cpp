@@ -1,9 +1,12 @@
 #include <Windows.h>
+#include<cstdlib>
 #include "D3D.h"
 #include "Engine/DInput.h"
 #include "Engine/MACRO.h"
 #include "Engine/CAM.h"
 #include "Engine/RootOBJ.h"
+
+#pragma comment(lib,"winmm.lib")
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -75,23 +78,59 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
         else
         {
+            timeBeginPeriod(1);
+
+            static unsigned long cnt_;
+            static unsigned long starttime_ = timeGetTime();
+            unsigned long nowtime_ = timeGetTime();
+            static unsigned long lasttime_ = nowtime_;
+
+            if ((nowtime_ - lasttime_) * 60.0 <= 1000.0f)
+            {
+                continue;
+            }
+
+            if (nowtime_ - starttime_ >= 1000)
+            {
+                char str[16];
+                wsprintf(str, "%u", cnt_);
+                SetWindowText(hWnd, str);
+
+                starttime_ = nowtime_;
+                cnt_ = 0;
+            }
+
+            lasttime_ = nowtime_;
+
+            cnt_++;
+
+
+            timeEndPeriod(1);
+
+
             D3D::BeginDraw();
             CAM::Update();
             Input::Update();
+
             ROBJ->Update();
             ROBJ->Draw();
 
+            (ROBJ->*(ROBJ->IsDoDisposal[ROBJ->IsDisposal()]))();
+            ROBJ->EndDisposal();
+
             D3D::EndDraw();
+
+           
         }
     }
 
     D3D::Release();
     Input::Release();
     ROBJ->Release();
-
     SAFE_DELETE(ROBJ);
 
 	return 0;
+
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

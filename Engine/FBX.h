@@ -23,6 +23,8 @@ public:
 	void    Draw(Trans* transform, XMFLOAT4 WorldLight , XMFLOAT4 LightPos);
 	void    Release();
 
+	void SetShaderType(SHADER_TYPE type_);
+
 	HRESULT InitVerticies(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitIndexes(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitMaterial(fbxsdk::FbxNode* Fmesh);
@@ -34,6 +36,7 @@ private:
 	int polygon;
 	int vertex;
 	int material;
+	SHADER_TYPE drwtype_;
 
 	ID3D11Buffer* vb;
 	ID3D11Buffer** ib;

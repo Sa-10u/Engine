@@ -60,6 +60,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Light.cpp">
+      <Filter>Source\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
@@ -85,7 +88,6 @@
     <None Include="Engine\packages.config">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="HEADER.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CAM.h">
@@ -129,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light.h">
+      <Filter>Header\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,6 +37,18 @@ void RootOBJ::Release()
 {
 	for (auto itr : scene_) {
 
-		SAFE_RELEASE(itr);
+		itr->ReleaseALL();
 	}
 }
+
+void RootOBJ::Disposal()
+{
+	for (auto itr : scene_) {
+
+		itr->Disposal();
+	}
+}
+
+
+
+

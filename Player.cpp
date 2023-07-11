@@ -1,6 +1,6 @@
 #include "Player.h"
 #include"Engine/FBX.h"
-
+#include"Engine/DInput.h"
 
 
 Player::Player(GOBJ* parent):model_(nullptr),GOBJ(parent,"Player")
@@ -18,11 +18,15 @@ void Player::Initialize()
 	trans.size.x = 0.5;
 	trans.size.y = 0.5;
 	trans.size.z = 0.5;
+
+	model_->SetShaderType(SHADER_TYPE::SHADER_CELL3D);
 }
 
 void Player::Update()
 {
-	trans.rot.y += 0.001;
+	trans.rot.y += 0.1 ;
+
+	if (Input::IsKey(DIK_A))	KillMe();
 }
 
 void Player::Draw()

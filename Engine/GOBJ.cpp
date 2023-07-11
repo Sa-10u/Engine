@@ -1,4 +1,7 @@
 #include "GOBJ.h"
+bool GOBJ::DoDelProc_ = false;
+
+
 
 GOBJ::GOBJ(GOBJ* parent, const char* name):name_(name),parent_(parent),state_(0)
 {
@@ -26,9 +29,23 @@ void GOBJ::DrawALL()
 	}
 }
 
+void GOBJ::ReleaseALL()
+{
+	for (auto itr : children) {
+
+		itr->ReleaseALL();
+		
+		
+	}
+	
+	this->Release();
+	this->GetParent()->children.remove(this);
+}
+
 void GOBJ::KillMe()
 {
 	state_ |= static_cast<int>(OBJ_STATE::KILL);
+	GOBJ::DoDelProc_ = true;
 }
 
 void GOBJ::Stop()
@@ -40,7 +57,48 @@ void GOBJ::DelCol()
 {
 }
 
+void GOBJ::Disposal()
+{
+	for (auto itr = children.begin(); itr != children.end(); true ) {
+		(*itr)->Disposal();
+		
+		if ((*itr)->IsDead())
+		{
+			(*itr)->ReleaseALL();
+		}
+		else
+		{
+			itr++;
+		}
+	}
+}
+
 list<GOBJ*> GOBJ::GetChildren()
 {
-	return list<GOBJ*>();
+	return children;
+}
+
+GOBJ* GOBJ::GetParent()
+{
+	return parent_;
+}
+
+bool GOBJ::IsDead()
+{
+	return (state_ & static_cast<int>(OBJ_STATE::KILL));
+}
+
+bool GOBJ::IsDisposal()
+{
+	return DoDelProc_;
+}
+
+void GOBJ::EndDisposal()
+{
+	DoDelProc_ = false;
+}
+
+void GOBJ::EmptyWork()
+{
+	//Empty
 }

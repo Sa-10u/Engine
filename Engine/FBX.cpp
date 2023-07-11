@@ -4,6 +4,7 @@ const short TRIANGLE = 3;
 
 Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 {
+	drwtype_ = SHADER_TYPE::SHADER_POINT3D;
 }
 
 HRESULT Fbx::Load(std::string fileName)
@@ -51,7 +52,7 @@ HRESULT Fbx::Load(std::string fileName)
 void Fbx::Draw(Trans* wldMat , XMFLOAT4 WorldLight , XMFLOAT4 LightPos)
 {
 	
-		D3D::SetShader(SHADER_TYPE::SHADER_CELL3D);
+		D3D::SetShader(drwtype_);
 
 		for (int i = 0; i < material; i++) {
 
@@ -108,6 +109,11 @@ void Fbx::Release()
 	SAFE_DELETE(list_material);
 	SAFE_DELETE(ib);
 	SAFE_DELETE(indcnt_);
+}
+
+void Fbx::SetShaderType(SHADER_TYPE type_)
+{
+	drwtype_ = type_;
 }
 
 HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
