@@ -6,7 +6,7 @@ const short TRIANGLE = 3;
 Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 {
 	drwtype_ = SHADER_TYPE::SHADER_POINT3D;
-	//lights_ = LIGHT::LightPath1;
+	lights_ = LIGHT::LightPath1;
 }
 
 Fbx::~Fbx()

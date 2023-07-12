@@ -47,7 +47,13 @@ protected:
 
 //-------
 
-namespace LIGHT
+class LIGHTMANAGER
 {
-	extern list<Light*> LightPath1;
-}
+public:
+	list<Light*> LightPath1;
+	LIGHTMANAGER* GetInstance();
+
+private:
+
+	LIGHTMANAGER* inst;
+};
