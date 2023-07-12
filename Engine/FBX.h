@@ -3,16 +3,19 @@
 #include <d3d11.h>
 #include <fbxsdk.h>
 #include <string>
+#include <list>
 #include "Trans.h"
 #include"CONSTANT_BUFFER.h"
 #include "D3D.h"
 #include"M_Quad.h"
 
+using namespace std;
+
 #pragma comment(lib, "LibFbxSDK-Md.lib")
 #pragma comment(lib, "LibXml2-Md.lib")
 #pragma comment(lib, "zlib-Md.lib")
 
-
+class Light;
 
 class Fbx
 {
@@ -22,13 +25,17 @@ public:
 	~Fbx();
 	HRESULT Load(std::string fileName);
 	void    Draw(Trans* transform, XMFLOAT4 WorldLight , XMFLOAT4 LightPos);
+	void    Draw(Trans* transform);
 	void    Release();
+
+	void SetLightGroup(list<Light*> lights);
 
 	void SetShaderType(SHADER_TYPE type_);
 
 	HRESULT InitVerticies(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitIndexes(fbxsdk::FbxMesh* Fmesh);
 	HRESULT InitMaterial(fbxsdk::FbxNode* Fmesh);
+
 
 	void InitCB();
 
@@ -44,6 +51,7 @@ private:
 	ID3D11Buffer* pb;
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
+	list<Light*> lights_;
 
 	int* indcnt_;
 };

@@ -3,7 +3,7 @@
 using std::sinf;
 using std::cosf;
 
-Trans::Trans():matgra(XMMatrixIdentity()),matrot(XMMatrixIdentity()),matsc(XMMatrixIdentity())
+Trans::Trans():matgra(XMMatrixIdentity()),matrot(XMMatrixIdentity()),matsc(XMMatrixIdentity()),parent_(nullptr)
 {
     pos = XMFLOAT3(0, 0, 0);
     rot = XMFLOAT3(0, 0, 0);
@@ -65,12 +65,39 @@ void Trans::Calc()
 
 XMMATRIX Trans::GetWorldMatrix()
 {
+    if (parent_ != nullptr)
+    {
+        Calc();
+        return mat * parent_->GetWorldMatrix() ;
+    }
+
     Calc();
     return mat;
 }
 
 XMMATRIX Trans::GetNormalMatrix()
 {
+    if (parent_ != nullptr)
+    {
+        Calc();
+        return  mat * parent_->GetNormalMatrix();
+    }
+
     Calc();
     return  mat;// * XMMatrixInverse(nullptr,matsc);
+}
+
+XMMATRIX Trans::GetRotationMatrix()
+{
+    return matrot;
+}
+
+XMMATRIX Trans::GetMigrationMatrix()
+{
+    return matgra;
+}
+
+XMMATRIX Trans::GetScalingMatrix()
+{
+    return matsc;
 }

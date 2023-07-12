@@ -22,15 +22,22 @@ void Player::Initialize()
 
 	model_->SetShaderType(SHADER_TYPE::SHADER_CELL3D);
 
-	Make<child>(this);
+	child* c1 = Make<child>(this);
+	child* c2 = Make<child>(this);
+
+	c1->trans.pos.y = 1;
+	c2->trans.pos.y = 1;
+
+	c1->trans.pos.z = 2;
+	c2->trans.pos.z = -2;
 }
 
 void Player::Update()
 {
 	trans.rot.y += 0.1 ;
 
-	if (Input::IsKey(DIK_A))	trans.pos.x -= 0.1;
-	if (Input::IsKey(DIK_D))	trans.pos.x += 0.1;
+	if (Input::IsKey(DIK_Q))	trans.pos.x -= 0.1;
+	if (Input::IsKey(DIK_E))	trans.pos.x += 0.1;
 
 	if (Input::IsKey(DIK_ESCAPE))	KillMe();
 }

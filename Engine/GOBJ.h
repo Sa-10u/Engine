@@ -18,6 +18,7 @@ class GOBJ
 public:
 
 	GOBJ(GOBJ* parent , const char* name);
+	GOBJ(const char* name);
 	GOBJ();
 	virtual ~GOBJ() {};
 

@@ -15,15 +15,16 @@ void child::Initialize()
 	model_->Load("Assets/O-DEN.fbx");
 
 	trans.size = XMFLOAT3{ 0.2,0.2,0.2 };
-	trans.pos.x = 2.5;
 }
 
 void child::Update()
 {
-	trans.rot.y += 0.2;
+//	trans.rot.y += 0.2;
 
 	if (Input::IsKey(DIK_A))	trans.pos.x -= 0.1;
 	if (Input::IsKey(DIK_D))	trans.pos.x += 0.1;
+
+	if (Input::IsKey(DIK_W))	KillMe();
 }
 
 void child::Draw()

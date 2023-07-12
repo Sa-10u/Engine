@@ -206,6 +206,7 @@
     <ClInclude Include="Engine\GOBJ.h" />
     <ClInclude Include="Engine\Light.h" />
     <ClInclude Include="Engine\MACRO.h" />
+    <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\M_Quad.h" />
     <ClInclude Include="Engine\RootOBJ.h" />
     <ClInclude Include="Engine\Sprite.h" />

@@ -2,12 +2,21 @@
 bool GOBJ::DoDelProc_ = false;
 
 
-
+/// <summary>
+/// nullptr を入れないでください。親なしの場合は別のコンストラクタで
+/// </summary>
+/// <param name="parent"></param>
+/// <param name="name"></param>
 GOBJ::GOBJ(GOBJ* parent, const char* name):name_(name),parent_(parent),state_(0)
+{
+	trans.parent_ = &(parent->trans);
+}
+
+GOBJ::GOBJ(const char* name):name_(name),state_(NULL),parent_(nullptr)
 {
 }
 
-GOBJ::GOBJ():parent_(this),name_(nullptr),state_(NULL)
+GOBJ::GOBJ():parent_(nullptr),name_(nullptr),state_(NULL)
 {
 }
 

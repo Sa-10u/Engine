@@ -19,11 +19,18 @@ public:
 	XMMATRIX GetWorldMatrix();
 	XMMATRIX GetNormalMatrix();
 
+	XMMATRIX GetRotationMatrix();
+	XMMATRIX GetMigrationMatrix();
+	XMMATRIX GetScalingMatrix();
+
+	Trans* parent_;
+
 private:
 	XMMATRIX matgra;
 	XMMATRIX matrot;
 	XMMATRIX matsc;
 
 	XMMATRIX mat;
+
 };
 
