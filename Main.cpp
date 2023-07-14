@@ -5,6 +5,7 @@
 #include "Engine/MACRO.h"
 #include "Engine/CAM.h"
 #include "Engine/RootOBJ.h"
+#include "Engine/Model.h"
 
 #pragma comment(lib,"winmm.lib")
 
@@ -125,7 +126,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     }
 
 
-
+    Model::Release();
     D3D::Release();
     Input::Release();
     ROBJ->Release();

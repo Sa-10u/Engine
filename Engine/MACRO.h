@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename tgt>
-inline void SAFE_DELETE(tgt* p)
+inline void SAFE_DELETE(tgt* &p)
 {
 	
 	if ( (p != nullptr)) 
@@ -12,7 +12,7 @@ inline void SAFE_DELETE(tgt* p)
 }
 
 template<typename tgt>
-inline void SAFE_RELEASE(tgt* p)
+inline void SAFE_RELEASE(tgt* &p)
 {
 	
 	if ((p != nullptr))
@@ -24,3 +24,5 @@ inline void SAFE_RELEASE(tgt* p)
 }
 
 #define ARRAY_WITH_SIZE(vx)  vx , static_cast<int>(sizeof(vx))
+
+const int LIGHT_AMMOUNT = 30;

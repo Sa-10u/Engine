@@ -28,7 +28,7 @@ public:
 	void    Draw(Trans* transform);
 	void    Release();
 
-	void SetLightGroup(list<Light*> lights);
+	void SetLightGroup(LIGHTMANAGER::LightGroup* grp);
 
 	void SetShaderType(SHADER_TYPE type_);
 
@@ -52,6 +52,7 @@ private:
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
 	list<Light*> lights_;
+	//LIGHTMANAGER::LightGroup* lght_;
 
 	int* indcnt_;
 };

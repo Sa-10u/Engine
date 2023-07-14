@@ -1,7 +1,8 @@
 #include "child.h"
 #include "Engine/DInput.h"
+#include "Engine/Model.h"
 
-child::child(GOBJ* parent) :model_(nullptr), GOBJ(parent, "child")
+child::child(GOBJ* parent) :model_(nullptr), GOBJ(parent, "child"),m_(-1)
 {
 }
 
@@ -11,25 +12,30 @@ child::~child()
 
 void child::Initialize()
 {
-	model_ = new Fbx();
-	model_->Load("Assets/O-DEN.fbx");
+	m_ = Model::Load("Assets/O-DEN.fbx");
+	assert(m_ >= 0);
 
 	trans.size = XMFLOAT3{ 0.2,0.2,0.2 };
+	trans.rot.y = 3.141592/2;
+
+	Model::SetShader(&m_, SHADER_TYPE::SHADER_POINT3D);
 }
 
 void child::Update()
 {
 //	trans.rot.y += 0.2;
 
-	if (Input::IsKey(DIK_A))	trans.pos.x -= 0.1;
-	if (Input::IsKey(DIK_D))	trans.pos.x += 0.1;
+//	if (Input::IsKey(DIK_A))	trans.pos.x -= 0.1;
+	//if (Input::IsKey(DIK_D))	trans.pos.x += 0.1;
 
-	if (Input::IsKey(DIK_W))	KillMe();
+	trans.pos.z += 0.3;
+
+	if (trans.pos.z > 20.0) KillMe();
 }
 
 void child::Draw()
 {
-	model_->Draw(&trans, XMFLOAT4(1, 1, 1, 0), XMFLOAT4(0.8, 0, 0, 0));
+	Model::Draw(&m_ , &trans , SHADER_TYPE::SHADER_POINT3D);
 }
 
 void child::Release()

@@ -1,7 +1,7 @@
 #include "Player.h"
 #include"Engine/FBX.h"
 #include"Engine/DInput.h"
-
+#include"Engine/Model.h"
 #include "child.h"
 
 Player::Player(GOBJ* parent):model_(nullptr),GOBJ(parent,"Player")
@@ -14,14 +14,15 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	model_ = new Fbx;
-	model_->Load("Assets/O-DEN.fbx");
+	m_ = Model::Load("Assets/O-DEN.fbx");
+
 	trans.size.x = 0.5;
 	trans.size.y = 0.5;
 	trans.size.z = 0.5;
 
-	model_->SetShaderType(SHADER_TYPE::SHADER_CELL3D);
+	Model::SetShader(&m_,SHADER_TYPE::SHADER_CELL3D);
 
+	/*
 	child* c1 = Make<child>(this);
 	child* c2 = Make<child>(this);
 
@@ -30,21 +31,28 @@ void Player::Initialize()
 
 	c1->trans.pos.z = 2;
 	c2->trans.pos.z = -2;
+	*/
 }
 
 void Player::Update()
 {
 	trans.rot.y += 0.1 ;
 
-	if (Input::IsKey(DIK_Q))	trans.pos.x -= 0.1;
-	if (Input::IsKey(DIK_E))	trans.pos.x += 0.1;
+	if (Input::IsKey(DIK_A))	trans.pos.x -= 0.1;
+	if (Input::IsKey(DIK_D))	trans.pos.x += 0.1;
 
-	if (Input::IsKey(DIK_ESCAPE))	KillMe();
+	if (Input::IsKeyDown(DIK_SPACE))
+	{
+		child *c = Make<child>(parent_);
+		c->trans.pos = this->trans.pos;
+	}
+
+	if (Input::IsKey(DIK_ESCAPE))	PostQuitMessage(0);
 }
 
 void Player::Draw()
 {
-	model_->Draw(&trans, XMFLOAT4(1, 1, 1, 0), XMFLOAT4(0.8, 0, 0, 0));
+	Model::Draw(&m_, &trans, SHADER_TYPE::SHADER_CELL3D);
 }
 
 void Player::Release()

@@ -1,11 +1,11 @@
 #pragma once
-#include <list>
+#include <array>
 #include "Trans.h"
 #include"MACRO.h"
 #include "D3D.h"
 #include "GOBJ.h"
 
-using std::list;
+using std::array;
 
 enum class LIGHT_TYPE
 {
@@ -28,11 +28,10 @@ public:
 
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
-	void Draw() override;
 	virtual void Release() = 0;
+	virtual void Draw() override;
 
-	virtual void Stop();
-	void DelCol();
+	int GetType();
 
 public:
 
@@ -41,8 +40,36 @@ public:
 	float			intensity;
 
 protected:
-	int				LightType;
+	LIGHT_TYPE			LightType;
 
+};
+
+class S_Light : public Light
+{
+public:
+	S_Light(GOBJ* parent, const char* name);
+	S_Light(const char* name);
+	S_Light();
+	~S_Light();
+
+	void Initialize() override;
+	virtual void Update() override;
+	void Release() override;
+	virtual void Draw() override;
+};
+
+class P_Light : public Light
+{
+public:
+	P_Light(GOBJ* parent, const char* name);
+	P_Light(const char* name);
+	P_Light();
+	~P_Light();
+
+	void Initialize() override;
+	virtual void Update() override;
+	void Release() override;
+	virtual void Draw() override;
 };
 
 //-------
@@ -50,10 +77,34 @@ protected:
 class LIGHTMANAGER
 {
 public:
-	list<Light*> LightPath1;
-	LIGHTMANAGER* GetInstance();
+
+	struct LightGroup
+	{
+		Light* me[LIGHT_AMMOUNT];
+		LightGroup();
+		~LightGroup();
+		void Release();
+		void Make(Light* &lght);
+
+	private:
+		int index_;
+	};
+
+public:
+	//--- Light Resources
+	LightGroup LightPath1;
+	
+	//---
+
+	static LIGHTMANAGER* GetInstance();
+	void Release();
 
 private:
 
-	LIGHTMANAGER* inst;
+	LIGHTMANAGER();
+	~LIGHTMANAGER();
+
+	static LIGHTMANAGER* inst_;
 };
+
+extern LIGHTMANAGER* LightManager;

@@ -6,7 +6,7 @@ const short TRIANGLE = 3;
 Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 {
 	drwtype_ = SHADER_TYPE::SHADER_POINT3D;
-	lights_ = LIGHT::LightPath1;
+	//lights_ = LIGHT::LightPath1;
 }
 
 Fbx::~Fbx()
@@ -65,7 +65,7 @@ void Fbx::Draw(Trans* wldMat, XMFLOAT4 WorldLight, XMFLOAT4 LightPos)
 		CONSTANT_BUFFER cb;
 		cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 		cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
-		cb.matWV = XMMatrixTranspose(CAM::GetViewMatrix());
+		cb.matWV = XMMatrixTranspose(wldMat->GetNormalMatrix()*CAM::GetViewMatrix());
 		cb.matLGT = WorldLight;
 		cb.matLGTpos = LightPos;
 		cb.diffuse = list_material[i].diffuse;
@@ -163,9 +163,8 @@ void Fbx::Release()
 {
 }
 
-void Fbx::SetLightGroup(list<Light*> lights)
+void Fbx::SetLightGroup(LIGHTMANAGER::LightGroup* grp)
 {
-	lights_ = lights;
 }
 
 void Fbx::SetShaderType(SHADER_TYPE type_)

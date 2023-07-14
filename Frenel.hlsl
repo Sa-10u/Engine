@@ -52,5 +52,5 @@ float4 PS(VS_OUT inData) : SV_Target
 	float F0 = 0.04;
 	float fresnel = F0 + (1.0 - F0) * pow(1.0 - theta, 5.0);
 
-	return fresnel;
+	return inData.color;
 }

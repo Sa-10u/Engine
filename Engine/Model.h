@@ -8,24 +8,18 @@ using namespace std;
 
 namespace Model
 {
-	class Data
-	{
-	public:
-		Fbx* model_;
-		Trans trans;
-		string filename_;
-	};
-	vector<Data*> models_;
+	int Load(string filename);
 
+	void Draw(int* model_);
 
-	int Load(string filename)
-	{
-		for (auto itr : models_) {
+	void Release();
 
-			if (itr->filename_ == filename)
-			{
-				return itr->model_;
-			}
-		}
-	}
+	void SetTrans(int* model_, Trans* trans);
+
+	void Draw(int* model_, Trans* trans , SHADER_TYPE type);
+	
+	void SetShader(int* model_, SHADER_TYPE type);
+
+	void SetLightGroup(int* model_, LIGHTMANAGER::LightGroup* grp);
+
 }

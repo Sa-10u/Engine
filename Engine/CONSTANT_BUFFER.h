@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <fbxsdk.h>
+#include"Light.h"
 
 using namespace DirectX;
 
@@ -14,9 +15,12 @@ struct CONSTANT_BUFFER
 
 	XMFLOAT4 matLGT;
 	XMFLOAT4 matLGTpos;
+	//Light* light[LIGHT_AMMOUNT];
 
 	XMFLOAT4 diffuse;
 	int isTex;
+
+	
 };
 
 struct CONSTANT_BUFFER_SPRITE

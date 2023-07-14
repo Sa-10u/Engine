@@ -17,5 +17,6 @@ public:
 private:
 
 	Fbx* model_;
+	int m_;
 };
 

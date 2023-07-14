@@ -146,6 +146,7 @@
     <ClCompile Include="Engine\FBX.cpp" />
     <ClCompile Include="Engine\GOBJ.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
+    <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\M_Quad.cpp" />
     <ClCompile Include="Engine\RootOBJ.cpp" />
     <ClCompile Include="Engine\Sprite.cpp" />
