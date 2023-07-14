@@ -25,4 +25,4 @@ inline void SAFE_RELEASE(tgt* &p)
 
 #define ARRAY_WITH_SIZE(vx)  vx , static_cast<int>(sizeof(vx))
 
-const int LIGHT_AMMOUNT = 30;
+constexpr int LIGHT_AMMOUNT = 10;

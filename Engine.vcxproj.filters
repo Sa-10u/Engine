@@ -60,7 +60,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Light.cpp">
+    <ClCompile Include="Engine\LOBJ.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
     <ClCompile Include="child.cpp">
@@ -138,13 +138,16 @@
     <ClInclude Include="Player.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Light.h">
+    <ClInclude Include="Engine\LOBJ.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
     <ClInclude Include="child.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model.h">
+      <Filter>Header\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIGHTMANAGER.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
   </ItemGroup>

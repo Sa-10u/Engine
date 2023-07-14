@@ -1,12 +1,12 @@
 #include "FBX.h"
-#include "Light.h"
+#include "LOBJ.h"
 
 const short TRIANGLE = 3;
 
 Fbx::Fbx():polygon(0),vertex(0),indcnt_(0)
 {
 	drwtype_ = SHADER_TYPE::SHADER_POINT3D;
-	//lights_ = LIGHT::LightPath1;
+	lght_ = &(LightManager->Light_Path1);
 }
 
 Fbx::~Fbx()
@@ -55,55 +55,7 @@ HRESULT Fbx::Load(std::string fileName)
 	return S_OK;
 }
 
-void Fbx::Draw(Trans* wldMat, XMFLOAT4 WorldLight, XMFLOAT4 LightPos)
-{
 
-	D3D::SetShader(drwtype_);
-
-	for (int i = 0; i < material; i++) {
-
-		CONSTANT_BUFFER cb;
-		cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
-		cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
-		cb.matWV = XMMatrixTranspose(wldMat->GetNormalMatrix()*CAM::GetViewMatrix());
-		cb.matLGT = WorldLight;
-		cb.matLGTpos = LightPos;
-		cb.diffuse = list_material[i].diffuse;
-		cb.isTex = list_material[i].tex != nullptr;
-
-		D3D11_MAPPED_SUBRESOURCE pdata;
-		D3D::pContext_->Map(this->cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
-		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-		D3D::pContext_->Unmap(this->cb, 0);	//再開
-
-		UINT stride = sizeof(VERTEX);
-		UINT offset = 0;
-		D3D::pContext_->IASetVertexBuffers(0, 1, &this->vb, &stride, &offset);
-
-		// インデックスバッファーをセット
-		stride = sizeof(int);
-		offset = 0;
-
-		D3D::pContext_->IASetIndexBuffer(ib[i], DXGI_FORMAT_R32_UINT, 0);
-
-
-		//コンスタントバッファ
-		D3D::pContext_->VSSetConstantBuffers(0, 1, &(this->cb));	//頂点シェーダー用	
-		D3D::pContext_->PSSetConstantBuffers(0, 1, &(this->cb));
-
-		if (list_material[i].tex)
-		{
-			ID3D11SamplerState* pSampler = list_material[i].tex->GetSampler();
-			D3D::pContext_->PSSetSamplers(0, 1, &pSampler);
-
-			ID3D11ShaderResourceView* pSRV = list_material[i].tex->GetResourceV();
-			D3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
-		}
-
-		D3D::pContext_->DrawIndexed(indcnt_[i], 0, 0);
-
-	}
-}
 
 
 void Fbx::Draw(Trans* wldMat)
@@ -112,18 +64,18 @@ void Fbx::Draw(Trans* wldMat)
 
 	for (int i = 0; i < material; i++) {
 
-		for (auto itr : lights_) {
 
 			CONSTANT_BUFFER cb;
 			cb.VP_matWLD = XMMatrixTranspose(wldMat->GetWorldMatrix() * CAM::GetViewMatrix() * CAM::GetProjectionMatrix());
 			cb.matW = XMMatrixTranspose(wldMat->GetNormalMatrix());
 			cb.matWV = XMMatrixTranspose(CAM::GetViewMatrix());
-			cb.matLGT = itr->color;
-			cb.matLGTpos = XMFLOAT4{ itr->trans.pos.x,itr->trans.pos.y,itr->trans.pos.z,0 };
+
+			for (int i = 0; i < LIGHT_AMMOUNT; i++) {
+				cb.matLGT[i] = (*lght_->me[i]).color;
+				cb.matLGTpos[i] = XMFLOAT4{ (*lght_->me[i]).trans.pos.x,(*lght_->me[i]).trans.pos.y,(*lght_->me[i]).trans.pos.z,0};
+			}
 			cb.diffuse = list_material[i].diffuse;
 			cb.isTex = list_material[i].tex != nullptr;
-			//cb.LightType = itr->type;
-
 
 			D3D11_MAPPED_SUBRESOURCE pdata;
 			D3D::pContext_->Map(this->cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
@@ -155,7 +107,7 @@ void Fbx::Draw(Trans* wldMat)
 			}
 
 			D3D::pContext_->DrawIndexed(indcnt_[i], 0, 0);
-		}
+	
 	}
 }
 

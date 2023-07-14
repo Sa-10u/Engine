@@ -145,7 +145,7 @@
     <ClCompile Include="Engine\DInput.cpp" />
     <ClCompile Include="Engine\FBX.cpp" />
     <ClCompile Include="Engine\GOBJ.cpp" />
-    <ClCompile Include="Engine\Light.cpp" />
+    <ClCompile Include="Engine\LOBJ.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\M_Quad.cpp" />
     <ClCompile Include="Engine\RootOBJ.cpp" />
@@ -205,7 +205,8 @@
     <ClInclude Include="Engine\DInput.h" />
     <ClInclude Include="Engine\FBX.h" />
     <ClInclude Include="Engine\GOBJ.h" />
-    <ClInclude Include="Engine\Light.h" />
+    <ClInclude Include="Engine\LIGHTMANAGER.h" />
+    <ClInclude Include="Engine\LOBJ.h" />
     <ClInclude Include="Engine\MACRO.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\M_Quad.h" />

@@ -34,7 +34,7 @@ int Model::Load(string filename)
 
 void Model::Draw(int* model_)
 {
-	models_[*model_]->model_->Draw(&(models_[*model_]->trans), XMFLOAT4(1, 1, 1, 0), XMFLOAT4(0.4, 0.0, 10.0, 0.0)); //testlight
+	models_[*model_]->model_->Draw(&(models_[*model_]->trans)); //testlight
 }
 
 void Model::Release()
@@ -73,7 +73,7 @@ void Model::Draw(int* model_, Trans* trans , SHADER_TYPE type)
 	{
 		models_[*model_]->model_->SetShaderType(type);
 		models_[*model_]->trans = *trans;
-		models_[*model_]->model_->Draw(&(models_[*model_]->trans), XMFLOAT4(1, 1, 1, 0), XMFLOAT4(0.4, 0.0, 10.0, 0.0));
+		models_[*model_]->model_->Draw(&(models_[*model_]->trans));
 	}
 
 }

@@ -8,6 +8,7 @@
 #include"CONSTANT_BUFFER.h"
 #include "D3D.h"
 #include"M_Quad.h"
+#include"LIGHTMANAGER.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ using namespace std;
 #pragma comment(lib, "LibXml2-Md.lib")
 #pragma comment(lib, "zlib-Md.lib")
 
-class Light;
+class LOBJ;
 
 class Fbx
 {
@@ -24,7 +25,6 @@ public:
 	Fbx();
 	~Fbx();
 	HRESULT Load(std::string fileName);
-	void    Draw(Trans* transform, XMFLOAT4 WorldLight , XMFLOAT4 LightPos);
 	void    Draw(Trans* transform);
 	void    Release();
 
@@ -51,8 +51,7 @@ private:
 	ID3D11Buffer* pb;
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
-	list<Light*> lights_;
-	//LIGHTMANAGER::LightGroup* lght_;
+	LIGHTMANAGER::LightGroup* lght_;
 
 	int* indcnt_;
 };

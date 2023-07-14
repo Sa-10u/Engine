@@ -18,7 +18,9 @@ void child::Initialize()
 	trans.size = XMFLOAT3{ 0.2,0.2,0.2 };
 	trans.rot.y = 3.141592/2;
 
-	Model::SetShader(&m_, SHADER_TYPE::SHADER_POINT3D);
+	Model::SetLightGroup(&m_, &(LightManager->Light_Path1));
+	Model::SetShader(&m_, SHADER_TYPE::SHADER_CELL3D);
+	
 }
 
 void child::Update()

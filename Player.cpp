@@ -20,7 +20,9 @@ void Player::Initialize()
 	trans.size.y = 0.5;
 	trans.size.z = 0.5;
 
+	Model::SetLightGroup(&m_, &(LightManager->Light_Path1));
 	Model::SetShader(&m_,SHADER_TYPE::SHADER_CELL3D);
+	
 
 	/*
 	child* c1 = Make<child>(this);

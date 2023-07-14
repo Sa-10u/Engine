@@ -1,29 +1,30 @@
-#include "Light.h"
+#include "LOBJ.h"
+#include"LIGHTMANAGER.h"
 
 LIGHTMANAGER* LIGHTMANAGER::inst_ = nullptr;
 LIGHTMANAGER* LightManager = LIGHTMANAGER::GetInstance();
 
-Light::Light(GOBJ* parent, const char* name):GOBJ(parent,name),intensity(0),color(XMFLOAT4{0,0,0,0})
+LOBJ::LOBJ(LOBJ* parent, const char* name):parent(parent),name(name), intensity(0), color(XMFLOAT4{0,0,0,0})
 {
 	trans.parent_ = &parent->trans;
 }
 
-Light::Light(const char* name):GOBJ(name), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
+LOBJ::LOBJ(const char* name) :parent(nullptr), name(name), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
 {
 }
 
-Light::Light():GOBJ(), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
+LOBJ::LOBJ():parent(nullptr),name(nullptr), intensity(0), color(XMFLOAT4{0,0,0,0})
 {
 }
 
-Light::~Light()
+LOBJ::~LOBJ()
 {
 
 }
-void Light::Draw()
+void LOBJ::Draw()
 {
 }
-int Light::GetType()
+int LOBJ::GetType()
 {
 	return (static_cast<int>(LightType));
 }
@@ -32,7 +33,7 @@ int Light::GetType()
 LIGHTMANAGER::LightGroup::LightGroup() :index_(0)
 {
 	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
-		me[i] = new P_Light();
+		me[i] = new P_LOBJ();
 	}
 }
 
@@ -51,7 +52,7 @@ void LIGHTMANAGER::LightGroup::Release()
 	}
 }
 
-void LIGHTMANAGER::LightGroup::Make(Light* &lght)
+void LIGHTMANAGER::LightGroup::Make(LOBJ* &lght)
 {
 	index_ = index_ % LIGHT_AMMOUNT;
 
@@ -62,81 +63,83 @@ void LIGHTMANAGER::LightGroup::Make(Light* &lght)
 	lght = me[index_];
 
 	index_++;
+
+	
 }
 //----------------------------
 
-P_Light::P_Light(GOBJ* parent, const char* name):Light(parent,name)
+P_LOBJ::P_LOBJ(LOBJ* parent, const char* name):LOBJ(parent,name)
 {
 	LightType = LIGHT_TYPE::POINT;
 }
 
-P_Light::P_Light(const char* name) :Light( name)
+P_LOBJ::P_LOBJ(const char* name) :LOBJ( name)
 {
 	LightType = LIGHT_TYPE::POINT;
 }
 
-P_Light::P_Light() :Light()
+P_LOBJ::P_LOBJ() :LOBJ()
 {
 	LightType = LIGHT_TYPE::POINT;
 }
 
-P_Light::~P_Light()
+P_LOBJ::~P_LOBJ()
 {
 }
 
-void P_Light::Initialize()
+void P_LOBJ::Initialize()
 {
 }
 
-void P_Light::Update()
+void P_LOBJ::Update()
 {
 }
 
-void P_Light::Release()
+void P_LOBJ::Release()
 {
 	trans.pos = { 0,0,0 };
 	color = { 0,0,0,0 };
 	intensity = 0.0;
 }
-void P_Light::Draw()
+void P_LOBJ::Draw()
 {
 }
 //---------------
 
-S_Light::S_Light(GOBJ* parent, const char* name)
+S_LOBJ::S_LOBJ(LOBJ* parent, const char* name)
 {
 	LightType = LIGHT_TYPE::SUN;
 }
 
-S_Light::S_Light(const char* name)
+S_LOBJ::S_LOBJ(const char* name)
 {
 	LightType = LIGHT_TYPE::SUN;
 }
 
-S_Light::S_Light()
+S_LOBJ::S_LOBJ()
 {
 	LightType = LIGHT_TYPE::SUN;
 }
 
-S_Light::~S_Light()
+S_LOBJ::~S_LOBJ()
 {
 }
 
-void S_Light::Initialize()
+void S_LOBJ::Initialize()
 {
 }
 
-void S_Light::Update()
+void S_LOBJ::Update()
 {
 }
 
-void S_Light::Release()
+void S_LOBJ::Release()
 {
 	trans.pos = { 0,0,0 };
 	color = { 0,0,0,0 };
 	intensity = 0.0;
 }
-void S_Light::Draw()
+void S_LOBJ::Draw()
 {
 }
 //------------
@@ -150,6 +153,12 @@ LIGHTMANAGER* LIGHTMANAGER::GetInstance()
 
 void LIGHTMANAGER::Release()
 {
+	for (int i = 0; i < sizeof(LIGHTGROUP) / sizeof(LightGroup); i++) {
+	
+		delete[] LIGHTGROUP[i]->me;
+	}
+	delete[] LIGHTGROUP;
+
 	delete LIGHTMANAGER::inst_;
 	LIGHTMANAGER::inst_ = nullptr;
 }

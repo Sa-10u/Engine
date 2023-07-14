@@ -7,6 +7,8 @@
 #include<string>
 #include "CONSTANT_BUFFER.h"
 #include "Trans.h"
+#include "LOBJ.h"
+#include "LIGHTMANAGER.h"
 
 using namespace DirectX;
 using std::string;
@@ -21,7 +23,6 @@ public :
 	HRESULT Initialize(VERTEX vcs[], int vcw ,string pic , int index[] , int inds);
 	virtual HRESULT Initialize(void);
 	void Draw(Trans* trans , XMFLOAT4* wldLGT , XMFLOAT4 LightPos);
-	void Draw(XMMATRIX* trans, XMFLOAT4* wldLGT , XMFLOAT4 LightPos);
 	void Release();
 
 private:
@@ -30,8 +31,9 @@ private:
 	ID3D11Buffer* pIndBuffer_;
 	ID3D11Buffer* pConstBuffer_;
 	Texture* pTex_;
-	//Trans trans;
+	LIGHTMANAGER::LightGroup* lght_;
 
 	int VCs;
+
 };
 
