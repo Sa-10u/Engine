@@ -64,7 +64,7 @@ float4 PS(VS_OUT inData) : SV_Target
 		len = 2 - len;
 		
 		float4 diffuse[2][3] = { {g_texture.Sample(g_sampler, inData.uv) * float4(0.3,0.3,0.3,1),	g_texture.Sample(g_sampler, inData.uv) * float4(0.8,0.5,0.5,1) ,g_texture.Sample(g_sampler, inData.uv) * float4(1,1,1,1)} , { difcol * float4(0,0,0,1),  difcol * float4(0.8,0.5,0.5,1),  difcol * float4(1,1,1,1)} };
-		return diffuse[!istex][len];
+		return float4(0.3,0.3,0.3,1);
 	}
 
 	return color;
