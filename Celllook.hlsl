@@ -8,8 +8,8 @@ cbuffer global
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matW;
 	float4x4	matWV;
-	float4		matLGT[30];
-	float4		matLGTpos[30];
+	float4		matLGT[lights_];
+	float4		matLGTpos[lights_];
 
 	float4 difcol;
 	bool istex;
