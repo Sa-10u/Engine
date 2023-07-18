@@ -1,3 +1,4 @@
+#pragma once
 #include"../SCENE_Test.h"
 #include"../PlayScene.h"
 #include "Model.h"
