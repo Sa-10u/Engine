@@ -1,6 +1,7 @@
 #include "RootOBJ.h"
+#include "SceneManager.h"
 
-RootOBJ::RootOBJ()
+RootOBJ::RootOBJ(GOBJ* parent):GOBJ(parent ,"RootOBJ")
 {
 }
 
@@ -10,16 +11,13 @@ RootOBJ::~RootOBJ()
 
 void RootOBJ::Initialize()
 {
-	PlayScene* p_plscn;
-	p_plscn = new PlayScene(this,"PlayScene");
-	p_plscn->Initialize();
+	Make<SceneManager>(this);
 
-	scene_.push_back(p_plscn);
 }
 
 void RootOBJ::Update()
 {
-	for (auto itr : scene_) {
+	for (auto itr : children) {
 
 		itr->Update();
 	}
@@ -27,7 +25,7 @@ void RootOBJ::Update()
 
 void RootOBJ::Draw()
 {
-	for (auto itr : scene_) {
+	for (auto itr : children) {
 
 		itr->Draw();
 	}
@@ -35,7 +33,7 @@ void RootOBJ::Draw()
 
 void RootOBJ::Release()
 {
-	for (auto itr : scene_) {
+	for (auto itr : children) {
 
 		itr->ReleaseALL();
 	}
@@ -43,7 +41,7 @@ void RootOBJ::Release()
 
 void RootOBJ::Disposal()
 {
-	for (auto itr : scene_) {
+	for (auto itr : children) {
 
 		itr->Disposal();
 	}

@@ -44,27 +44,21 @@ LIGHTMANAGER::LightGroup::~LightGroup()
 
 void LIGHTMANAGER::LightGroup::Release()
 {
+	delete[] me;
+
 	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
 
-		me[i]->trans.pos = { 0,0,0 };
-		me[i]->color = { 0,0,0,0 };
-		me[i]->intensity = 0.0;
+		me[i] = nullptr;
 	}
 }
 
 void LIGHTMANAGER::LightGroup::Make(LOBJ* &lght)
 {
-	index_ = index_ % LIGHT_AMMOUNT;
+	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
 
-	delete me[index_];
-	me[index_] = lght;
 
-	delete lght;
-	lght = me[index_];
 
-	index_++;
-
-	
+	}
 }
 //----------------------------
 

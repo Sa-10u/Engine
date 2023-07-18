@@ -69,6 +69,12 @@
     <ClCompile Include="Engine\Model.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="SCENE_Test.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SceneManager.cpp">
+      <Filter>Source\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
@@ -148,6 +154,12 @@
       <Filter>Header\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\LIGHTMANAGER.h">
+      <Filter>Header\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SCENE_Test.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SceneManager.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
   </ItemGroup>

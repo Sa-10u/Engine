@@ -8,6 +8,7 @@ class PlayScene	: public GOBJ
 public: 
 	PlayScene()= delete;
 	PlayScene(GOBJ* parent,const char* name);
+	PlayScene(GOBJ* parent);
 	~PlayScene();
 
 	void Initialize()	override;

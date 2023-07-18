@@ -63,7 +63,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     D3D::Initialize(WIN::_WIDTH,WIN::_HEIGHT,hWnd);
     CAM::Initialize();
     Input::Initialize(hWnd);
-    RootOBJ* ROBJ = new RootOBJ;
+    RootOBJ* ROBJ = new RootOBJ(nullptr);
     ROBJ->Initialize();
 
 

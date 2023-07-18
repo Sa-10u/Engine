@@ -6,6 +6,10 @@ PlayScene::PlayScene(GOBJ* parent, const char* name):GOBJ(parent,name)
 {
 }
 
+PlayScene::PlayScene(GOBJ* parent) :GOBJ(parent,"SCENE_PLAY")
+{
+}
+
 PlayScene::~PlayScene()
 {
 }

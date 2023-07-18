@@ -59,12 +59,12 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 color = (0,0,0,0);
 	for (int i = 0; i < lights_; i++) {
 		float len = length(matLGTpos[i].xyz - (mul(inData.capos, matW).xyz));
-		len = clamp(0, 3, len);
+		len = clamp(len,0, 3);
 		len = (int)(len * 0.9);
 		len = 2 - len;
 		
 		float4 diffuse[2][3] = { {g_texture.Sample(g_sampler, inData.uv) * float4(0.3,0.3,0.3,1),	g_texture.Sample(g_sampler, inData.uv) * float4(0.8,0.5,0.5,1) ,g_texture.Sample(g_sampler, inData.uv) * float4(1,1,1,1)} , { difcol * float4(0,0,0,1),  difcol * float4(0.8,0.5,0.5,1),  difcol * float4(1,1,1,1)} };
-		color += diffuse[!istex][len];
+		return diffuse[!istex][len];
 	}
 
 	return color;

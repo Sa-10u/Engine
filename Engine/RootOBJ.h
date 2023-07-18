@@ -5,7 +5,7 @@
 class RootOBJ : public GOBJ
 {
 public:
-	RootOBJ();
+	RootOBJ(GOBJ* parent);
 	~RootOBJ();
 
 	void Initialize()	override;
@@ -15,7 +15,5 @@ public:
 	void Disposal()		override;
 
 private:
-
-	list<PlayScene*>scene_;
 };
 
