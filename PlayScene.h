@@ -6,8 +6,8 @@ class Fbx;
 class PlayScene	: public GOBJ
 {
 public: 
-	PlayScene()= delete;
-	PlayScene(GOBJ* parent,const char* name);
+	PlayScene();
+	PlayScene(GOBJ* parent,string name);
 	PlayScene(GOBJ* parent);
 	~PlayScene();
 

@@ -1,23 +1,20 @@
 #include "GOBJ.h"
 bool GOBJ::DoDelProc_ = false;
 
-
-/// <summary>
-/// nullptr を入れないでください。親なしの場合は別のコンストラクタで
-/// </summary>
-/// <param name="parent"></param>
-/// <param name="name"></param>
-GOBJ::GOBJ(GOBJ* parent, const char* name):name_(name),parent_(parent),state_(0)
+GOBJ::GOBJ(GOBJ* parent, string name):name_(name),parent_(parent),state_(0)
 {
-	trans.parent_ = &(parent->trans);
+	//if(parent != nullptr)	this->trans.parent_ = &(parent->trans);
+	(this->*consfunc[static_cast<bool>(parent)])(parent);
 }
 
-GOBJ::GOBJ(const char* name):name_(name),state_(NULL),parent_(nullptr)
+GOBJ::GOBJ(string name):name_(name),state_(NULL),parent_(nullptr)
 {
+	trans.parent_ = nullptr;
 }
 
-GOBJ::GOBJ():parent_(nullptr),name_(nullptr),state_(NULL)
+GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL)
 {
+	trans.parent_ = nullptr;
 }
 
 void GOBJ::UpdateALL()
@@ -84,6 +81,63 @@ void GOBJ::Disposal()
 			itr++;
 		}
 	}
+}
+
+GOBJ* GOBJ::FindObject_ALL(string name)
+{
+	GOBJ* obj = nullptr;
+	obj = GetRootObj();
+
+	return obj->FindObject_Child(name);
+}
+
+GOBJ* GOBJ::FindObject_Child(string name)
+{
+	if (name == this->name_)
+	{
+		return this;
+	}
+
+	for (auto itr : children) {
+
+		return itr->FindObject_Child(name);
+	}
+
+	return nullptr;
+}
+
+list<GOBJ*> GOBJ::FindObject_Children(string name)
+{
+	list<GOBJ*> cluster;
+
+	if (name == this->name_)
+	{
+		cluster.push_back(this);
+	}
+
+	for (auto itr : children) {
+
+		itr->FindObject_Children(name);
+	}
+
+	return cluster;
+}
+
+GOBJ* GOBJ::GetRootObj()
+{
+	if (this->parent_ == nullptr)	return this;
+
+	return parent_->GetRootObj();
+}
+
+void GOBJ::consfunc1(GOBJ* p)
+{
+	this->trans.parent_ = nullptr;
+}
+
+void GOBJ::consfunc2(GOBJ* p)
+{
+	this->trans.parent_ = &(p->trans);
 }
 
 list<GOBJ*> GOBJ::GetChildren()

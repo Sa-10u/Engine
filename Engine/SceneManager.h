@@ -1,7 +1,7 @@
 #pragma once
 #include"GOBJ.h"
 
-enum class SID
+enum class USID
 {
 	PLAY = 0,
 	TEST,
@@ -13,7 +13,7 @@ class SceneManager : public GOBJ
 {
 public:
 
-	SceneManager(GOBJ* parent, const char* name);
+	SceneManager(GOBJ* parent, string name);
 	SceneManager(GOBJ* parent);
 	~SceneManager();
 
@@ -22,13 +22,17 @@ public:
 	void Release() override;
 	void Draw() override;
 
-	void ChangeScene(SID next);
+	void ChangeScene(USID next);
+	void Changing();
 
-	void (SceneManager::* Changer[2])();
+	void (SceneManager::* Changer[2])() = {&GOBJ::EmptyWork , &SceneManager::Changing};
+
+	
+	
 
 private:
 
-	SID current_;
-	SID next_;
+	USID current_;
+	USID next_;
 };
 

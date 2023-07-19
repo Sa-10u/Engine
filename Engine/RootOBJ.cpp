@@ -12,23 +12,16 @@ RootOBJ::~RootOBJ()
 void RootOBJ::Initialize()
 {
 	Make<SceneManager>(this);
-
 }
 
 void RootOBJ::Update()
 {
-	for (auto itr : children) {
 
-		itr->Update();
-	}
 }
 
 void RootOBJ::Draw()
 {
-	for (auto itr : children) {
 
-		itr->Draw();
-	}
 }
 
 void RootOBJ::Release()

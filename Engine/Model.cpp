@@ -32,9 +32,9 @@ int Model::Load(string filename)
 	return (models_.size() - 1);
 }
 
-void Model::Draw(int* model_)
+void Model::Draw(int* num)
 {
-	models_[*model_]->model_->Draw(&(models_[*model_]->trans)); //testlight
+	models_[*num]->model_->Draw(&(models_[*num]->trans)); 
 }
 
 void Model::Release()

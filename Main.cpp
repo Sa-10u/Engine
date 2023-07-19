@@ -114,8 +114,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
             CAM::Update();
             Input::Update();
 
-            ROBJ->Update();
-            ROBJ->Draw();
+            ROBJ->UpdateALL();
+            ROBJ->DrawALL();
 
             (ROBJ->*(ROBJ->IsDoDisposal[ROBJ->IsDisposal()]))();
             ROBJ->EndDisposal();

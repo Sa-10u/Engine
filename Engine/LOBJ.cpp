@@ -4,16 +4,20 @@
 LIGHTMANAGER* LIGHTMANAGER::inst_ = nullptr;
 LIGHTMANAGER* LightManager = LIGHTMANAGER::GetInstance();
 
-LOBJ::LOBJ(LOBJ* parent, const char* name):parent(parent),name(name), intensity(0), color(XMFLOAT4{0,0,0,0})
+LOBJ::LOBJ(LOBJ* parent, string name):parent(parent),name(name), intensity(0), color(XMFLOAT4{0,0,0,0})
 {
 	trans.parent_ = &parent->trans;
 }
 
-LOBJ::LOBJ(const char* name) :parent(nullptr), name(name), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
+LOBJ::LOBJ(string name) :parent(nullptr), name(name), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
 {
 }
 
-LOBJ::LOBJ():parent(nullptr),name(nullptr), intensity(0), color(XMFLOAT4{0,0,0,0})
+LOBJ::LOBJ(LOBJ* parent)
+{
+}
+
+LOBJ::LOBJ():parent(nullptr),name(" "), intensity(0), color(XMFLOAT4{0,0,0,0})
 {
 }
 
@@ -62,12 +66,12 @@ void LIGHTMANAGER::LightGroup::Make(LOBJ* &lght)
 }
 //----------------------------
 
-P_LOBJ::P_LOBJ(LOBJ* parent, const char* name):LOBJ(parent,name)
+P_LOBJ::P_LOBJ(LOBJ* parent, string name):LOBJ(parent,name)
 {
 	LightType = LIGHT_TYPE::POINT;
 }
 
-P_LOBJ::P_LOBJ(const char* name) :LOBJ( name)
+P_LOBJ::P_LOBJ(string name) :LOBJ( name)
 {
 	LightType = LIGHT_TYPE::POINT;
 }
@@ -100,12 +104,12 @@ void P_LOBJ::Draw()
 }
 //---------------
 
-S_LOBJ::S_LOBJ(LOBJ* parent, const char* name)
+S_LOBJ::S_LOBJ(LOBJ* parent, string name)
 {
 	LightType = LIGHT_TYPE::SUN;
 }
 
-S_LOBJ::S_LOBJ(const char* name)
+S_LOBJ::S_LOBJ(string name)
 {
 	LightType = LIGHT_TYPE::SUN;
 }

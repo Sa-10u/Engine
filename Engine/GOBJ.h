@@ -3,8 +3,10 @@
 #include "Trans.h"
 #include"MACRO.h"
 #include "D3D.h"
+#include <string>
 
 using std::list;
+using std::string;
 
 enum class OBJ_STATE
 {
@@ -17,8 +19,8 @@ class GOBJ
 {
 public:
 
-	GOBJ(GOBJ* parent , const char* name);
-	GOBJ(const char* name);
+	GOBJ(GOBJ* parent , string name);
+	GOBJ(string name);
 	GOBJ();
 	virtual ~GOBJ() {};
 
@@ -56,7 +58,11 @@ public:
 
 		return obj;
 	}
-	
+
+	GOBJ*			FindObject_ALL(string name);
+	GOBJ*			FindObject_Child(string name);
+	list<GOBJ*>		FindObject_Children(string name);
+	GOBJ*			GetRootObj();
 
 public:
 
@@ -65,11 +71,18 @@ public:
 
 protected:
 
-	const char*		name_;
+	string			name_;
 	GOBJ*			parent_;
 
 	char			state_;
 	static bool		DoDelProc_ ;
+
+private:
+
+	void consfunc1(GOBJ* p);
+	void consfunc2(GOBJ* p);
+
+	void(GOBJ::*consfunc[2])(GOBJ* p) = {&GOBJ::consfunc1,&GOBJ::consfunc2};
 
 };
 

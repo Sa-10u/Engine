@@ -20,8 +20,9 @@ class LOBJ
 {
 public:
 
-	LOBJ(LOBJ* parent, const char* name);
-	LOBJ(const char* name);
+	LOBJ(LOBJ* parent, string name);
+	LOBJ(string name);
+	LOBJ(LOBJ* parent);
 	LOBJ();
 	virtual ~LOBJ() ;
 
@@ -42,15 +43,15 @@ public:
 protected:
 	LIGHT_TYPE			LightType;
 	LOBJ* parent;
-	const char* name;
+	string name;
 
 };
 
 class S_LOBJ : public LOBJ
 {
 public:
-	S_LOBJ(LOBJ* parent, const char* name);
-	S_LOBJ(const char* name);
+	S_LOBJ(LOBJ* parent,string name);
+	S_LOBJ(string name);
 	S_LOBJ();
 	~S_LOBJ();
 
@@ -63,8 +64,8 @@ public:
 class P_LOBJ : public LOBJ
 {
 public:
-	P_LOBJ(LOBJ* parent, const char* name);
-	P_LOBJ(const char* name);
+	P_LOBJ(LOBJ* parent,string name);
+	P_LOBJ(string name);
 	P_LOBJ();
 	~P_LOBJ();
 

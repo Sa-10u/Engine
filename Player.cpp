@@ -4,6 +4,7 @@
 #include"Engine/Model.h"
 #include "child.h"
 
+
 Player::Player(GOBJ* parent):model_(nullptr),GOBJ(parent,"Player")
 {
 }
