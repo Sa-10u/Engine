@@ -34,3 +34,8 @@ void Enemy::Draw()
 void Enemy::Release()
 {
 }
+
+void Enemy::ColProc()
+{
+	KillMe();
+}

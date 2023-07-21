@@ -28,12 +28,12 @@ void GOBJ::Make_Col(Collider* col)
 	col_ = col;
 }
 
-void GOBJ::Culc(GOBJ* parent)
+void GOBJ::Culc(GOBJ* tgt)
 {
-	if (parent == nullptr)	return;
-	float len = Pow_Length(this->trans.pos, parent->trans.pos);
+	if (tgt->col_ == nullptr || tgt->col_ == this->col_)	return;
+	float len = Pow_Length(this->trans.pos, tgt->trans.pos);
 
-	if (len <= pow(this->col_->GetRadius() + parent->col_->GetRadius(),2))
+	if (len <= pow(this->col_->GetRadius() + tgt->col_->GetRadius(),2))
 	{
 		ColProc();
 	}
@@ -77,14 +77,14 @@ void GOBJ::ReleaseALL()
 
 }
 
-void GOBJ::Culc_ALL(GOBJ* parent)
+void GOBJ::Culc_ALL(GOBJ* tgt)
 {
 
-	if (parent->col_ == this->col_ || parent_->col_ == nullptr)		return;
+	if (this->col_ == nullptr)		return;
 
-	Culc(parent);
+	if(tgt->col_ != this->col_)		Culc(tgt);
 
-	for (auto itr : children) {
+	for (auto itr : tgt->children) {
 
 		Culc_ALL(itr);
 	}

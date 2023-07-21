@@ -15,6 +15,8 @@ public:
 	void Draw()			override;
 	void Release()		override;
 
+	void ColProc()		override;
+
 private:
 
 	int m_;

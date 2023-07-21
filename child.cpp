@@ -22,7 +22,7 @@ void child::Initialize()
 	Model::SetLightGroup(&m_, &(LightManager->Light_Path1));
 	Model::SetShader(&m_, SHADER_TYPE::SHADER_CELL3D);
 
-	SphereCol* col = new SphereCol(0.5, trans.pos);
+	SphereCol* col = new SphereCol(2, trans.pos);
 	Make_Col(col);
 	
 }
