@@ -4,27 +4,25 @@
 LIGHTMANAGER* LIGHTMANAGER::inst_ = nullptr;
 LIGHTMANAGER* LightManager = LIGHTMANAGER::GetInstance();
 
-LOBJ::LOBJ(LOBJ* parent, string name):parent(parent),name(name), intensity(0), color(XMFLOAT4{0,0,0,0})
+LOBJ::LOBJ( string name):name(name), intensity(0), color(XMFLOAT4{0,0,0,0}),selfpointer_(nullptr)
 {
-	trans.parent_ = &parent->trans;
+	
 }
 
-LOBJ::LOBJ(string name) :parent(nullptr), name(name), intensity(0), color(XMFLOAT4{ 0,0,0,0 })
-{
-}
-
-LOBJ::LOBJ(LOBJ* parent)
-{
-}
-
-LOBJ::LOBJ():parent(nullptr),name(" "), intensity(0), color(XMFLOAT4{0,0,0,0})
+LOBJ::LOBJ():name("LOBJ"), intensity(0), color(XMFLOAT4{0,0,0,0}), selfpointer_(nullptr)
 {
 }
 
 LOBJ::~LOBJ()
-{
-
+{	
 }
+
+void LOBJ::Release()
+{
+	delete selfpointer_;
+	selfpointer_ = nullptr;
+}
+
 void LOBJ::Draw()
 {
 }
@@ -37,46 +35,32 @@ int LOBJ::GetType()
 LIGHTMANAGER::LightGroup::LightGroup() :index_(0)
 {
 	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
-		me[i] = new P_LOBJ();
+		me[i] = nullptr;
 	}
 }
 
 LIGHTMANAGER::LightGroup::~LightGroup()
 {
-	delete[] me;
 }
 
 void LIGHTMANAGER::LightGroup::Release()
 {
-	delete[] me;
+	for (auto itr : me) {
 
-	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
+		if(itr != nullptr)		itr->Release();
+	};
 
-		me[i] = nullptr;
-	}
 }
 
 void LIGHTMANAGER::LightGroup::Make(LOBJ* &lght)
 {
-	for (int i = 0; i < LIGHT_AMMOUNT; i++) {
-
-
-
+	for (auto itr : me) {
+		//////
 	}
 }
 //----------------------------
 
-P_LOBJ::P_LOBJ(LOBJ* parent, string name):LOBJ(parent,name)
-{
-	LightType = LIGHT_TYPE::POINT;
-}
-
-P_LOBJ::P_LOBJ(string name) :LOBJ( name)
-{
-	LightType = LIGHT_TYPE::POINT;
-}
-
-P_LOBJ::P_LOBJ() :LOBJ()
+P_LOBJ::P_LOBJ( string name ):LOBJ(name)
 {
 	LightType = LIGHT_TYPE::POINT;
 }
@@ -85,7 +69,16 @@ P_LOBJ::~P_LOBJ()
 {
 }
 
+P_LOBJ* P_LOBJ::Make_Light()
+{
+	return nullptr;
+}
+
 void P_LOBJ::Initialize()
+{
+}
+
+P_LOBJ::P_LOBJ():LOBJ("P_LOBJ")
 {
 }
 
@@ -93,34 +86,25 @@ void P_LOBJ::Update()
 {
 }
 
-void P_LOBJ::Release()
-{
-	trans.pos = { 0,0,0 };
-	color = { 0,0,0,0 };
-	intensity = 0.0;
-}
 void P_LOBJ::Draw()
 {
 }
 //---------------
 
-S_LOBJ::S_LOBJ(LOBJ* parent, string name)
+S_LOBJ::S_LOBJ( string name):LOBJ(name)
 {
 	LightType = LIGHT_TYPE::SUN;
 }
 
-S_LOBJ::S_LOBJ(string name)
-{
-	LightType = LIGHT_TYPE::SUN;
-}
 
-S_LOBJ::S_LOBJ()
-{
-	LightType = LIGHT_TYPE::SUN;
-}
 
 S_LOBJ::~S_LOBJ()
 {
+}
+
+LOBJ* S_LOBJ::Make_Light()
+{
+	return nullptr;
 }
 
 void S_LOBJ::Initialize()
@@ -131,12 +115,6 @@ void S_LOBJ::Update()
 {
 }
 
-void S_LOBJ::Release()
-{
-	trans.pos = { 0,0,0 };
-	color = { 0,0,0,0 };
-	intensity = 0.0;
-}
 void S_LOBJ::Draw()
 {
 }
@@ -153,7 +131,7 @@ void LIGHTMANAGER::Release()
 {
 	for (int i = 0; i < sizeof(LIGHTGROUP) / sizeof(LightGroup); i++) {
 	
-		delete[] LIGHTGROUP[i]->me;
+		LIGHTGROUP[i]->Release();
 	}
 	delete[] LIGHTGROUP;
 

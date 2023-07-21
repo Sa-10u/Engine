@@ -71,8 +71,12 @@ void Fbx::Draw(Trans* wldMat)
 			cb.matWV = XMMatrixTranspose(CAM::GetViewMatrix());
 
 			for (int i = 0; i < LIGHT_AMMOUNT; i++) {
-				cb.matLGT[i] = (*lght_->me[i]).color;
-				cb.matLGTpos[i] = XMFLOAT4{ (*lght_->me[i]).trans.pos.x,(*lght_->me[i]).trans.pos.y,(*lght_->me[i]).trans.pos.z,0};
+				//cb.matLGT[i] = (*lght_->me[i]).color;
+				//cb.matLGTpos[i] = XMFLOAT4{ (*lght_->me[i]).trans.pos.x,(*lght_->me[i]).trans.pos.y,(*lght_->me[i]).trans.pos.z,0};
+				//cb.Type[i] = (*lght_->me[i]).GetType();
+				//cb.intensity[i] = (*lght_->me[i]).intensity;
+
+				(this->*SetCB[static_cast<bool>(lght_->me[i])])( (lght_->me[i]), i, & cb );
 			}
 			cb.diffuse = list_material[i].diffuse;
 			cb.isTex = list_material[i].tex != nullptr;
@@ -290,4 +294,20 @@ void Fbx::InitCB()
 		D3D::pDevice_->CreateBuffer(&cb, nullptr, &(this->cb));
 
 	}
+}
+
+void Fbx::Set(LOBJ *lght ,int i , CONSTANT_BUFFER* cb)
+{
+	cb->matLGT[i] = (*lght_->me[i]).color;
+	cb->matLGTpos[i] = XMFLOAT4{ (*lght_->me[i]).trans.pos.x,(*lght_->me[i]).trans.pos.y,(*lght_->me[i]).trans.pos.z,0 };
+	cb->Type[i] = (*lght_->me[i]).GetType();
+	cb->intensity[i] = (*lght_->me[i]).intensity;
+}
+
+void Fbx::Unset(LOBJ *lght ,int i , CONSTANT_BUFFER* cb)
+{
+	cb->matLGT[i] = XMFLOAT4(0,0,0,0);
+	cb->matLGTpos[i] = XMFLOAT4(0,0,0,0);
+	cb->Type[i] = static_cast<int>(LIGHT_TYPE::NONE);
+	cb->intensity[i] = NULL;
 }

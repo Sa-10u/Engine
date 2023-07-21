@@ -1,12 +1,8 @@
 #pragma once
 #include"LOBJ.h"
+#include <array>
 
-enum 
-{
-	Light_Path1 = 0,
-
-	Light_Group_Ammount 
-};
+using std::array;
 
 class LIGHTMANAGER
 {
@@ -14,7 +10,7 @@ public:
 
 	struct LightGroup
 	{
-		LOBJ* me[LIGHT_AMMOUNT];
+		array<LOBJ* , LIGHT_AMMOUNT> me;
 		LightGroup();
 		~LightGroup();
 		void Release();
@@ -28,7 +24,7 @@ public:
 
 public:
 	//--- Light Resources
-	LightGroup* LIGHTGROUP[Light_Group_Ammount] =
+	LightGroup* LIGHTGROUP[1] =
 	{
 		&Light_Path1,
 	};

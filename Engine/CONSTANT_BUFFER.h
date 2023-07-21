@@ -18,7 +18,9 @@ struct CONSTANT_BUFFER
 
 	XMFLOAT4 diffuse;
 	int isTex;
-	//int Type;
+
+	int Type[LIGHT_AMMOUNT];
+	float intensity[LIGHT_AMMOUNT];
 };
 
 struct CONSTANT_BUFFER_SPRITE

@@ -1,16 +1,17 @@
 #pragma once
-#include <array>
+
 #include "Trans.h"
 #include"MACRO.h"
 #include "D3D.h"
 #include "GOBJ.h"
 
-using std::array;
+
 
 enum class LIGHT_TYPE
 {
-	SUN = 0,
-	POINT = 1,
+	NONE = 0,
+	SUN = 1,
+	POINT ,
 	
 
 	AMMOUNT,
@@ -20,21 +21,21 @@ class LOBJ
 {
 public:
 
-	LOBJ(LOBJ* parent, string name);
-	LOBJ(string name);
-	LOBJ(LOBJ* parent);
-	LOBJ();
-	virtual ~LOBJ() ;
+	virtual LOBJ* Make_Light() = 0;
+	virtual LOBJ* Make_Light(string name) = 0;	//virtual friend LOBJ* Make_Light(LOBJ* inst) <- [inst is nullptr ->new LOBJ]
 
 
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
-	virtual void Release() = 0;
+	void Release();
 	virtual void Draw();
 
 	int GetType();
 
 public:
+	LOBJ(string name);
+	LOBJ();
+	virtual ~LOBJ();
 
 	Trans			trans;
 	XMFLOAT4		color;
@@ -42,37 +43,42 @@ public:
 
 protected:
 	LIGHT_TYPE			LightType;
-	LOBJ* parent;
 	string name;
+
+	LOBJ* selfpointer_;
+
+private:
 
 };
 
 class S_LOBJ : public LOBJ
 {
 public:
-	S_LOBJ(LOBJ* parent,string name);
+	LOBJ* Make_Light() override;
+
+	virtual void Initialize() override;
+	virtual void Update() override;
+	virtual void Draw() override;
+
+private:
 	S_LOBJ(string name);
 	S_LOBJ();
 	~S_LOBJ();
-
-	void Initialize() override;
-	virtual void Update() override;
-	void Release() override;
-	virtual void Draw() override;
 };
 
 class P_LOBJ : public LOBJ
 {
 public:
-	P_LOBJ(LOBJ* parent,string name);
+	P_LOBJ* Make_Light() override;
+
+	virtual void Initialize() override;
+	virtual void Update() override;
+	virtual void Draw() override;
+
+private:
 	P_LOBJ(string name);
 	P_LOBJ();
 	~P_LOBJ();
-
-	void Initialize() override;
-	virtual void Update() override;
-	void Release() override;
-	virtual void Draw() override;
 };
 
 //-------

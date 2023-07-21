@@ -41,6 +41,10 @@ public:
 
 private:
 
+	void Set(LOBJ *lght , int i ,CONSTANT_BUFFER* cb);
+	void Unset(LOBJ* lght, int i , CONSTANT_BUFFER* cb);
+	void(Fbx::*SetCB[2])(LOBJ* lght ,int i , CONSTANT_BUFFER* cb) = {&Fbx::Unset,&Fbx::Set};
+
 	int polygon;
 	int vertex;
 	int material;
