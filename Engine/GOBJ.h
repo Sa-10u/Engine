@@ -5,6 +5,8 @@
 #include "D3D.h"
 #include <string>
 
+class Collider;
+
 using std::list;
 using std::string;
 
@@ -24,6 +26,9 @@ public:
 	GOBJ();
 	virtual ~GOBJ() {};
 
+	void Make_Col(Collider* col);
+	void Culc(GOBJ* parent);
+	virtual void ColProc();
 
 	virtual void Initialize()	= 0;
 	virtual void Update()		= 0;
@@ -33,6 +38,7 @@ public:
 	void UpdateALL();
 	void DrawALL();
 	void ReleaseALL();
+	void Culc_ALL(GOBJ* parent);
 
 	virtual void KillMe();
 	virtual void Stop();
@@ -73,9 +79,10 @@ protected:
 
 	string			name_;
 	GOBJ*			parent_;
+	Collider* col_;
 
 	char			state_;
-	static bool		DoDelProc_ ;
+	static bool		DoDelProc_;
 
 private:
 

@@ -1,28 +1,57 @@
 #include "GOBJ.h"
+#include "Collider.h"
+#include "SphereCol.h"
+#include<cmath>
+
+using std::pow;
+
 bool GOBJ::DoDelProc_ = false;
 
-GOBJ::GOBJ(GOBJ* parent, string name):name_(name),parent_(parent),state_(0)
+GOBJ::GOBJ(GOBJ* parent, string name):name_(name),parent_(parent),state_(0), col_(nullptr)
 {
 	//if(parent != nullptr)	this->trans.parent_ = &(parent->trans);
 	(this->*consfunc[static_cast<bool>(parent)])(parent);
 }
 
-GOBJ::GOBJ(string name):name_(name),state_(NULL),parent_(nullptr)
+GOBJ::GOBJ(string name):name_(name),state_(NULL),parent_(nullptr), col_(nullptr)
 {
 	trans.parent_ = nullptr;
 }
 
-GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL)
+GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL),col_(nullptr)
 {
 	trans.parent_ = nullptr;
+}
+
+void GOBJ::Make_Col(Collider* col)
+{
+	col_ = col;
+}
+
+void GOBJ::Culc(GOBJ* parent)
+{
+	if (parent == nullptr)	return;
+	float len = Pow_Length(this->trans.pos, parent->trans.pos);
+
+	if (len <= pow(this->col_->GetRadius() + parent->col_->GetRadius(),2))
+	{
+		ColProc();
+	}
+}
+
+void GOBJ::ColProc()
+{
 }
 
 void GOBJ::UpdateALL()
 {
 	Update();
+	Culc_ALL(GetRootObj());
+
 	for (auto itr : children) {
 
 		itr->UpdateALL();
+	
 	}
 }
 
@@ -46,6 +75,19 @@ void GOBJ::ReleaseALL()
 	this->Release();
 	children.clear();
 
+}
+
+void GOBJ::Culc_ALL(GOBJ* parent)
+{
+
+	if (parent->col_ == this->col_ || parent_->col_ == nullptr)		return;
+
+	Culc(parent);
+
+	for (auto itr : children) {
+
+		Culc_ALL(itr);
+	}
 }
 
 void GOBJ::KillMe()

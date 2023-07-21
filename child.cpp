@@ -1,6 +1,7 @@
 #include "child.h"
 #include "Engine/DInput.h"
 #include "Engine/Model.h"
+#include "Engine/SphereCol.h"
 
 child::child(GOBJ* parent) :model_(nullptr), GOBJ(parent, "child"),m_(-1)
 {
@@ -20,6 +21,9 @@ void child::Initialize()
 
 	Model::SetLightGroup(&m_, &(LightManager->Light_Path1));
 	Model::SetShader(&m_, SHADER_TYPE::SHADER_CELL3D);
+
+	SphereCol* col = new SphereCol(0.5, trans.pos);
+	Make_Col(col);
 	
 }
 

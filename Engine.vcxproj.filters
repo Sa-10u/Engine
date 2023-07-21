@@ -75,12 +75,21 @@
     <ClCompile Include="Engine\SceneManager.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SphereCol.cpp">
+      <Filter>Source\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider.cpp">
+      <Filter>Source\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Frenel.hlsl">
+    <FxCompile Include="Fresnel.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="Point3D.hlsl">
@@ -160,6 +169,15 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SceneManager.h">
+      <Filter>Header\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SphereCol.h">
+      <Filter>Header\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
   </ItemGroup>

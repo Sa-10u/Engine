@@ -3,9 +3,9 @@
 #include"Engine/DInput.h"
 #include"Engine/Model.h"
 #include "child.h"
+#include"Engine/SphereCol.h"
 
-
-Player::Player(GOBJ* parent):model_(nullptr),GOBJ(parent,"Player")
+Player::Player(GOBJ* parent):GOBJ(parent,"Player"),m_(-1)
 {
 }
 
@@ -35,6 +35,9 @@ void Player::Initialize()
 	c1->trans.pos.z = 2;
 	c2->trans.pos.z = -2;
 	*/
+
+	
+
 }
 
 void Player::Update()
@@ -60,6 +63,4 @@ void Player::Draw()
 
 void Player::Release()
 {
-	model_->Release();
-	delete model_;
 }

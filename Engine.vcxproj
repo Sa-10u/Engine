@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="child.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\CAM.cpp" />
+    <ClCompile Include="Engine\Collider.cpp" />
     <ClCompile Include="Engine\D3D.cpp" />
     <ClCompile Include="Engine\DInput.cpp" />
     <ClCompile Include="Engine\FBX.cpp" />
@@ -150,6 +152,7 @@
     <ClCompile Include="Engine\M_Quad.cpp" />
     <ClCompile Include="Engine\RootOBJ.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
+    <ClCompile Include="Engine\SphereCol.cpp" />
     <ClCompile Include="Engine\Sprite.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Trans.cpp" />
@@ -165,7 +168,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="Frenel.hlsl">
+    <FxCompile Include="Fresnel.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -201,7 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="child.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\CAM.h" />
+    <ClInclude Include="Engine\Collider.h" />
     <ClInclude Include="Engine\CONSTANT_BUFFER.h" />
     <ClInclude Include="Engine\D3D.h" />
     <ClInclude Include="Engine\DInput.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="Engine\M_Quad.h" />
     <ClInclude Include="Engine\RootOBJ.h" />
     <ClInclude Include="Engine\SceneManager.h" />
+    <ClInclude Include="Engine\SphereCol.h" />
     <ClInclude Include="Engine\Sprite.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Trans.h" />

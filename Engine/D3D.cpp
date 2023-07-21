@@ -341,7 +341,7 @@ void D3D::Shader_InitializeFrenel3D()
 
 
     ID3DBlob* pCompileVS = nullptr;
-    D3DCompileFromFile(L"Frenel.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+    D3DCompileFromFile(L"Fresnel.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
     assert(pCompileVS != nullptr);
     pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_FRENEL3D)].vs);
 
@@ -357,7 +357,7 @@ void D3D::Shader_InitializeFrenel3D()
 
 
     ID3DBlob* pCompilePS = nullptr;
-    D3DCompileFromFile(L"Frenel.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+    D3DCompileFromFile(L"Fresnel.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
     assert(pCompilePS != nullptr);
     pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_FRENEL3D)].ps);
     SAFE_RELEASE(pCompilePS);
