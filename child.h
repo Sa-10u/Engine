@@ -20,6 +20,7 @@ private:
 	Fbx* model_;
 	int m_;
 	Collider* col;
+	GOBJ* tgt_;
 
 	void OnCol();
 };

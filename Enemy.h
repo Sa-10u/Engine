@@ -20,5 +20,6 @@ private:
 
 	int m_;
 	Collider* col;
+	//void OnCol();
 };
 

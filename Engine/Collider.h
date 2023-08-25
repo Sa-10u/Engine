@@ -23,7 +23,7 @@ public:
 
 	virtual bool IsHit(GOBJ* tgt) = 0;
 
-	void SetFunc(void rum());
+	void SetFunc(void(* rum)());
 	void OnCol(GOBJ* tgt);
 	void OnCol(GOBJ* tgt, void rum());
 

@@ -42,6 +42,7 @@ public:
 
 	virtual list<GOBJ*> GetChildren();
 	GOBJ* GetParent();
+	string GetName();
 
 	bool IsDead();
 	bool IsDisposal();

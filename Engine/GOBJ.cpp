@@ -159,6 +159,11 @@ GOBJ* GOBJ::GetParent()
 	return parent_;
 }
 
+string GOBJ::GetName()
+{
+	return name_;
+}
+
 bool GOBJ::IsDead()
 {
 	return (state_ & static_cast<int>(OBJ_STATE::KILL));
