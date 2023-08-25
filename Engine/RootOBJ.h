@@ -1,6 +1,5 @@
 #pragma once
 #include "GOBJ.h"
-#include "../PlayScene.h"
 
 class RootOBJ : public GOBJ
 {

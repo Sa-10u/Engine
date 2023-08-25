@@ -1,6 +1,5 @@
 #pragma once
 #include"../SCENE_Test.h"
-#include"../PlayScene.h"
 #include "Model.h"
 
 #include "SceneManager.h"
@@ -55,7 +54,6 @@ void SceneManager::Changing()
 
 	switch (next_)
 	{
-	case USID::PLAY:	Make<PlayScene>(this);	break;
 
 	case USID::TEST:	Make<SCENE_Test>(this);	break;
 	}

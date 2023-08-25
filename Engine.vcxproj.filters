@@ -54,17 +54,8 @@
     <ClCompile Include="Engine\Trans.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\LOBJ.cpp">
       <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="child.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Model.cpp">
       <Filter>Source\Engine</Filter>
@@ -73,15 +64,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Engine\SceneManager.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\SphereCol.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Collider.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,17 +129,8 @@
     <ClInclude Include="Engine\Trans.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\LOBJ.h">
       <Filter>Header\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="child.h">
-      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model.h">
       <Filter>Header\Engine</Filter>
@@ -169,15 +142,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SceneManager.h">
-      <Filter>Header\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SphereCol.h">
-      <Filter>Header\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Collider.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
   </ItemGroup>

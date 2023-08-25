@@ -1,6 +1,4 @@
 #include "GOBJ.h"
-#include "Collider.h"
-#include "SphereCol.h"
 #include<cmath>
 
 using std::pow;
@@ -157,6 +155,11 @@ list<GOBJ*> GOBJ::GetChildren()
 GOBJ* GOBJ::GetParent()
 {
 	return parent_;
+}
+
+string GOBJ::GetName()
+{
+	return name_;
 }
 
 bool GOBJ::IsDead()
