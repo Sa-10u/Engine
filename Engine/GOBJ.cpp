@@ -5,18 +5,18 @@ using std::pow;
 
 bool GOBJ::DoDelProc_ = false;
 
-GOBJ::GOBJ(GOBJ* parent, string name):name_(name),parent_(parent),state_(0), col_(nullptr)
+GOBJ::GOBJ(GOBJ* parent, string name):name_(name),parent_(parent),state_(0)
 {
 	//if(parent != nullptr)	this->trans.parent_ = &(parent->trans);
 	(this->*consfunc[static_cast<bool>(parent)])(parent);
 }
 
-GOBJ::GOBJ(string name):name_(name),state_(NULL),parent_(nullptr), col_(nullptr)
+GOBJ::GOBJ(string name):name_(name),state_(NULL),parent_(nullptr)
 {
 	trans.parent_ = nullptr;
 }
 
-GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL),col_(nullptr)
+GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL)
 {
 	trans.parent_ = nullptr;
 }

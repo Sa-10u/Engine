@@ -5,8 +5,6 @@
 #include "D3D.h"
 #include <string>
 
-class Collider;
-
 using std::list;
 using std::string;
 
@@ -75,7 +73,6 @@ protected:
 
 	string			name_;
 	GOBJ*			parent_;
-	Collider* col_;
 
 	char			state_;
 	static bool		DoDelProc_;

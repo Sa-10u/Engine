@@ -1,6 +1,8 @@
 #include "SCENE_Test.h"
 #include"Engine/DInput.h"
 #include"Engine/SceneManager.h"
+#include "Stage.h"
+#include "CamCon.h"
 
 SCENE_Test::SCENE_Test(GOBJ* parent,string name) :GOBJ(parent, name)
 {
@@ -16,18 +18,12 @@ SCENE_Test::~SCENE_Test()
 
 void SCENE_Test::Initialize()
 {
+	Make<Stage>(this);
+	Make<CamCon>(this);
 }
 
 void SCENE_Test::Update()
 {
-	parent_;
-	if (Input::IsKey(DIK_SPACE))
-	{
-		SceneManager* sm = nullptr;
-		sm = dynamic_cast<SceneManager*>(FindObject_ALL("SceneManager"));
-		sm->ChangeScene(USID::PLAY);
-	}
-
 	for (auto itr : children) {
 		itr->UpdateALL();
 	}

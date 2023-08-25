@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CamCon.cpp" />
     <ClCompile Include="Engine\CAM.cpp" />
     <ClCompile Include="Engine\D3D.cpp" />
     <ClCompile Include="Engine\DInput.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Engine\Trans.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SCENE_Test.cpp" />
+    <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
@@ -198,6 +200,7 @@
     <None Include="Engine\packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CamCon.h" />
     <ClInclude Include="Engine\CAM.h" />
     <ClInclude Include="Engine\CONSTANT_BUFFER.h" />
     <ClInclude Include="Engine\D3D.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Trans.h" />
     <ClInclude Include="SCENE_Test.h" />
+    <ClInclude Include="Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
