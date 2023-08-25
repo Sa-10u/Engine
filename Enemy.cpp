@@ -17,8 +17,7 @@ void Enemy::Initialize()
 	trans.size = XMFLOAT3(0.5, 0.5, 0.5);
 	trans.pos.z = 6;
 
-	SphereCol* col = new SphereCol(2, trans.pos);
-	Make_Col(col);
+	col = new SphereCol(3, trans.pos, this);
 }
 
 void Enemy::Update()
@@ -33,9 +32,4 @@ void Enemy::Draw()
 
 void Enemy::Release()
 {
-}
-
-void Enemy::ColProc()
-{
-	KillMe();
 }

@@ -9,17 +9,29 @@ class GOBJ;
 class Collider
 {
 public:
-	Collider();
-	Collider(float len, XMFLOAT3 pos);
+	Collider(GOBJ* parent);
+	Collider(float len, XMFLOAT3 pos ,GOBJ* parent);
 	virtual ~Collider();
 
 	float GetRadius();
 	XMFLOAT3 GetPos();
+	GOBJ* GetParent();
 
 	void SetRadius(float len);
 	void SetPos(XMFLOAT3 pos);
+	void SetParent(GOBJ* p);
 
-private:
+	virtual bool IsHit(GOBJ* tgt) = 0;
+
+	void SetFunc(void rum());
+	void OnCol(GOBJ* tgt);
+	void OnCol(GOBJ* tgt, void rum());
+
+	static list<Collider*> cols;
+
+protected:
 	float rad_;
 	Trans trans;
+	void(* func)();
+	GOBJ* parent_;
 };

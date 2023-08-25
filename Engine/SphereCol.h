@@ -5,7 +5,9 @@
 class SphereCol : public Collider
 {
 public:
-	SphereCol();
-	SphereCol(float len ,XMFLOAT3 pos);
+	SphereCol(GOBJ* parent);
+	SphereCol(float len ,XMFLOAT3 pos,GOBJ* parent);
 	~SphereCol();
+
+	bool IsHit(GOBJ* tgt)	override;
 };

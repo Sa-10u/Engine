@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GOBJ.h"
 #include "Engine/Fbx.h"
+#include "Engine/SphereCol.h"
 
 class child : public GOBJ
 {
@@ -18,5 +19,8 @@ private:
 
 	Fbx* model_;
 	int m_;
+	Collider* col;
+
+	void OnCol();
 };
 

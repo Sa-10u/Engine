@@ -26,10 +26,6 @@ public:
 	GOBJ();
 	virtual ~GOBJ() {};
 
-	void Make_Col(Collider* col);
-	void Culc(GOBJ* parent);
-	virtual void ColProc();
-
 	virtual void Initialize()	= 0;
 	virtual void Update()		= 0;
 	virtual void Draw()			= 0;
@@ -38,7 +34,6 @@ public:
 	void UpdateALL();
 	void DrawALL();
 	void ReleaseALL();
-	void Culc_ALL(GOBJ* parent);
 
 	virtual void KillMe();
 	virtual void Stop();

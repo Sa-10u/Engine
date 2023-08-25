@@ -23,30 +23,9 @@ GOBJ::GOBJ() :parent_(nullptr), name_(" "), state_(NULL),col_(nullptr)
 	trans.parent_ = nullptr;
 }
 
-void GOBJ::Make_Col(Collider* col)
-{
-	col_ = col;
-}
-
-void GOBJ::Culc(GOBJ* tgt)
-{
-	if (tgt->col_ == nullptr || tgt->col_ == this->col_)	return;
-	float len = Pow_Length(this->trans.pos, tgt->trans.pos);
-
-	if (len <= pow(this->col_->GetRadius() + tgt->col_->GetRadius(),2))
-	{
-		ColProc();
-	}
-}
-
-void GOBJ::ColProc()
-{
-}
-
 void GOBJ::UpdateALL()
 {
 	Update();
-	Culc_ALL(GetRootObj());
 
 	for (auto itr : children) {
 
@@ -77,18 +56,6 @@ void GOBJ::ReleaseALL()
 
 }
 
-void GOBJ::Culc_ALL(GOBJ* tgt)
-{
-
-	if (this->col_ == nullptr)		return;
-
-	if(tgt->col_ != this->col_)		Culc(tgt);
-
-	for (auto itr : tgt->children) {
-
-		Culc_ALL(itr);
-	}
-}
 
 void GOBJ::KillMe()
 {

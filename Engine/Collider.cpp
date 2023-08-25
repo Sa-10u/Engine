@@ -1,15 +1,20 @@
 #include "Collider.h"
 
-Collider::Collider() :rad_(1.0)
+Collider::Collider(GOBJ* parent) :rad_(1.0),parent_(parent)
 {
+    cols.push_back(this);
 }
 
-Collider::Collider(float len, XMFLOAT3 pos) :rad_(len)
+Collider::Collider(float len, XMFLOAT3 pos,GOBJ* parent) :rad_(len),parent_(parent)
 {
+    trans.pos = pos;
+
+    cols.push_back(this);
 }
 
 Collider::~Collider()
 {
+    cols.remove(this);
 }
 
 float Collider::GetRadius()
@@ -19,7 +24,12 @@ float Collider::GetRadius()
 
 XMFLOAT3 Collider::GetPos()
 {
-    return XMFLOAT3();
+    return trans.pos;
+}
+
+GOBJ* Collider::GetParent()
+{
+    return parent_;
 }
 
 void Collider::SetRadius(float len)
@@ -29,5 +39,35 @@ void Collider::SetRadius(float len)
 
 void Collider::SetPos(XMFLOAT3 pos)
 {
+    trans.pos = pos;
+}
+
+void Collider::SetParent(GOBJ* p)
+{
+    parent_ = p;
+}
+
+void Collider::SetFunc(void rum())
+{
+    func = rum;
+}
+
+void Collider::OnCol(GOBJ* tgt)
+{
+    if (this->IsHit(tgt))
+    {
+        return;
+    }
+    
+}
+
+void Collider::OnCol(GOBJ* tgt, void rum())
+{
+    SetFunc(rum);
+
+    if (IsHit(tgt))
+    {
+        return;
+    }
 
 }

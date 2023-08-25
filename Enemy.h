@@ -1,6 +1,7 @@
 #pragma once
 #include"Engine/GOBJ.h"
 #include"Engine/Model.h"
+#include"Engine/Collider.h"
 
 class Enemy : public GOBJ
 {
@@ -15,10 +16,9 @@ public:
 	void Draw()			override;
 	void Release()		override;
 
-	void ColProc()		override;
-
 private:
 
 	int m_;
+	Collider* col;
 };
 

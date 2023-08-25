@@ -21,10 +21,18 @@ void child::Initialize()
 
 	Model::SetLightGroup(&m_, &(LightManager->Light_Path1));
 	Model::SetShader(&m_, SHADER_TYPE::SHADER_CELL3D);
-
-	SphereCol* col = new SphereCol(2, trans.pos);
-	Make_Col(col);
 	
+	col = new SphereCol(1, this->trans.pos, this);
+	col->SetFunc(OnCol);
+
+	for (auto itr : GetParent()->GetChildren()) {
+		if (itr->GetName() == "Enemy")
+		{
+			tgt_ = itr;
+
+			break;
+		}
+	}
 }
 
 void child::Update()
@@ -37,6 +45,8 @@ void child::Update()
 	trans.pos.z += 0.3;
 
 	if (trans.pos.z > 20.0) KillMe();
+
+	col->IsHit(tgt_);
 }
 
 void child::Draw()
@@ -46,4 +56,11 @@ void child::Draw()
 
 void child::Release()
 {
+	delete col;
+}
+
+void child::OnCol()
+{
+	tgt_->KillMe();
+	KillMe();
 }
