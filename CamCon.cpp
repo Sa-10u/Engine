@@ -48,20 +48,20 @@ void CamCon::Move()
 	{
 		XMMATRIX mat =
 		{
-		cosf(pie_ / 2), 0,               -sinf(pie_ / 2),     0,
-		0,           1,               0,                0,
-		sinf(pie_ / 2), 0,               cosf(pie_ / 2) ,     0,
-		0,           0,               0,                1
+		cosf(pie_ / 2), 0,               -sinf(pie_ / 2),  0,
+		0,				1,               0,                0,
+		sinf(pie_ / 2), 0,               cosf(pie_ / 2) ,  0,
+		0,				0,               0,                1
 		};
-		temp = XMVector3TransformCoord(temp, mat);
+		auto Temp = XMVector3TransformCoord(temp, mat);
 		XMFLOAT3 fvec;
-		XMStoreFloat3(&fvec, temp);
+		XMStoreFloat3(&fvec, Temp);
 
 		fvec.y = 0;
-		temp = XMLoadFloat3(&fvec);
+		Temp = XMLoadFloat3(&fvec);
 
-		CAM::SetPosition(CAM::GetPosition() - temp * val);
-		CAM::SetTarget(CAM::GetTarget() - temp * val);
+		CAM::SetPosition(CAM::GetPosition() - Temp * val);
+		CAM::SetTarget(CAM::GetTarget() - Temp * val);
 	}
 	if (Input::IsKey(DIK_S))
 	{
@@ -72,21 +72,21 @@ void CamCon::Move()
 	{
 		XMMATRIX mat =
 		{
-		cosf(-pie_ / 2), 0,               -sinf(-pie_ / 2),     0,
-		0,           1,               0,                0,
-		sinf(-pie_ / 2), 0,               cosf(-pie_ / 2) ,     0,
-		0,           0,               0,                1
+		cosf(-pie_ / 2), 0,           -sinf(-pie_ / 2),     0,
+		0,				 1,           0,					0,
+		sinf(-pie_ / 2), 0,           cosf(-pie_ / 2) ,     0,
+		0,				 0,           0,					1
 		};
-		temp = XMVector3TransformCoord(temp, mat);
+		auto Temp = XMVector3TransformCoord(temp, mat);
 		XMFLOAT3 fvec;
-		XMStoreFloat3(&fvec, temp);
+		XMStoreFloat3(&fvec, Temp);
 
 		fvec.y = 0;
-		temp = XMLoadFloat3(&fvec);
+		Temp = XMLoadFloat3(&fvec);
 
 
-		CAM::SetPosition(CAM::GetPosition() - temp * val);
-		CAM::SetTarget(CAM::GetTarget() - temp * val);
+		CAM::SetPosition(CAM::GetPosition() - Temp * val);
+		CAM::SetTarget(CAM::GetTarget() - Temp * val);
 	}
 
 	if (Input::IsKey(DIK_Q))
@@ -111,73 +111,68 @@ void CamCon::Move()
 		CAM::SetTarget(CAM::GetTarget() + vec * val);
 	}
 
+	if (Input::IsKey(DIK_Z))
+	{
+		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
+		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
+
+		CAM::SetPosition(CAM::GetPosition() - Temp * val);
+		CAM::SetTarget(CAM::GetTarget() - Temp * val);
+	}
+
+	if (Input::IsKey(DIK_X))
+	{
+		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
+		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
+
+		CAM::SetPosition(CAM::GetPosition() + Temp * val);
+		CAM::SetTarget(CAM::GetTarget() + Temp * val);
+	}
 }
 
 void CamCon::Roll()
 {
-	XMVECTOR rot = CAM::GetTarget();
-	Trans temp;	XMStoreFloat3(&temp.pos, rot);
+	XMVECTOR mig = CAM::GetTarget() - CAM::GetPosition();
 
-	XMFLOAT3 temppos;	XMStoreFloat3(&temppos,CAM::GetPosition());
-	temp.pos = temp.pos - temppos;
+	XMMATRIX MAT =
+	{
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
 
-	rot = XMLoadFloat3(&temp.pos);
+	double val = 0.015;
 
-	//rot = XMVector3Normalize(rot);
-
-	double val = 0.05 / 3.141592;
-
+	
 	if (Input::IsKey(DIK_LEFTARROW))
 	{
-		XMMATRIX mat =
-		{
-			cosf(-val), 0,               -sinf(-val),     0,
-			0,          1,               0,               0,
-			sinf(-val), 0,               cosf(-val) ,     0,
-			0,          0,               0,               1
-		};
-		rot = XMVector3TransformCoord(rot, mat);
+		XMMATRIX mat = XMMatrixRotationY(-val);
+		MAT = MAT * mat;
 
-		CAM::SetTarget(rot);
 	}
 	if (Input::IsKey(DIK_RIGHTARROW))
 	{
-		XMMATRIX mat =
-		{
-			cosf(val), 0,               -sinf(val),     0,
-			0,         1,               0,              0,
-			sinf(val), 0,               cosf(val) ,     0,
-			0,         0,               0,              1
-		};
-		rot = XMVector3TransformCoord(rot, mat);
+		XMMATRIX mat = XMMatrixRotationY(val);
+		MAT = MAT * mat;
 
-		CAM::SetTarget(rot);
 	}
+	
 	if (Input::IsKey(DIK_UPARROW))
 	{
-		XMMATRIX mat =
-		{
-			1 ,          0,               0,                0,
-			0,           cosf(val),     -sinf(val),     0,
-			0,           sinf(val),     cosf(val),      0,
-			0,           0,               0,                1
-		};
-		rot = XMVector3TransformCoord(rot, mat);
+		XMMATRIX mat = XMMatrixRotationX(-val);
+		MAT = MAT * mat;
 
-		CAM::SetTarget(rot);
 	}
 	if (Input::IsKey(DIK_DOWNARROW))
 	{
-		XMMATRIX mat =
-		{
-			1 ,          0,               0,                0,
-			0,           cosf(-val),     -sinf(-val),     0,
-			0,           sinf(-val),     cosf(-val),      0,
-			0,           0,               0,                1
-		};
-		rot = XMVector3TransformCoord(rot, mat);
+		XMMATRIX mat = XMMatrixRotationX(val);
+		MAT = MAT * mat;
 
-		CAM::SetTarget(rot);
 	}
 
+	auto rot = XMQuaternionRotationMatrix(MAT);
+	auto out = XMVector3Rotate(mig, rot);
+
+	CAM::SetTarget(out);
 }

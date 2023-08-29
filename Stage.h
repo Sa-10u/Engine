@@ -1,6 +1,20 @@
 #pragma once
 #include "Engine/GOBJ.h"
 
+const int XSIZE{ 15 };
+const int ZSIZE{ 15 };
+
+enum class BLOCKTYPE
+{
+	DEFAULT,
+	BRICK,
+	GRASS,
+	SAND,
+	WATER,
+
+	AMMOUNT
+};
+
 class Stage : public GOBJ
 {
 public:
@@ -20,6 +34,10 @@ public:
 	//ŠJ•ú
 	void Release() override;
 
+	void SetBlockType(int x, int y, BLOCKTYPE type);
+	BLOCKTYPE GetBlockType(int x,int y);
+
 protected:
-	int model_;
+	int model_[5];
+	int Table[XSIZE * ZSIZE];
 };
