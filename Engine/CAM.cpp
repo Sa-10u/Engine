@@ -32,6 +32,11 @@ void CAM::SetPosition(XMFLOAT3 position)
 	SetPosition(XMLoadFloat3(&position));
 }
 
+XMVECTOR CAM::GetPosition()
+{
+	return pos_;
+}
+
 void CAM::SetTarget(XMVECTOR target)
 {
 	tgt_ = target;
@@ -40,6 +45,11 @@ void CAM::SetTarget(XMVECTOR target)
 void CAM::SetTarget(XMFLOAT3 target)
 {
 	SetTarget(XMLoadFloat3(&target));
+}
+
+XMVECTOR CAM::GetTarget()
+{
+	return tgt_;
 }
 
 void CAM::SetFOV(float fov)
