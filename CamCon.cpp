@@ -8,11 +8,12 @@ CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon")
 
 void CamCon::Initialize()
 {
-	trans.pos = { 0,3,-10 };
-	ray = { 0,0,1.0 ,0};
+	ray = CAM::GetTarget();
+	trans.rot.x = -0.4;
 
-	CAM::SetPosition(trans.pos);
-	CAM::SetTarget(ray);
+	XMFLOAT3 temp = { 6.5,5,-7 };
+	CAM::SetPosition(temp);
+	CAM::SetTarget(XMLoadFloat3(&temp) + CAM::GetPosition());
 }
 
 void CamCon::Update()
@@ -59,6 +60,7 @@ void CamCon::Move()
 
 		fvec.y = 0;
 		Temp = XMLoadFloat3(&fvec);
+		XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -83,7 +85,7 @@ void CamCon::Move()
 
 		fvec.y = 0;
 		Temp = XMLoadFloat3(&fvec);
-
+		XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -95,6 +97,7 @@ void CamCon::Move()
 		XMFLOAT3 material = { 0,1,0 };
 
 		vec = XMLoadFloat3(&material);
+		XMVector3Normalize(vec);
 
 		CAM::SetPosition(CAM::GetPosition() - vec * val);
 		CAM::SetTarget(CAM::GetTarget() - vec * val);
@@ -106,6 +109,7 @@ void CamCon::Move()
 		XMFLOAT3 material = { 0,1,0 };
 
 		vec = XMLoadFloat3(&material);
+		XMVector3Normalize(vec);
 
 		CAM::SetPosition(CAM::GetPosition() + vec * val);
 		CAM::SetTarget(CAM::GetTarget() + vec * val);
@@ -115,6 +119,7 @@ void CamCon::Move()
 	{
 		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
+		XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -124,6 +129,7 @@ void CamCon::Move()
 	{
 		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
+		XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() + Temp * val);
 		CAM::SetTarget(CAM::GetTarget() + Temp * val);
@@ -132,47 +138,49 @@ void CamCon::Move()
 
 void CamCon::Roll()
 {
-	XMVECTOR mig = CAM::GetTarget() - CAM::GetPosition();
-
-	XMMATRIX MAT =
-	{
-		1,0,0,0,
-		0,1,0,0,
-		0,0,1,0,
-		0,0,0,1
-	};
-
 	double val = 0.015;
 
 	
 	if (Input::IsKey(DIK_LEFTARROW))
 	{
-		XMMATRIX mat = XMMatrixRotationY(-val);
-		MAT = MAT * mat;
+		trans.rot.y -= val;
 
 	}
 	if (Input::IsKey(DIK_RIGHTARROW))
 	{
-		XMMATRIX mat = XMMatrixRotationY(val);
-		MAT = MAT * mat;
+		trans.rot.y += val;
 
 	}
 	
 	if (Input::IsKey(DIK_UPARROW))
 	{
-		XMMATRIX mat = XMMatrixRotationX(-val);
-		MAT = MAT * mat;
+		trans.rot.x += val;
 
 	}
 	if (Input::IsKey(DIK_DOWNARROW))
 	{
-		XMMATRIX mat = XMMatrixRotationX(val);
-		MAT = MAT * mat;
-
+		trans.rot.x -= val;
 	}
 
-	auto rot = XMQuaternionRotationMatrix(MAT);
-	auto out = XMVector3Rotate(mig, rot);
+	if (trans.rot.x > XMConvertToRadians(89.9f))	trans.rot.x = XMConvertToRadians(89.9);
+	if (trans.rot.x < XMConvertToRadians(-89.9f))		trans.rot.x = XMConvertToRadians(-89.9);
 
-	CAM::SetTarget(out);
+	XMMATRIX rot_x = 
+	{
+	 1 ,          0,					 0,					 0,
+	 0,           cosf(trans.rot.x),     -sinf(trans.rot.x),    0,
+	 0,           sinf(trans.rot.x),     cosf(trans.rot.x),     0,
+	 0,           0,					 0,						1
+	};
+	XMMATRIX rot_y = 
+	{
+	cosf(trans.rot.y), 0,               -sinf(trans.rot.y),     0,
+	0,				   1,               0,						0,
+	sinf(trans.rot.y), 0,               cosf(trans.rot.y) ,     0,
+	0,				   0,               0,						1
+	};
+
+	XMVECTOR out = XMVector3TransformCoord(ray, rot_x * rot_y);
+
+	CAM::SetTarget(out + CAM::GetPosition());
 }

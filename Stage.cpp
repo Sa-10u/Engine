@@ -26,7 +26,8 @@ void Stage::Initialize()
 	for (int x = 0; x < XSIZE; x++) {
 		for (int z = 0; z < ZSIZE; z++) {
 			
-			Table[x* XSIZE + z] = model_[(x + z) % 5];
+			Table[x* XSIZE + z].blk = BLOCKTYPE((x + z) % 5);
+			Table[x * XSIZE + z].height = z / 4;
 		}
 	}
 	
@@ -40,10 +41,16 @@ void Stage::Draw()
 {
 	for (int x = 0; x < XSIZE; x++) {
 		for (int z = 0; z < ZSIZE; z++) {
-			Trans sttrans;
-			sttrans.pos = { (float)x,0 ,(float)z };
 
-			Model::Draw(&Table[x*XSIZE + z], &sttrans, SHADER_TYPE::SHADER_2D);
+			Trans sttrans;
+			for (int i = 0; i <= Table[x * XSIZE + z].height; i++) {
+
+				sttrans.pos = { (float)x,static_cast<float>(i) ,(float)z };
+
+				auto number = static_cast<int>(Table[x * XSIZE + z].blk);
+
+				Model::Draw(&number, &sttrans, SHADER_TYPE::SHADER_2D);
+			}
 		}
 	}
 	
@@ -55,10 +62,10 @@ void Stage::Release()
 
 void Stage::SetBlockType(int x, int y, BLOCKTYPE type)
 {
-	Table[x * XSIZE + y] = model_[static_cast<int>(type)];
+	Table[x * XSIZE + y].blk = type;
 }
 
 BLOCKTYPE Stage::GetBlockType(int x, int y)
 {
-	return static_cast<BLOCKTYPE>(Table[x * XSIZE + y]);
+	return static_cast<BLOCKTYPE>(Table[x * XSIZE + y].blk);
 }

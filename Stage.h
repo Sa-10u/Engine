@@ -15,6 +15,13 @@ enum class BLOCKTYPE
 	AMMOUNT
 };
 
+struct Block
+{
+public:
+	BLOCKTYPE blk;
+	float height;
+};
+
 class Stage : public GOBJ
 {
 public:
@@ -39,5 +46,5 @@ public:
 
 protected:
 	int model_[5];
-	int Table[XSIZE * ZSIZE];
+	Block Table[XSIZE * ZSIZE];
 };
