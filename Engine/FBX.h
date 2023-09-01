@@ -9,6 +9,7 @@
 #include "D3D.h"
 #include"M_Quad.h"
 #include"LIGHTMANAGER.h"
+#include "DirectXCollision.h"
 
 using namespace std;
 
@@ -39,6 +40,8 @@ public:
 
 	void InitCB();
 
+	bool RayCast(RAYCAST_DATA* data);
+
 private:
 
 	void Set(LOBJ *lght , int i ,CONSTANT_BUFFER* cb);
@@ -56,6 +59,9 @@ private:
 	ID3D11Buffer* cb;
 	MATERIAL* list_material;
 	LIGHTMANAGER::LightGroup* lght_;
+
+	VERTEX *pVxs_;
+	int **pInds_;
 
 	int* indcnt_;
 };

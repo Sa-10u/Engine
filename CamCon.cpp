@@ -32,9 +32,9 @@ void CamCon::Release()
 
 void CamCon::Move()
 {
-	XMVECTOR temp;
-	temp = CAM::GetTarget() - CAM::GetPosition();
-	temp = XMVector3Normalize(temp);
+	XMVECTOR way;
+	way = CAM::GetTarget() - CAM::GetPosition();
+	way = XMVector3Normalize(way);
 
 	static double pie_ = 3.141592;
 
@@ -42,8 +42,8 @@ void CamCon::Move()
 
 	if (Input::IsKey(DIK_W)) 
 	{
-		CAM::SetPosition(CAM::GetPosition() + temp * val);
-		CAM::SetTarget(CAM::GetTarget() + temp * val);
+		CAM::SetPosition(CAM::GetPosition() + way * val);
+		CAM::SetTarget(CAM::GetTarget() + way * val);
 	}
 	if (Input::IsKey(DIK_A))
 	{
@@ -54,7 +54,7 @@ void CamCon::Move()
 		sinf(pie_ / 2), 0,               cosf(pie_ / 2) ,  0,
 		0,				0,               0,                1
 		};
-		auto Temp = XMVector3TransformCoord(temp, mat);
+		auto Temp = XMVector3TransformCoord(way, mat);
 		XMFLOAT3 fvec;
 		XMStoreFloat3(&fvec, Temp);
 
@@ -67,8 +67,8 @@ void CamCon::Move()
 	}
 	if (Input::IsKey(DIK_S))
 	{
-		CAM::SetPosition(CAM::GetPosition() - temp * val);
-		CAM::SetTarget(CAM::GetTarget() - temp * val);
+		CAM::SetPosition(CAM::GetPosition() - way * val);
+		CAM::SetTarget(CAM::GetTarget() - way * val);
 	}
 	if (Input::IsKey(DIK_D)) 
 	{
@@ -79,7 +79,7 @@ void CamCon::Move()
 		sinf(-pie_ / 2), 0,           cosf(-pie_ / 2) ,     0,
 		0,				 0,           0,					1
 		};
-		auto Temp = XMVector3TransformCoord(temp, mat);
+		auto Temp = XMVector3TransformCoord(way, mat);
 		XMFLOAT3 fvec;
 		XMStoreFloat3(&fvec, Temp);
 
@@ -117,7 +117,7 @@ void CamCon::Move()
 
 	if (Input::IsKey(DIK_Z))
 	{
-		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
+		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
 		XMVector3Normalize(Temp);
 
@@ -127,7 +127,7 @@ void CamCon::Move()
 
 	if (Input::IsKey(DIK_X))
 	{
-		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, temp);
+		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
 		XMVector3Normalize(Temp);
 

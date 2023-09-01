@@ -130,7 +130,7 @@ void Fbx::SetShaderType(SHADER_TYPE type_)
 
 HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 {
-	VERTEX* vx = new VERTEX[vertex];
+	pVxs_ = new VERTEX[vertex];
 
 	for (unsigned long int i = 0; i < polygon; i++) {
 		for (int j = 0; j < TRIANGLE; j++) {
@@ -138,16 +138,16 @@ HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 			int index = Fmesh->GetPolygonVertex(i, j);
 
 			FbxVector4 pos = Fmesh->GetControlPointAt(index);
-			vx[index].pos = XMVectorSet((float)pos[0], (float)pos[1], (float)pos[2], 0.0f);
+			pVxs_[index].pos = XMVectorSet((float)pos[0], (float)pos[1], (float)pos[2], 0.0f);
 
 			FbxLayerElementUV* pUV = Fmesh->GetLayer(0)->GetUVs();
 			int uvIndex = Fmesh->GetTextureUVIndex(i, j, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
-			vx[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0 - uv.mData[1]), 0.0f, 0.0f);
+			pVxs_[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0 - uv.mData[1]), 0.0f, 0.0f);
 
 			FbxVector4 Normal;
 			Fmesh->GetPolygonVertexNormal(i, j, Normal);	//ｉ番目のポリゴンの、ｊ番目の頂点の法線をゲット
-			vx[index].normal = XMVectorSet((float)Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
+			pVxs_[index].normal = XMVectorSet((float)Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
 		}
 
 	}
@@ -162,7 +162,7 @@ HRESULT Fbx::InitVerticies(fbxsdk::FbxMesh* Fmesh)
 		bd_vertex.MiscFlags = 0;
 		bd_vertex.StructureByteStride = 0;
 		D3D11_SUBRESOURCE_DATA data_vertex;
-		data_vertex.pSysMem = vx;
+		data_vertex.pSysMem = pVxs_;
 		HRESULT hr = D3D::pDevice_->CreateBuffer(&bd_vertex, &data_vertex, &vb);
 
 		if (hr != S_OK)
@@ -181,11 +181,15 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 	ib = new ID3D11Buffer* [material];
 
 	indcnt_ = new int[material];
-	int* ind = new int[polygon * 3];
+
+	pInds_ = new int*[material];
+
 
 	for (int i = 0; i < material; i++) {
 
 		int cnt = 0;
+		pInds_[i] = new int[polygon * 3];
+
 
 		for (uint32_t j = 0; j < polygon; j++) {
 
@@ -195,7 +199,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 			if (mtlId == i)
 			{
 				for (DWORD vertex = 0; vertex < 3; vertex++) {
-					ind[cnt] = Fmesh->GetPolygonVertex(j, vertex);
+					pInds_[i][cnt] = Fmesh->GetPolygonVertex(j, vertex);
 					cnt++;
 				}
 			}
@@ -212,7 +216,7 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 		bd.MiscFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData;
-		InitData.pSysMem = ind;
+		InitData.pSysMem = *pInds_;
 		InitData.SysMemPitch = 0;
 		InitData.SysMemSlicePitch = 0;
 
@@ -227,7 +231,6 @@ HRESULT Fbx::InitIndexes(fbxsdk::FbxMesh* Fmesh)
 		}
 
 	}
-	delete[] ind;
 
 	return S_OK;
 	
@@ -294,6 +297,30 @@ void Fbx::InitCB()
 		D3D::pDevice_->CreateBuffer(&cb, nullptr, &(this->cb));
 
 	}
+}
+
+bool Fbx::RayCast(RAYCAST_DATA* data)
+{
+	for (int i = 0; i < material; i++) {
+		for (int j = 0; j < indcnt_[i] / 3; j++) {
+
+			auto poly = j * 3;
+
+			int i0 = pInds_[i][poly + 0];
+			int i1 = pInds_[i][poly + 1];
+			int i2 = pInds_[i][poly + 2];
+
+			XMVECTOR v0 = pVxs_[i0].pos;
+			XMVECTOR v1 = pVxs_[i1].pos;
+			XMVECTOR v2 = pVxs_[i2].pos;
+
+			data->isHit = TriangleTests::Intersects(XMLoadFloat3(&data->begin), XMLoadFloat3(&data->end), v0, v1, v2, data->distance);
+
+			if (data->isHit)	return 1;
+		}
+	}
+
+	return false;
 }
 
 void Fbx::Set(LOBJ *lght ,int i , CONSTANT_BUFFER* cb)

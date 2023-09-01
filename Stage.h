@@ -43,6 +43,8 @@ public:
 
 	void SetBlockType(int x, int y, BLOCKTYPE type);
 	BLOCKTYPE GetBlockType(int x,int y);
+	void SetHeight(int x, int y, int h);
+	int GetHeight(int x, int y);
 
 protected:
 	int model_[5];

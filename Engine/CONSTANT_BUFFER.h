@@ -64,3 +64,11 @@ struct S_LIGHT
 	XMFLOAT4 color;
 	float strength;
 };
+
+struct RAYCAST_DATA
+{
+	XMFLOAT3 begin;
+	XMFLOAT3 end;
+	bool isHit;
+	float distance;
+};

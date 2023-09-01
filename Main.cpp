@@ -23,17 +23,6 @@ namespace WIN
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
-    XMVECTOR ray_beg = XMVectorSet(1, 5, 1, 1);
-    XMVECTOR ray_end = XMVectorSet(0, -1, 0, 1);
-
-    XMVECTOR p1 = XMVectorSet(0, 0, 0, 1);
-    XMVECTOR p2 = XMVectorSet(0, 0, 3, 1);
-    XMVECTOR p3 = XMVectorSet(3, 0, 0, 1);
-
-    float ray_length;
-    
-    bool ray_res = TriangleTests::Intersects(ray_beg, ray_end, p1, p2, p3, ray_length);
-
     RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
     AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
     int winW = winRect.right - winRect.left;     
@@ -78,7 +67,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     
     RootOBJ* ROBJ = new RootOBJ(nullptr);
     ROBJ->Initialize();
-
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));

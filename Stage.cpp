@@ -69,3 +69,13 @@ BLOCKTYPE Stage::GetBlockType(int x, int y)
 {
 	return static_cast<BLOCKTYPE>(Table[x * XSIZE + y].blk);
 }
+
+void Stage::SetHeight(int x, int y, int h)
+{
+	Table[x * XSIZE + y].height = h;
+}
+
+int Stage::GetHeight(int x, int y)
+{
+	return Table[x * XSIZE + y].height;
+}
