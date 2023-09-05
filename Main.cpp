@@ -7,10 +7,19 @@
 #include "Engine/RootOBJ.h"
 #include "Engine/Model.h"
 #include "DirectXCollision.h"
+#include "resource.h"
 
 #pragma comment(lib,"winmm.lib")
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+    switch (msg)
+    {
+
+    }
+    return FALSE;
+}
 
 namespace WIN
 {
@@ -70,6 +79,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
+
+    HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, (DLGPROC)DialogProc);
+
     while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))

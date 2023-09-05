@@ -66,6 +66,12 @@
     <ClCompile Include="Engine\SceneManager.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="CamCon.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Celllook.hlsl">
@@ -144,5 +150,19 @@
     <ClInclude Include="Engine\SceneManager.h">
       <Filter>Header\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="CamCon.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Map_Editor.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
