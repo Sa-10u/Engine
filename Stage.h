@@ -45,8 +45,30 @@ public:
 	BLOCKTYPE GetBlockType(int x,int y);
 	void SetHeight(int x, int y, int h);
 	int GetHeight(int x, int y);
+	BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 
 protected:
 	int model_[5];
 	Block Table[XSIZE * ZSIZE];
+
+	enum class MODE
+	{
+		UP,
+		DOWN,
+		CHANGE,
+	};
+	enum class select_
+	{
+		DEFAULT,
+		BRICK,
+		GRASS,
+		SAND,
+		WATER,
+
+		AMMOUNT
+
+	};
+
+	short mode_;
+	short select_;
 };

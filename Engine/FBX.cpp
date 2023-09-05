@@ -314,12 +314,12 @@ bool Fbx::RayCast(RAYCAST_DATA* data)
 			XMVECTOR v1 = pVxs_[i1].pos;
 			XMVECTOR v2 = pVxs_[i2].pos;
 
-			data->isHit = TriangleTests::Intersects(XMLoadFloat3(&data->begin), XMLoadFloat3(&data->end), v0, v1, v2, data->distance);
+			data->isHit = TriangleTests::Intersects(XMVector4Normalize(XMLoadFloat3(&data->begin)), XMVector4Normalize(XMLoadFloat3(&data->end)), v0, v1, v2, data->distance);
 
 			if (data->isHit)	return 1;
 		}
 	}
-
+	data->distance = -1;
 	return false;
 }
 

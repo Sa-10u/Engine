@@ -8,18 +8,13 @@
 #include "Engine/Model.h"
 #include "DirectXCollision.h"
 #include "resource.h"
+#include"Stage.h"
 
 #pragma comment(lib,"winmm.lib")
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
-{
-    switch (msg)
-    {
 
-    }
-    return FALSE;
-}
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 
 namespace WIN
 {
@@ -29,6 +24,8 @@ namespace WIN
     const int _HEIGHT = 600 ;
     const int _WIDTH = 800;
 }
+
+RootOBJ* ROBJ = new RootOBJ(nullptr);
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -74,13 +71,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     CAM::Initialize();
     Input::Initialize(hWnd);
     
-    RootOBJ* ROBJ = new RootOBJ(nullptr);
     ROBJ->Initialize();
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
 
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, (DLGPROC)DialogProc);
+    ShowWindow(hDlg, SW_NORMAL);
 
     while (msg.message != WM_QUIT)
     {
@@ -156,7 +153,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);  
         return 0;
+
+    case WM_MOUSEMOVE : 
+        Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+        return 0;
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+    Stage* st = dynamic_cast<Stage*>(ROBJ->FindObject_Child("Stage"));
+    return st->DialogProc(hDlg, msg, wp, lp);
+}

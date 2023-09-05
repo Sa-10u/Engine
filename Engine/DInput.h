@@ -1,5 +1,6 @@
 #pragma once
 
+#include <DirectXMath.h>
 #include<dInput.h>
 #include "MACRO.h"
 
@@ -14,5 +15,15 @@ namespace Input
 	bool IsKeyDown(int code);
 	bool IsKeyUp(int code);
 	void Release();
+
+	bool IsMouseButton(int code);
+	bool IsMouseButtonDown(int code);
+	bool IsMouseButtonUp(int code);
+
+	XMFLOAT3 GetMousePosition();
+	XMFLOAT3 GetMouseMove();
+
+	void SetMousePosition(XMFLOAT3 pos);
+	void SetMousePosition(int x ,int y);
 };
 
