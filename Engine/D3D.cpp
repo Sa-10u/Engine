@@ -18,14 +18,19 @@ namespace D3D
         ID3D11InputLayout* lo = nullptr;
         ID3D11RasterizerState* rs = nullptr;
     }shader_bundle[static_cast<int>(SHADER_TYPE::SHADER_AMMOUNT)];
+
+    int Width_;
+    int Height_;
 }
 
 
 
 HRESULT D3D::Initialize(int winW ,int winH,HWND hwnd)
 {
+    Width_ = winW;
+    Height_ = winH;
+
     HRESULT hr = E_FAIL;
-    
 
     DXGI_SWAP_CHAIN_DESC scDesc;
 

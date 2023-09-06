@@ -1,6 +1,7 @@
 #include "Stage.h"
 #include "Engine/Model.h"
 #include "resource.h"
+#include "Engine/DInput.h"
 
 Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage")
 {
@@ -36,6 +37,54 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
+	float w = static_cast<float>(D3D::Width_ / 2);
+	float h = static_cast<float>(D3D::Height_ / 2);
+
+	XMMATRIX vp =
+	{
+		w,	0,	0,	0,
+		0, -h,	0,	0,
+		0,	0,	1,	0,
+		w,	h,	0,	1,
+	};
+
+	XMMATRIX inv_vp = XMMatrixInverse(nullptr, vp);
+	XMMATRIX inv_proj = XMMatrixInverse(nullptr, CAM::projMat_);
+	XMMATRIX inv_view = XMMatrixInverse(nullptr, CAM::viewMat_);
+
+	XMFLOAT3 mousePosFront = {};
+	{
+		mousePosFront.x = Input::GetMousePosition().x;
+		mousePosFront.y = Input::GetMousePosition().y;
+	}
+
+	XMVECTOR Front = XMLoadFloat3(&mousePosFront);
+	Front = XMVector3Transform(Front,(inv_view * inv_proj * inv_vp));
+	XMStoreFloat3(&mousePosFront, Front);
+
+
+	XMFLOAT3 mousePosBack = {};
+	{
+		mousePosBack.z = 1.0f;
+
+		mousePosBack.x = Input::GetMousePosition().x;
+		mousePosBack.y = Input::GetMousePosition().y;
+	}
+
+	XMVECTOR Back = XMLoadFloat3(&mousePosBack);
+	Back = XMVector3Transform(Back, (inv_view * inv_proj * inv_vp));
+	XMStoreFloat3(&mousePosBack, Back);
+
+	RAYCAST_DATA ray = {};
+	ray.begin = mousePosFront;
+	ray.end = mousePosBack;
+	
+	int num = 0;
+
+	if (Model::RayCast(&num, &ray))
+	{
+		int i = true;
+	}
 }
 
 void Stage::Draw()
@@ -102,8 +151,8 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	}
 		return true;	
 
-	 case WM_COMMAND:	select_ = static_cast<int>(SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, NULL, NULL));
-						mode_ = LOWORD(wp) - IDR_UP;
+	 case WM_COMMAND:	select_ = static_cast<SELECT>(SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, NULL, NULL));
+						mode_ = static_cast<MODE>(LOWORD(wp) - IDR_UP);
 						return true;
 
 	}

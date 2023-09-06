@@ -39,6 +39,7 @@ namespace D3D
 	
 	extern ID3D11Device* pDevice_;		//デバイス
 	extern ID3D11DeviceContext* pContext_;
-
+	extern int Width_;
+	extern int Height_;
 	
 }

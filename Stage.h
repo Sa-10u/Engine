@@ -57,7 +57,7 @@ protected:
 		DOWN,
 		CHANGE,
 	};
-	enum class select_
+	enum class SELECT
 	{
 		DEFAULT,
 		BRICK,
@@ -69,6 +69,6 @@ protected:
 
 	};
 
-	short mode_;
-	short select_;
+	MODE mode_;
+	SELECT select_;
 };

@@ -88,3 +88,8 @@ void Model::SetLightGroup(int* model_, LIGHTMANAGER::LightGroup* grp)
 	models_[*model_]->model_->SetLightGroup(grp);
 }
 
+bool Model::RayCast(int* num, RAYCAST_DATA* data)
+{
+	return models_[*num]->model_->RayCast(data);
+}
+

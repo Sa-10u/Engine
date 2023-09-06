@@ -60,7 +60,7 @@ void CamCon::Move()
 
 		fvec.y = 0;
 		Temp = XMLoadFloat3(&fvec);
-		XMVector3Normalize(Temp);
+		Temp = XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -85,7 +85,7 @@ void CamCon::Move()
 
 		fvec.y = 0;
 		Temp = XMLoadFloat3(&fvec);
-		XMVector3Normalize(Temp);
+		Temp = XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -97,7 +97,7 @@ void CamCon::Move()
 		XMFLOAT3 material = { 0,1,0 };
 
 		vec = XMLoadFloat3(&material);
-		XMVector3Normalize(vec);
+		vec = XMVector3Normalize(vec);
 
 		CAM::SetPosition(CAM::GetPosition() - vec * val);
 		CAM::SetTarget(CAM::GetTarget() - vec * val);
@@ -109,7 +109,7 @@ void CamCon::Move()
 		XMFLOAT3 material = { 0,1,0 };
 
 		vec = XMLoadFloat3(&material);
-		XMVector3Normalize(vec);
+		vec = XMVector3Normalize(vec);
 
 		CAM::SetPosition(CAM::GetPosition() + vec * val);
 		CAM::SetTarget(CAM::GetTarget() + vec * val);
@@ -119,7 +119,7 @@ void CamCon::Move()
 	{
 		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
-		XMVector3Normalize(Temp);
+		Temp = XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
@@ -129,7 +129,7 @@ void CamCon::Move()
 	{
 		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
-		XMVector3Normalize(Temp);
+		Temp = XMVector3Normalize(Temp);
 
 		CAM::SetPosition(CAM::GetPosition() + Temp * val);
 		CAM::SetTarget(CAM::GetTarget() + Temp * val);

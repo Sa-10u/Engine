@@ -22,4 +22,5 @@ namespace Model
 
 	void SetLightGroup(int* model_, LIGHTMANAGER::LightGroup* grp);
 
+	bool RayCast(int* number ,RAYCAST_DATA* data);
 }
