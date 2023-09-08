@@ -135,6 +135,7 @@ void Stage::Update()
 		XMFLOAT3 end = Input::GetMousePosition();
 		end.z = 1.0f;
 
+		RAYCAST_DATA ray = {};
 
 		for (int x = 0; x < XSIZE; x++) {
 			for (int z = 0; z < ZSIZE; z++) {
