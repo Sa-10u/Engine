@@ -37,54 +37,130 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
-	float w = static_cast<float>(D3D::Width_ / 2);
-	float h = static_cast<float>(D3D::Height_ / 2);
-
-	XMMATRIX vp =
+	if (Input::IsMouseButtonDown(0))
 	{
-		w,	0,	0,	0,
-		0, -h,	0,	0,
-		0,	0,	1,	0,
-		w,	h,	0,	1,
-	};
+		float w = static_cast<float>(D3D::Width_ / 2);
+		float h = static_cast<float>(D3D::Height_ / 2);
 
-	XMMATRIX inv_vp = XMMatrixInverse(nullptr, vp);
-	XMMATRIX inv_proj = XMMatrixInverse(nullptr, CAM::projMat_);
-	XMMATRIX inv_view = XMMatrixInverse(nullptr, CAM::viewMat_);
+		XMMATRIX vp =
+		{
+			w,	0,	0,	0,
+			0, -h,	0,	0,
+			0,	0,	1,	0,
+			w,	h,	0,	1,
+		};
 
-	XMFLOAT3 mousePosFront = {};
-	{
-		mousePosFront.x = Input::GetMousePosition().x;
-		mousePosFront.y = Input::GetMousePosition().y;
+		XMMATRIX inv_vp = XMMatrixInverse(nullptr, vp);
+		XMMATRIX inv_proj = XMMatrixInverse(nullptr, CAM::projMat_);
+		XMMATRIX inv_view = XMMatrixInverse(nullptr, CAM::viewMat_);
+
+		XMFLOAT3 mousePosFront = {};
+		{
+			XMFLOAT3 pos_x; XMStoreFloat3(&pos_x, CAM::GetPosition());
+
+			mousePosFront.x = Input::GetMousePosition().x;
+			mousePosFront.y = Input::GetMousePosition().y;
+			mousePosFront.z = 0.0f;
+		}
+
+		XMMATRIX matrix = inv_vp * inv_proj * inv_view;
+
+		XMVECTOR Front = XMLoadFloat3(&mousePosFront);
+		Front = XMVector3TransformCoord(Front, (matrix));
+		XMStoreFloat3(&mousePosFront, Front);
+
+
+		XMFLOAT3 mousePosBack = {};
+		{
+			mousePosBack.z = 1.0f;
+
+			mousePosBack.x = Input::GetMousePosition().x;
+			mousePosBack.y = Input::GetMousePosition().y;
+		}
+
+		XMVECTOR Back = XMLoadFloat3(&mousePosBack);
+		Back = XMVector3TransformCoord(Back, (matrix));
+		XMStoreFloat3(&mousePosBack, Back);
+
+		RAYCAST_DATA ray = {};
+		ray.begin = mousePosFront;
+		ray.end = mousePosBack - mousePosFront;
+		int num = 0;
+
+		for (int x = 0; x < XSIZE; x++) {
+			for (int z = 0; z < ZSIZE; z++) {
+				for (int y = 0; y < Table[XSIZE * x + z].height; y++) {
+
+					Trans trans;
+
+					trans.pos.x = x;
+					trans.pos.z = z;
+					trans.pos.y = y;
+
+					Model::SetTrans(&model_[0], &trans);
+
+					if (Model::RayCast(&model_[0], &ray))
+					{
+						OutputDebugString("Hit\n");
+					}
+					else
+					{
+						OutputDebugString("None\n");
+					}
+				}
+			}
+		}
 	}
 
-	XMVECTOR Front = XMLoadFloat3(&mousePosFront);
-	Front = XMVector3Transform(Front,(inv_view * inv_proj * inv_vp));
-	XMStoreFloat3(&mousePosFront, Front);
-
-
-	XMFLOAT3 mousePosBack = {};
+	if (Input::IsMouseButtonDown(1))
 	{
-		mousePosBack.z = 1.0f;
+		float w = static_cast<float>(D3D::Width_ / 2);
+		float h = static_cast<float>(D3D::Height_ / 2);
 
-		mousePosBack.x = Input::GetMousePosition().x;
-		mousePosBack.y = Input::GetMousePosition().y;
+		XMMATRIX vp =
+		{
+			w,	0,	0,	0,
+			0, -h,	0,	0,
+			0,	0,	1,	0,
+			w,	h,	0,	1,
+		};
+
+		XMMATRIX inv_vp = XMMatrixInverse(nullptr, vp);
+		XMMATRIX inv_proj = XMMatrixInverse(nullptr, CAM::projMat_);
+		XMMATRIX inv_view = XMMatrixInverse(nullptr, CAM::viewMat_);
+
+		XMFLOAT3 start = Input::GetMousePosition();
+		start.z = 0.0f;
+
+		XMFLOAT3 end = Input::GetMousePosition();
+		end.z = 1.0f;
+
+
+		for (int x = 0; x < XSIZE; x++) {
+			for (int z = 0; z < ZSIZE; z++) {
+				for (int y = 0; y < Table[XSIZE * x + z].height; y++) {
+
+					Trans trans;
+
+					trans.pos.x = x;
+					trans.pos.z = z;
+					trans.pos.y = y;
+
+					Model::SetTrans(&model_[0], &trans);
+
+					if (Model::RayCast(&model_[0], &ray))
+					{
+						OutputDebugString("Hit\n");
+					}
+					else
+					{
+						OutputDebugString("None\n");
+					}
+				}
+			}
+		}
 	}
 
-	XMVECTOR Back = XMLoadFloat3(&mousePosBack);
-	Back = XMVector3Transform(Back, (inv_view * inv_proj * inv_vp));
-	XMStoreFloat3(&mousePosBack, Back);
-
-	RAYCAST_DATA ray = {};
-	ray.begin = mousePosFront;
-	ray.end = mousePosBack;
-	
-	int num = 0;
-
-	if (Model::RayCast(&num, &ray))
-	{
-		int i = true;
-	}
 }
 
 void Stage::Draw()

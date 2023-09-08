@@ -37,13 +37,11 @@ namespace Input
     void Input::Update()
     {
         memcpy(prev_keyState, keyState, sizeof(keyState));
-
         pKeyDevice->Acquire();
         pKeyDevice->GetDeviceState(sizeof(keyState), &keyState);
 
-
-        mouseDevice->Acquire();
         memcpy(&prev_mouseState, &mouseState, sizeof(mouseState));
+        mouseDevice->Acquire();
         mouseDevice->GetDeviceState(sizeof(mouseState), &mouseState);
     }
 
@@ -73,11 +71,11 @@ namespace Input
     }
     bool IsMouseButtonDown(int code)
     {
-        return static_cast<bool>((mouseState.rgbButtons[code] & 0b10000000) & (~(mouseState.rgbButtons[code]) & 0b10000000));
+        return static_cast<bool>((mouseState.rgbButtons[code] & 0b10000000) & (~(prev_mouseState.rgbButtons[code]) & 0b10000000));
     }
     bool IsMouseButtonUp(int code)
     {
-        return static_cast<bool>(~(mouseState.rgbButtons[code] & 0b10000000) & ((mouseState.rgbButtons[code]) & 0b10000000));
+        return static_cast<bool>(~(mouseState.rgbButtons[code] & 0b10000000) & ((prev_mouseState.rgbButtons[code]) & 0b10000000));
     }
     XMFLOAT3 GetMousePosition()
     {
@@ -101,6 +99,6 @@ namespace Input
 
         std::string str = std::to_string(mousePosition.x) + ',' + std::to_string(mousePosition.y) + "\n";
 
-        OutputDebugString(str.c_str());
+       // OutputDebugString(str.c_str());
     }
 }
