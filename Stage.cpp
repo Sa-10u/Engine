@@ -70,6 +70,7 @@ void Stage::Update()
 		XMStoreFloat3(&mousePosFront, Front);
 
 
+
 		XMFLOAT3 mousePosBack = {};
 		{
 			mousePosBack.z = 1.0f;
@@ -98,10 +99,13 @@ void Stage::Update()
 					trans.pos.y = y;
 
 					Model::SetTrans(&model_[0], &trans);
+					Model::RayCast(&model_[0], &ray);
 
-					if (Model::RayCast(&model_[0], &ray))
+					if (ray.isHit)
 					{
 						OutputDebugString("Hit\n");
+						Table[XSIZE * x + z].height += 1;
+						break;
 					}
 					else
 					{
@@ -110,8 +114,9 @@ void Stage::Update()
 				}
 			}
 		}
+		
 	}
-
+	/*
 	if (Input::IsMouseButtonDown(1))
 	{
 		float w = static_cast<float>(D3D::Width_ / 2);
@@ -161,7 +166,7 @@ void Stage::Update()
 			}
 		}
 	}
-
+	*/
 }
 
 void Stage::Draw()

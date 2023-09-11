@@ -97,7 +97,7 @@ namespace Input
         mousePosition.y = y;
         mousePosition.z = 0;
 
-        std::string str = std::to_string(mousePosition.x) + ',' + std::to_string(mousePosition.y) + "\n";
+       // std::string str = std::to_string(mousePosition.x) + ',' + std::to_string(mousePosition.y) + "\n";
 
        // OutputDebugString(str.c_str());
     }
