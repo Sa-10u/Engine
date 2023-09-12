@@ -41,6 +41,20 @@ inline XMFLOAT3 operator- (const XMFLOAT3& th, const XMFLOAT3& se)
 	return XMFLOAT3(th.x - se.x, th.y - se.y, th.z - se.z);
 }
 
+inline XMFLOAT3 operator* (const XMFLOAT3& th, float val)
+{
+	return XMFLOAT3(th.x *val, th.y *val, th.z *val);
+}
+
+inline XMFLOAT3 operator* (const XMFLOAT3& th, int val)
+{
+	return XMFLOAT3(th.x * val, th.y * val, th.z * val);
+}
+
+inline XMFLOAT3 operator/ (const XMFLOAT3& th, int val)
+{
+	return XMFLOAT3(th.x / val, th.y / val, th.z / val);
+}
 inline double Pow_Length(const XMFLOAT3& th, const XMFLOAT3& se)
 {
 	return (pow(th.x - se.x, 2) + pow(th.y - se.y, 2) + pow(th.z - se.z, 2));

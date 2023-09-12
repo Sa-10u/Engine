@@ -22,7 +22,22 @@ public:
 
 	void Move();
 	void Roll();
+	void SetPrem();
 
 	XMVECTOR ray;
+
+	private:
+
+	bool isSetting_;
+
+	XMFLOAT3 prem_tgt;
+	XMFLOAT3 prem_pos;
+
+	XMFLOAT3 bef_tgt;
+	XMFLOAT3 bef_pos;
+
+	int count;
+
+	void ToPrem();
 };
 

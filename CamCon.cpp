@@ -1,6 +1,7 @@
 #include "CamCon.h"
 #include"Engine/CAM.h"
 #include "Engine/Trans.h"
+#include"Engine/MACRO.h"
 
 CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon")
 {
@@ -18,8 +19,17 @@ void CamCon::Initialize()
 
 void CamCon::Update()
 {
-	Move();
-	Roll();
+	switch (isSetting_)
+	{
+	case false: Move();
+				Roll();
+				SetPrem();
+				break;
+
+	case true: ToPrem();
+
+	default:return;
+	}
 }
 
 void CamCon::Draw()
@@ -37,16 +47,33 @@ void CamCon::Move()
 	way = XMVector3Normalize(way);
 
 	static double pie_ = 3.141592;
-
-	float val = 0.1;
-
-	if (Input::IsKey(DIK_W)) 
+	
+	if(!Input::IsKey(DIK_LCONTROL))
 	{
-		CAM::SetPosition(CAM::GetPosition() + way * val);
-		CAM::SetTarget(CAM::GetTarget() + way * val);
+		float tweak = (!Input::IsKey(DIK_LSHIFT)) * 8 +1;
+		auto wheel = Input::GetMouseMove().z * 0.001 *tweak;
+
+		CAM::SetPosition(CAM::GetPosition() + way * wheel);
+		CAM::SetTarget(CAM::GetTarget() + way * wheel);
 	}
-	if (Input::IsKey(DIK_A))
+	else
 	{
+		float tweak = (Input::IsKey(DIK_LSHIFT)) * -0.9 + 1;
+		auto val = Input::GetMouseMove().z * 0.01 * tweak;
+		XMVECTOR vec;
+		XMFLOAT3 material = { 0,1,0 };
+
+		vec = XMLoadFloat3(&material);
+		vec = XMVector3Normalize(vec);
+
+		CAM::SetPosition(CAM::GetPosition() - vec * val);
+		CAM::SetTarget(CAM::GetTarget() - vec * val);
+	}
+	
+	if (Input::IsMouseButton(1) && Input::IsKey(DIK_LALT))
+	{
+		auto val = Input::GetMouseMove().x * 0.05;
+
 		XMMATRIX mat =
 		{
 		cosf(pie_ / 2), 0,               -sinf(pie_ / 2),  0,
@@ -65,58 +92,10 @@ void CamCon::Move()
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
 	}
-	if (Input::IsKey(DIK_S))
+
+	if (Input::IsMouseButton(1) && Input::IsKey(DIK_LALT))
 	{
-		CAM::SetPosition(CAM::GetPosition() - way * val);
-		CAM::SetTarget(CAM::GetTarget() - way * val);
-	}
-	if (Input::IsKey(DIK_D)) 
-	{
-		XMMATRIX mat =
-		{
-		cosf(-pie_ / 2), 0,           -sinf(-pie_ / 2),     0,
-		0,				 1,           0,					0,
-		sinf(-pie_ / 2), 0,           cosf(-pie_ / 2) ,     0,
-		0,				 0,           0,					1
-		};
-		auto Temp = XMVector3TransformCoord(way, mat);
-		XMFLOAT3 fvec;
-		XMStoreFloat3(&fvec, Temp);
-
-		fvec.y = 0;
-		Temp = XMLoadFloat3(&fvec);
-		Temp = XMVector3Normalize(Temp);
-
-		CAM::SetPosition(CAM::GetPosition() - Temp * val);
-		CAM::SetTarget(CAM::GetTarget() - Temp * val);
-	}
-
-	if (Input::IsKey(DIK_Q))
-	{
-		XMVECTOR vec;
-		XMFLOAT3 material = { 0,1,0 };
-
-		vec = XMLoadFloat3(&material);
-		vec = XMVector3Normalize(vec);
-
-		CAM::SetPosition(CAM::GetPosition() - vec * val);
-		CAM::SetTarget(CAM::GetTarget() - vec * val);
-	}
-
-	if (Input::IsKey(DIK_E))
-	{
-		XMVECTOR vec;
-		XMFLOAT3 material = { 0,1,0 };
-
-		vec = XMLoadFloat3(&material);
-		vec = XMVector3Normalize(vec);
-
-		CAM::SetPosition(CAM::GetPosition() + vec * val);
-		CAM::SetTarget(CAM::GetTarget() + vec * val);
-	}
-
-	if (Input::IsKey(DIK_Z))
-	{
+		auto val = -Input::GetMouseMove().y * 0.05;
 		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
 		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
 		Temp = XMVector3Normalize(Temp);
@@ -125,41 +104,14 @@ void CamCon::Move()
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
 	}
 
-	if (Input::IsKey(DIK_X))
-	{
-		XMFLOAT3 fvec = {}; XMStoreFloat3(&fvec, way);
-		fvec.y = 0;		auto Temp = XMLoadFloat3(&fvec);
-		Temp = XMVector3Normalize(Temp);
-
-		CAM::SetPosition(CAM::GetPosition() + Temp * val);
-		CAM::SetTarget(CAM::GetTarget() + Temp * val);
-	}
 }
 
 void CamCon::Roll()
 {
-	double val = 0.015;
-
-	
-	if (Input::IsKey(DIK_LEFTARROW))
 	{
-		trans.rot.y -= val;
+		trans.rot.y += Input::GetMouseMove().x * 0.005  * (Input::IsMouseButton(1)* !Input::IsKey(DIK_LALT));
+		trans.rot.x += Input::GetMouseMove().y * -0.005 * (Input::IsMouseButton(1)* !Input::IsKey(DIK_LALT));
 
-	}
-	if (Input::IsKey(DIK_RIGHTARROW))
-	{
-		trans.rot.y += val;
-
-	}
-	
-	if (Input::IsKey(DIK_UPARROW))
-	{
-		trans.rot.x += val;
-
-	}
-	if (Input::IsKey(DIK_DOWNARROW))
-	{
-		trans.rot.x -= val;
 	}
 
 	if (trans.rot.x > XMConvertToRadians(89.9f))	trans.rot.x = XMConvertToRadians(89.9);
@@ -183,4 +135,41 @@ void CamCon::Roll()
 	XMVECTOR out = XMVector3TransformCoord(ray, rot_x * rot_y);
 
 	CAM::SetTarget(out + CAM::GetPosition());
+}
+
+void CamCon::SetPrem()
+{
+	if (Input::IsKeyDown(DIK_NUMPAD1))
+	{
+		isSetting_ = true;
+		XMStoreFloat3(&bef_pos,CAM::GetPosition());
+		XMStoreFloat3(&bef_tgt, CAM::GetTarget());
+
+		prem_pos = { 6.5,5,-7 };
+		prem_tgt = { 6.5,0, 0 };
+
+		count = 10;
+
+		return;
+	}
+
+}
+
+void CamCon::ToPrem()
+{
+	if (!(count > 0))
+	{
+		CAM::SetPosition(prem_pos);
+
+		isSetting_ = false;
+
+		return;
+	}
+	
+
+	XMFLOAT3 nowpos = (bef_pos * (10 - count) + prem_pos * (count - 10))/10 ;
+
+	count--;
+
+	CAM::SetPosition(nowpos);
 }

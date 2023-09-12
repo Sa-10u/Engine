@@ -44,8 +44,12 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
-	if (Input::IsMouseButtonDown(0))
+	static bool FLG = true;
+
+	if (Input::IsMouseButton(0))
 	{
+		
+
 		float w = static_cast<float>(D3D::Width_ / 2);
 		float h = static_cast<float>(D3D::Height_ / 2);
 
@@ -63,7 +67,6 @@ void Stage::Update()
 
 		XMFLOAT3 mousePosFront = {};
 		{
-			XMFLOAT3 pos_x; XMStoreFloat3(&pos_x, CAM::GetPosition());
 
 			mousePosFront.x = Input::GetMousePosition().x;
 			mousePosFront.y = Input::GetMousePosition().y;
@@ -130,15 +133,65 @@ void Stage::Update()
 		{
 			switch (mode_)
 			{
-			case MODE::UP:		Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height ++;  return;
-			case MODE::DOWN:	Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height > 0? Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height -- : NULL ; return;
+			case MODE::UP:		Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height < 5 && FLG ? Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height++ : NULL; FLG = false; return;
+			case MODE::DOWN:	Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height > 0 && FLG ? Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height-- : NULL; FLG = false; return;
 			case MODE::CHANGE:	Table[XSIZE * rank.blkpos.x + rank.blkpos.z].blk = select_; return;
 			default: return;
 			}
 			
 		}
 	}
-	
+
+	if(Input::IsMouseButtonUp(0))	FLG = true;
+
+	{
+		if (Input::IsKeyDown(DIK_A))
+		{
+			for (int x = 0; x < XSIZE; x++) {
+				for (int z = 0; z < ZSIZE; z++) {
+
+					if (Table[XSIZE * x + z].height < 5)	Table[x * XSIZE + z].height++;
+
+				}
+			}
+		}
+
+		if (Input::IsKeyDown(DIK_Z))
+		{
+			for (int x = 0; x < XSIZE; x++) {
+				for (int z = 0; z < ZSIZE; z++) {
+
+					if (Table[XSIZE * x + z].height > 0)	Table[x * XSIZE + z].height--;
+
+				}
+			}
+		}
+	}
+
+	{
+		if (Input::IsKeyDown(DIK_A) && Input::IsKey(DIK_LSHIFT))
+		{
+			for (int x = 0; x < XSIZE; x++) {
+				for (int z = 0; z < ZSIZE; z++) {
+
+					if (Table[XSIZE * x + z].height < 5)	Table[x * XSIZE + z].height = 5;
+
+				}
+			}
+		}
+
+		if (Input::IsKeyDown(DIK_Z) && Input::IsKey(DIK_LSHIFT))
+		{
+			for (int x = 0; x < XSIZE; x++) {
+				for (int z = 0; z < ZSIZE; z++) {
+
+					if (Table[XSIZE * x + z].height > 0)	Table[x * XSIZE + z].height = 0;
+
+				}
+			}
+		}
+	}
+
 }
 
 void Stage::Draw()

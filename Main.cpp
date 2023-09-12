@@ -79,6 +79,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, (DLGPROC)DialogProc);
     ShowWindow(hDlg, SW_NORMAL);
 
+    RECT rect_dlg;
+    GetWindowRect(hDlg, &rect_dlg);
+
+    int len = 800;
+
+    SetWindowPos(hDlg, nullptr, rect_dlg.left +len, rect_dlg.top, rect_dlg.right+len, rect_dlg.bottom, SW_NORMAL);
+
     while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
