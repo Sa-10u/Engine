@@ -67,8 +67,8 @@ struct S_LIGHT
 
 struct RAYCAST_DATA
 {
-	XMFLOAT3 begin;
-	XMFLOAT3 end;
+	XMFLOAT4 begin;
+	XMFLOAT4 end;
 	bool isHit;
 	float distance;
 };

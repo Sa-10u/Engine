@@ -91,12 +91,13 @@ void Model::SetLightGroup(int* model_, LIGHTMANAGER::LightGroup* grp)
 bool Model::RayCast(int* num, RAYCAST_DATA* data)
 {
 	XMMATRIX inv_wld = XMMatrixInverse(nullptr, models_[*num]->trans.GetWorldMatrix());
-	XMVECTOR st = XMLoadFloat3(&data->begin);
+	XMVECTOR st = XMLoadFloat4(&data->begin);
 	XMVECTOR end = 
 	{
 	data->begin.x + data->end.x,
 	data->begin.y + data->end.y,
 	data->begin.z + data->end.z,
+	data->begin.w + data->end.w,
 	};
 
 	st  = XMVector3TransformCoord(st, inv_wld);
@@ -104,8 +105,8 @@ bool Model::RayCast(int* num, RAYCAST_DATA* data)
 
 	end = end - st;
 
-	XMStoreFloat3(&data->begin, st);
-	XMStoreFloat3(&data->end, end);
+	XMStoreFloat4(&data->begin, st);
+	XMStoreFloat4(&data->end, end);
 	
 
 	return models_[*num]->model_->RayCast(data);

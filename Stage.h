@@ -19,7 +19,7 @@ struct Block
 {
 public:
 	BLOCKTYPE blk;
-	float height;
+	int height;
 };
 
 class Stage : public GOBJ
@@ -57,18 +57,8 @@ protected:
 		DOWN,
 		CHANGE,
 	};
-	enum class SELECT
-	{
-		DEFAULT,
-		BRICK,
-		GRASS,
-		SAND,
-		WATER,
-
-		AMMOUNT
-
-	};
+	
 
 	MODE mode_;
-	SELECT select_;
+	BLOCKTYPE select_;
 };

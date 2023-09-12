@@ -24,21 +24,15 @@ void SCENE_Test::Initialize()
 
 void SCENE_Test::Update()
 {
-	for (auto itr : children) {
-		itr->UpdateALL();
-	}
+	
 }
 
 void SCENE_Test::Release()
 {
-	for (auto itr : children) {
 
-	}
 }
 
 void SCENE_Test::Draw()
 {
-	for (auto itr : children) {
-		itr->DrawALL();
-	}
+	
 }

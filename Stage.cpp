@@ -7,6 +7,13 @@ Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage")
 {
 }
 
+struct HitBox
+{
+	int dir;
+	XMINT3 blkpos;
+	BLOCKTYPE type;
+};
+
 void Stage::Initialize()
 {
 	string base_ = "assets/";
@@ -29,7 +36,7 @@ void Stage::Initialize()
 		for (int z = 0; z < ZSIZE; z++) {
 			
 			Table[x* XSIZE + z].blk = BLOCKTYPE((x + z) % 5);
-			Table[x * XSIZE + z].height = z / 4;
+			Table[x * XSIZE + z].height = 0 ;
 		}
 	}
 	
@@ -67,8 +74,6 @@ void Stage::Update()
 
 		XMVECTOR Front = XMLoadFloat3(&mousePosFront);
 		Front = XMVector3TransformCoord(Front, (matrix));
-		XMStoreFloat3(&mousePosFront, Front);
-
 
 
 		XMFLOAT3 mousePosBack = {};
@@ -81,92 +86,59 @@ void Stage::Update()
 
 		XMVECTOR Back = XMLoadFloat3(&mousePosBack);
 		Back = XMVector3TransformCoord(Back, (matrix));
-		XMStoreFloat3(&mousePosBack, Back);
 
-		RAYCAST_DATA ray = {};
-		ray.begin = mousePosFront;
-		ray.end = mousePosBack - mousePosFront;
-		int num = 0;
+
+		
+
+		HitBox rank;
+		rank.dir = 9999.9f;
+		rank.blkpos.x = -1;
+		rank.blkpos.y = -1;
+		rank.blkpos.z = -1;
 
 		for (int x = 0; x < XSIZE; x++) {
 			for (int z = 0; z < ZSIZE; z++) {
-				for (int y = 0; y < Table[XSIZE * x + z].height; y++) {
+				for (int y = 0; y <= Table[XSIZE * x + z].height; y++) {
 
 					Trans trans;
 
 					trans.pos.x = x;
 					trans.pos.z = z;
 					trans.pos.y = y;
+
+					RAYCAST_DATA ray = {};
+					XMStoreFloat4(&ray.begin, Front);
+					XMStoreFloat4(&ray.end, Back - Front);
 
 					Model::SetTrans(&model_[0], &trans);
 					Model::RayCast(&model_[0], &ray);
 
-					if (ray.isHit)
+					if (ray.isHit && rank.dir >= ray.distance)
 					{
-						OutputDebugString("Hit\n");
-						Table[XSIZE * x + z].height += 1;
-						break;
-					}
-					else
-					{
-						OutputDebugString("None\n");
+						rank.blkpos.x = x;
+						rank.blkpos.z = z;
+						rank.blkpos.y = y;
+						rank.type = Table[XSIZE * x + z].blk;
+
+						rank.dir = ray.distance;
 					}
 				}
 			}
 		}
-		
-	}
-	/*
-	if (Input::IsMouseButtonDown(1))
-	{
-		float w = static_cast<float>(D3D::Width_ / 2);
-		float h = static_cast<float>(D3D::Height_ / 2);
 
-		XMMATRIX vp =
+		if (rank.blkpos.x >= 0 && rank.blkpos.z >= 0 && (rank.blkpos.y >=0 && rank.blkpos.y < 5))
 		{
-			w,	0,	0,	0,
-			0, -h,	0,	0,
-			0,	0,	1,	0,
-			w,	h,	0,	1,
-		};
-
-		XMMATRIX inv_vp = XMMatrixInverse(nullptr, vp);
-		XMMATRIX inv_proj = XMMatrixInverse(nullptr, CAM::projMat_);
-		XMMATRIX inv_view = XMMatrixInverse(nullptr, CAM::viewMat_);
-
-		XMFLOAT3 start = Input::GetMousePosition();
-		start.z = 0.0f;
-
-		XMFLOAT3 end = Input::GetMousePosition();
-		end.z = 1.0f;
-
-		RAYCAST_DATA ray = {};
-
-		for (int x = 0; x < XSIZE; x++) {
-			for (int z = 0; z < ZSIZE; z++) {
-				for (int y = 0; y < Table[XSIZE * x + z].height; y++) {
-
-					Trans trans;
-
-					trans.pos.x = x;
-					trans.pos.z = z;
-					trans.pos.y = y;
-
-					Model::SetTrans(&model_[0], &trans);
-
-					if (Model::RayCast(&model_[0], &ray))
-					{
-						OutputDebugString("Hit\n");
-					}
-					else
-					{
-						OutputDebugString("None\n");
-					}
-				}
+			switch (mode_)
+			{
+			case MODE::UP:		Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height ++;  return;
+			case MODE::DOWN:	Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height > 0? Table[XSIZE * rank.blkpos.x + rank.blkpos.z].height -- : NULL ; return;
+			case MODE::CHANGE:	Table[XSIZE * rank.blkpos.x + rank.blkpos.z].blk = select_; return;
+			default: return;
 			}
+			
 		}
 	}
-	*/
+	
 }
 
 void Stage::Draw()
@@ -233,7 +205,7 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	}
 		return true;	
 
-	 case WM_COMMAND:	select_ = static_cast<SELECT>(SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, NULL, NULL));
+	 case WM_COMMAND:	select_ = static_cast<BLOCKTYPE>(SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, NULL, NULL));
 						mode_ = static_cast<MODE>(LOWORD(wp) - IDR_UP);
 						return true;
 
@@ -241,3 +213,4 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 	return FALSE;
 }
+
