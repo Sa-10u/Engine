@@ -23,7 +23,7 @@ void child::Initialize()
 	Model::SetShader(&m_, SHADER_TYPE::SHADER_CELL3D);
 	
 	col = new SphereCol(1, this->trans.pos, this);
-	col->SetFunc(OnCol);
+	col->SetFunc(this->OnCol);
 
 	for (auto itr : GetParent()->GetChildren()) {
 		if (itr->GetName() == "Enemy")

@@ -47,7 +47,7 @@ void Collider::SetParent(GOBJ* p)
     parent_ = p;
 }
 
-void Collider::SetFunc(void (*rum)())
+void Collider::SetFunc(void (GOBJ::*rum)())
 {
     func = rum;
 }
@@ -61,7 +61,7 @@ void Collider::OnCol(GOBJ* tgt)
     
 }
 
-void Collider::OnCol(GOBJ* tgt, void rum())
+void Collider::OnCol(GOBJ* tgt, void (GOBJ::* rum)())
 {
     SetFunc(rum);
 
