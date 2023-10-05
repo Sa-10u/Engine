@@ -2,6 +2,7 @@
 #include"Engine/CAM.h"
 #include "Engine/Trans.h"
 #include"Engine/MACRO.h"
+#include "Stage.h"
 
 CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon")
 {
@@ -24,6 +25,7 @@ void CamCon::Update()
 	case false: Move();
 				Roll();
 				SetPrem();
+				Shortcut();
 				break;
 
 	case true: ToPrem();
@@ -153,6 +155,15 @@ void CamCon::SetPrem()
 		return;
 	}
 
+}
+
+void CamCon::Shortcut()
+{
+	if (Input::IsKey(DIK_LCONTROL) && Input::IsKeyDown(DIK_S))
+	{
+		Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
+		st->Save();
+	}
 }
 
 void CamCon::ToPrem()

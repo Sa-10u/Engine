@@ -261,9 +261,45 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	 case WM_COMMAND:	select_ = static_cast<BLOCKTYPE>(SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, NULL, NULL));
 						mode_ = static_cast<MODE>(LOWORD(wp) - IDR_UP);
 						return true;
-
 	}
 
+	
 	return FALSE;
+}
+
+void Stage::Save()
+{
+	fstream fs;
+	fs.open("Map.dat", ios::binary | ios::out);
+
+	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
+
+		fs.write(reinterpret_cast<char*>(&(Table[i].height)), sizeof(Table[i].height));
+		fs.write(reinterpret_cast<char*>(&(Table[i].blk)), sizeof(Table[i].blk));
+	}
+
+
+}
+
+void Stage::Load()
+{
+	fstream fs;
+	fs.open("Map.dat", ios::binary | ios::in);
+
+	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
+
+		fs.read(reinterpret_cast<char*>(&(Table[i].height)), sizeof(Table[i].height));
+		fs.read(reinterpret_cast<char*>(&(Table[i].blk)), sizeof(Table[i].blk));
+	}
+}
+
+void Stage::Reset()
+{
+
+	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
+
+		Table[i].height = 0;
+		Table[i].blk = BLOCKTYPE::BRICK;
+	}
 }
 

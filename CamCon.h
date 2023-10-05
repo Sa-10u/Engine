@@ -24,6 +24,8 @@ public:
 	void Roll();
 	void SetPrem();
 
+	void Shortcut();
+
 	XMVECTOR ray;
 
 	private:

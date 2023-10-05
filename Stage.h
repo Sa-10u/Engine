@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GOBJ.h"
+#include <fstream>
 
 const int XSIZE{ 15 };
 const int ZSIZE{ 15 };
@@ -46,6 +47,10 @@ public:
 	void SetHeight(int x, int y, int h);
 	int GetHeight(int x, int y);
 	BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
+
+	void Save();
+	void Load();
+	void Reset();
 
 protected:
 	int model_[5];

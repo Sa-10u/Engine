@@ -30,7 +30,7 @@ RootOBJ* ROBJ = new RootOBJ(nullptr);
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
     RECT winRect = { 0, 0, WIN::_WIDTH, WIN::_HEIGHT };
-    AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
+    AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, true);
     int winW = winRect.right - winRect.left;     
     int winH = winRect.bottom - winRect.top;
 
@@ -43,7 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
     wc.hIcon = LoadIcon(NULL, IDI_QUESTION); //アイコン
     wc.hIconSm = LoadIcon(NULL, IDI_QUESTION);   //小さいアイコン
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);   //マウスカーソル
-    wc.lpszMenuName = NULL;                     //メニュー（なし）
+    wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);                    //メニュー（なし）
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH); //背景（白）
@@ -164,6 +164,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_MOUSEMOVE : 
         Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
         return 0;
+
+    case WM_COMMAND :
+         {
+        Stage* st = dynamic_cast<Stage*>(ROBJ->FindObject_Child("Stage"));
+        if (wParam == ID_MNEW)   st->Reset();
+        if (wParam == ID_MSAVE)  st->Save();
+        if (wParam == ID_MLOAD)  st->Load();
+
+            return 0;
+         }
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
