@@ -3,7 +3,7 @@
 #include "resource.h"
 #include "Engine/DInput.h"
 
-Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage")
+Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.dat")
 {
 }
 
@@ -269,22 +269,61 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
+	OPENFILENAME ofn = {};
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.Flags = OFN_OVERWRITEPROMPT;
+	ofn.lpstrFile = fstr;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrDefExt = "dat";
+
+	bool sf;
+
+	sf = GetSaveFileName(&ofn);
+
+	if (sf == false) return;
+
 	fstream fs;
-	fs.open("Map.dat", ios::binary | ios::out);
+	fs.open(fstr, ios::binary | ios::out);
 
 	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
 
 		fs.write(reinterpret_cast<char*>(&(Table[i].height)), sizeof(Table[i].height));
 		fs.write(reinterpret_cast<char*>(&(Table[i].blk)), sizeof(Table[i].blk));
 	}
+}
 
+void Stage::Q_Save()
+{
+	fstream fs;
+	fs.open(fstr, ios::binary | ios::out);
 
+	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
+
+		fs.write(reinterpret_cast<char*>(&(Table[i].height)), sizeof(Table[i].height));
+		fs.write(reinterpret_cast<char*>(&(Table[i].blk)), sizeof(Table[i].blk));
+	}
 }
 
 void Stage::Load()
 {
+	OPENFILENAME ofn = {};
+	
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.Flags = OFN_FILEMUSTEXIST ;
+	ofn.lpstrFile = fstr;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrDefExt = "dat";
+
+	bool sf;
+
+	sf = GetOpenFileName(&ofn);
+
+	if (sf == false) return;
+
 	fstream fs;
-	fs.open("Map.dat", ios::binary | ios::in);
+	fs.open(fstr, ios::binary | ios::in);
 
 	for (auto i = 0; i < XSIZE * ZSIZE; ++i) {
 

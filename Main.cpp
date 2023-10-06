@@ -169,8 +169,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
          {
         Stage* st = dynamic_cast<Stage*>(ROBJ->FindObject_Child("Stage"));
         if (wParam == ID_MNEW)   st->Reset();
-        if (wParam == ID_MSAVE)  st->Save();
+        if (wParam == ID_MSAVE_SET)  st->Save();
         if (wParam == ID_MLOAD)  st->Load();
+        if (wParam == ID_MSAVE) st->Q_Save();
 
             return 0;
          }

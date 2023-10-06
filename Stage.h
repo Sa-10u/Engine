@@ -49,6 +49,7 @@ public:
 	BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 
 	void Save();
+	void Q_Save();
 	void Load();
 	void Reset();
 
@@ -66,4 +67,6 @@ protected:
 
 	MODE mode_;
 	BLOCKTYPE select_;
+
+	char fstr[MAX_PATH];
 };
