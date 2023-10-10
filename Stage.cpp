@@ -2,6 +2,7 @@
 #include "Engine/Model.h"
 #include "resource.h"
 #include "Engine/DInput.h"
+#include <sstream>
 
 Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.dat")
 {
@@ -16,6 +17,12 @@ struct HitBox
 
 void Stage::Initialize()
 {
+	/*	How to use getline !
+	char str[10] = {};
+	std::stringstream ss;
+	ss.getline(str,',');
+	*/
+
 	string base_ = "assets/";
 	string names_[static_cast<int>(BLOCKTYPE::AMMOUNT)] =
 	{
@@ -276,6 +283,7 @@ void Stage::Save()
 	ofn.lpstrFile = fstr;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.lpstrDefExt = "dat";
+	ofn.lpstrFilter = "バイナリデータ(***.dat)\0.dat\0\0";
 
 	bool sf;
 
