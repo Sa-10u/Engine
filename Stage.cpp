@@ -48,6 +48,10 @@ void Stage::Initialize()
 	}
 	
 	PutCommand();
+
+	//IND_cmd = 0;
+	fore_ = 0;
+	back_ = 0;
 }
 
 void Stage::Update()
@@ -210,6 +214,10 @@ void Stage::Update()
 		}
 	}
 
+	OutputDebugString(to_string(back_).c_str());
+	OutputDebugString(",");
+	OutputDebugString(to_string(IND_cmd).c_str());
+	OutputDebugString("\n");
 }
 
 void Stage::Draw()
@@ -228,8 +236,6 @@ void Stage::Draw()
 			}
 		}
 	}
-	
-	OutputDebugString(to_string(back_).c_str());
 }
 
 void Stage::Release()
@@ -370,51 +376,34 @@ void Stage::Reset()
 
 void Stage::PutCommand()
 {
-	memcpy(cmds[IND_cmd].Table, (this->Table), sizeof(Table));
-	IND_cmd++;	IND_cmd %= buffersize_;
+	memcpy(&cmds[IND_cmd], this->Table, sizeof(Table));
 	
+	IND_cmd++;	IND_cmd %= buffersize_;
 	back_++;
 	fore_ = 0;
 
-	back_ = std::clamp(back_, 0, buffersize_);
+	back_ = std::clamp(back_, 0, buffersize_ -1);
 }
 
 Command Stage::GetCommand()
 {
 	if (back_ > 0)
 	{
-		IND_cmd--;	
-		if (IND_cmd >= 0)
-		{
-			IND_cmd %= buffersize_;
-		}
-		else
-		{
-			IND_cmd += buffersize_;
-		}
-
 		back_--;
 		fore_++;
+		IND_cmd--;
 
-		fore_ = std::clamp(fore_, 0, buffersize_);
+		if (IND_cmd-1 < 0)
+		{
+			IND_cmd += buffersize_ ;
+		}
 	}
 
-	return this->cmds[IND_cmd];
-
+	return cmds[ IND_cmd-1 ];
 }
 
 Command Stage::ReGetCommand()
 {
-	if (fore_ > 0)
-	{
-		IND_cmd++;	IND_cmd %= buffersize_;
-
-		back_++;
-		fore_--;
-
-		back_ = std::clamp(back_, 0, buffersize_);
-	}
-
-	return this->cmds[IND_cmd];
+	return cmds[IND_cmd];
 }
 
