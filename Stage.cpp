@@ -47,6 +47,7 @@ void Stage::Initialize()
 		}
 	}
 	
+	PutCommand();
 }
 
 void Stage::Update()
@@ -154,7 +155,7 @@ void Stage::Update()
 	}
 
 	{
-		if (Input::IsKeyDown(DIK_A))
+		if (Input::IsKeyDown(DIK_A) && !Input::IsKey(DIK_LCONTROL))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -167,7 +168,7 @@ void Stage::Update()
 			PutCommand();
 		}
 
-		if (Input::IsKeyDown(DIK_Z))
+		if (Input::IsKeyDown(DIK_Z) && !Input::IsKey(DIK_LCONTROL))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -228,6 +229,7 @@ void Stage::Draw()
 		}
 	}
 	
+	OutputDebugString(to_string(back_).c_str());
 }
 
 void Stage::Release()
@@ -283,6 +285,11 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 	
 	return FALSE;
+}
+
+void Stage::SetSTG_CMD(Command cmd)
+{
+	memcpy(this->Table, cmd.Table, sizeof(Table));
 }
 
 void Stage::Save()
@@ -363,7 +370,7 @@ void Stage::Reset()
 
 void Stage::PutCommand()
 {
-	memcpy(reinterpret_cast<void*>(&cmds[IND_cmd]), reinterpret_cast<void*>(&this->Table), sizeof(Table));
+	memcpy(cmds[IND_cmd].Table, (this->Table), sizeof(Table));
 	IND_cmd++;	IND_cmd %= buffersize_;
 	
 	back_++;
@@ -376,7 +383,15 @@ Command Stage::GetCommand()
 {
 	if (back_ > 0)
 	{
-		IND_cmd--;	IND_cmd %= buffersize_;
+		IND_cmd--;	
+		if (IND_cmd >= 0)
+		{
+			IND_cmd %= buffersize_;
+		}
+		else
+		{
+			IND_cmd += buffersize_;
+		}
 
 		back_--;
 		fore_++;
