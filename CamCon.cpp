@@ -164,6 +164,12 @@ void CamCon::Shortcut()
 		Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
 		st->Q_Save();
 	}
+
+	if (Input::IsKeyDown(DIK_Z) && Input::IsKey(DIK_LSHIFT))
+	{
+		Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
+		st->
+	}
 }
 
 void CamCon::ToPrem()

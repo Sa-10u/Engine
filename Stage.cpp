@@ -3,9 +3,14 @@
 #include "resource.h"
 #include "Engine/DInput.h"
 #include <sstream>
+#include <algorithm>
 
-Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.dat")
+Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.map"),buffersize_(20)
 {
+	cmds = new Command[buffersize_];
+	IND_cmd = 0;
+	back_ = 0;
+	fore_ = 0;
 }
 
 struct HitBox
@@ -17,11 +22,6 @@ struct HitBox
 
 void Stage::Initialize()
 {
-	/*	How to use getline !
-	char str[10] = {};
-	std::stringstream ss;
-	ss.getline(str,',');
-	*/
 
 	string base_ = "assets/";
 	string names_[static_cast<int>(BLOCKTYPE::AMMOUNT)] =
@@ -55,8 +55,6 @@ void Stage::Update()
 
 	if (Input::IsMouseButton(0))
 	{
-		
-
 		float w = static_cast<float>(D3D::Width_ / 2);
 		float h = static_cast<float>(D3D::Height_ / 2);
 
@@ -149,7 +147,11 @@ void Stage::Update()
 		}
 	}
 
-	if(Input::IsMouseButtonUp(0))	FLG = true;
+	if (Input::IsMouseButtonUp(0))
+	{
+		FLG = true;
+		PutCommand();
+	}
 
 	{
 		if (Input::IsKeyDown(DIK_A))
@@ -161,6 +163,8 @@ void Stage::Update()
 
 				}
 			}
+
+			PutCommand();
 		}
 
 		if (Input::IsKeyDown(DIK_Z))
@@ -172,6 +176,8 @@ void Stage::Update()
 
 				}
 			}
+
+			PutCommand();
 		}
 	}
 
@@ -185,6 +191,8 @@ void Stage::Update()
 
 				}
 			}
+
+			PutCommand();
 		}
 
 		if (Input::IsKeyDown(DIK_Z) && Input::IsKey(DIK_LSHIFT))
@@ -196,6 +204,8 @@ void Stage::Update()
 
 				}
 			}
+
+			PutCommand();
 		}
 	}
 
@@ -222,6 +232,7 @@ void Stage::Draw()
 
 void Stage::Release()
 {
+	delete[] cmds;
 }
 
 void Stage::SetBlockType(int x, int y, BLOCKTYPE type)
@@ -282,8 +293,8 @@ void Stage::Save()
 	ofn.Flags = OFN_OVERWRITEPROMPT;
 	ofn.lpstrFile = fstr;
 	ofn.nMaxFile = MAX_PATH;
-	ofn.lpstrDefExt = "dat";
-	ofn.lpstrFilter = "バイナリデータ(***.dat)\0.dat\0\0";
+	ofn.lpstrDefExt = "Map";
+	ofn.lpstrFilter = "マップデータ(***.map)\0.map\0\0";
 
 	bool sf;
 
@@ -348,5 +359,47 @@ void Stage::Reset()
 		Table[i].height = 0;
 		Table[i].blk = BLOCKTYPE::BRICK;
 	}
+}
+
+void Stage::PutCommand()
+{
+	memcpy(reinterpret_cast<void*>(&cmds[IND_cmd]), reinterpret_cast<void*>(&this->Table), sizeof(Table));
+	IND_cmd++;	IND_cmd %= buffersize_;
+	
+	back_++;
+	fore_ = 0;
+
+	back_ = std::clamp(back_, 0, buffersize_);
+}
+
+Command Stage::GetCommand()
+{
+	if (back_ > 0)
+	{
+		IND_cmd--;	IND_cmd %= buffersize_;
+
+		back_--;
+		fore_++;
+
+		fore_ = std::clamp(fore_, 0, buffersize_);
+	}
+
+	return this->cmds[IND_cmd];
+
+}
+
+Command Stage::ReGetCommand()
+{
+	if (fore_ > 0)
+	{
+		IND_cmd++;	IND_cmd %= buffersize_;
+
+		back_++;
+		fore_--;
+
+		back_ = std::clamp(back_, 0, buffersize_);
+	}
+
+	return this->cmds[IND_cmd];
 }
 

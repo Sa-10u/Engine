@@ -4,6 +4,7 @@
 
 const int XSIZE{ 15 };
 const int ZSIZE{ 15 };
+struct Command;
 
 enum class BLOCKTYPE
 {
@@ -48,10 +49,16 @@ public:
 	int GetHeight(int x, int y);
 	BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 
+	void SetSTG_CMD(Command cmd);
+
 	void Save();
 	void Q_Save();
 	void Load();
 	void Reset();
+
+	void PutCommand();
+	Command GetCommand();
+	Command ReGetCommand();
 
 protected:
 	int model_[5];
@@ -64,9 +71,21 @@ protected:
 		CHANGE,
 	};
 	
+	int IND_cmd;
+	int back_;
+	int fore_;
+	const int buffersize_;
+	Command* cmds;
 
 	MODE mode_;
 	BLOCKTYPE select_;
 
 	char fstr[MAX_PATH];
+};
+
+//--------
+
+struct Command
+{
+	Block Table[XSIZE * ZSIZE];
 };
