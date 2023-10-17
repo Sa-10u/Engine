@@ -39,6 +39,7 @@ public:
 	XMFLOAT3 bef_pos;
 
 	int count;
+	int count_val;
 
 	void ToPrem();
 };

@@ -4,18 +4,23 @@
 #include"Engine/MACRO.h"
 #include "Stage.h"
 
-CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon")
+static const float rotX = -0.4f;
+
+CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon"),count_val(10)
 {
 }
 
 void CamCon::Initialize()
 {
 	ray = CAM::GetTarget();
-	trans.rot.x = -0.4;
+	XMStoreFloat3(&prem_tgt, (CAM::GetTarget()));
+	trans.rot.x = rotX;
 
 	XMFLOAT3 temp = { 6.5,5,-7 };
 	CAM::SetPosition(temp);
 	CAM::SetTarget(XMLoadFloat3(&temp) + CAM::GetPosition());
+
+	XMStoreFloat3(&prem_pos, CAM::GetPosition());
 }
 
 void CamCon::Update()
@@ -144,13 +149,11 @@ void CamCon::SetPrem()
 	if (Input::IsKeyDown(DIK_NUMPAD1))
 	{
 		isSetting_ = true;
+
 		XMStoreFloat3(&bef_pos,CAM::GetPosition());
-		XMStoreFloat3(&bef_tgt, CAM::GetTarget());
+		XMStoreFloat3(&bef_tgt,(CAM::GetTarget() ));
 
-		prem_pos = { 6.5,5,-7 };
-		prem_tgt = { 6.5,0, 0 };
-
-		count = 10;
+		count = 0;
 
 		return;
 	}
@@ -184,20 +187,28 @@ void CamCon::Shortcut()
 
 void CamCon::ToPrem()
 {
-	if (!(count > 0))
+	if ((count >= count_val))
 	{
+		trans.pos = XMFLOAT3{ 0,0,0 };
 		CAM::SetPosition(prem_pos);
+
+		trans.rot.x = rotX;
+		trans.rot.y = 0.0f;
+		trans.rot.z = 0.0f;
+		CAM::SetTarget(prem_tgt);
 
 		isSetting_ = false;
 
 		return;
 	}
+
+	//XMFLOAT3 nowpos = ((bef_pos * (count_val - count)) + (prem_pos * (count_val - (count_val - count)))) / count_val;
+	//CAM::SetPosition(nowpos);
+
+	XMFLOAT3 nowtgt = ((bef_tgt * (count_val - count)) + (prem_tgt * (count_val - (count_val - count)))) / count_val;
+	CAM::SetTarget(nowtgt);
+
+	count++;
+
 	
-
-	XMFLOAT3 nowpos = (bef_pos * (10 - count) + prem_pos * (count - 10))/10 ;
-	//XMFLOAT3 newrot = ()
-
-	count--;
-
-	CAM::SetPosition(nowpos);
 }
