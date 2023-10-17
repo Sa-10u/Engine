@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 
-Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.map"),buffersize_(20)
+Stage::Stage(GOBJ* parent):GOBJ(parent,"Stage"),fstr("Map.map"),buffersize_(32)
 {
 	cmds = new Command[buffersize_];
 	IND_cmd = 0;
@@ -159,7 +159,7 @@ void Stage::Update()
 	}
 
 	{
-		if (Input::IsKeyDown(DIK_A) && !Input::IsKey(DIK_LCONTROL))
+		if (Input::IsKeyDown(DIK_Q) && !Input::IsKey(DIK_LCONTROL))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -172,7 +172,7 @@ void Stage::Update()
 			PutCommand();
 		}
 
-		if (Input::IsKeyDown(DIK_Z) && !Input::IsKey(DIK_LCONTROL))
+		if (Input::IsKeyDown(DIK_A) && !Input::IsKey(DIK_LCONTROL))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -187,7 +187,7 @@ void Stage::Update()
 	}
 
 	{
-		if (Input::IsKeyDown(DIK_A) && Input::IsKey(DIK_LSHIFT))
+		if (Input::IsKeyDown(DIK_Q) && Input::IsKey(DIK_LSHIFT))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -200,7 +200,7 @@ void Stage::Update()
 			PutCommand();
 		}
 
-		if (Input::IsKeyDown(DIK_Z) && Input::IsKey(DIK_LSHIFT))
+		if (Input::IsKeyDown(DIK_A) && Input::IsKey(DIK_LSHIFT))
 		{
 			for (int x = 0; x < XSIZE; x++) {
 				for (int z = 0; z < ZSIZE; z++) {
@@ -217,6 +217,8 @@ void Stage::Update()
 	OutputDebugString(to_string(back_).c_str());
 	OutputDebugString(",");
 	OutputDebugString(to_string(IND_cmd).c_str());
+	OutputDebugString(",");
+	OutputDebugString(to_string(fore_).c_str());
 	OutputDebugString("\n");
 }
 
@@ -404,6 +406,19 @@ Command Stage::GetCommand()
 
 Command Stage::ReGetCommand()
 {
-	return cmds[IND_cmd];
+	if (fore_ > 0)
+	{
+		fore_--;
+		back_++;
+		IND_cmd++;
+		IND_cmd %= buffersize_;
+
+		if (IND_cmd - 1 < 0)
+		{
+			IND_cmd += buffersize_;
+		}
+	}
+
+	return cmds[IND_cmd - 1];
 }
 

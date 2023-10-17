@@ -159,18 +159,22 @@ void CamCon::SetPrem()
 
 void CamCon::Shortcut()
 {
+	static Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
 	if (Input::IsKey(DIK_LCONTROL) )
 	{
 		
 		if (Input::IsKeyDown(DIK_Z))
 		{
-			Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
 			st->SetSTG_CMD(st->GetCommand());
+		}
+
+		if (Input::IsKeyDown(DIK_R))
+		{
+			st->SetSTG_CMD(st->ReGetCommand());
 		}
 
 		if (Input::IsKeyDown(DIK_S))
 		{
-			Stage* st = dynamic_cast<Stage*>(parent_->FindObject_Child("Stage"));
 			st->Q_Save();
 		}
 		
