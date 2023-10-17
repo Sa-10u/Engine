@@ -195,6 +195,7 @@ void CamCon::ToPrem()
 	
 
 	XMFLOAT3 nowpos = (bef_pos * (10 - count) + prem_pos * (count - 10))/10 ;
+	//XMFLOAT3 newrot = ()
 
 	count--;
 
