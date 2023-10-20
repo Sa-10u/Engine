@@ -184,9 +184,7 @@ void CamCon::Shortcut()
 		{
 			st->Q_Save();
 		}
-		
 	}
-
 }
 
 void CamCon::ToPrem()
@@ -194,12 +192,10 @@ void CamCon::ToPrem()
 	if ((count >= count_val))
 	{
 		trans.pos = XMFLOAT3{ 0,0,0 };
-		CAM::SetPosition(prem_pos);
 
 		trans.rot.x = rotX;
 		trans.rot.y = 0.0f;
 		trans.rot.z = 0.0f;
-		CAM::SetTarget(prem_tgt);
 
 		isSetting_ = false;
 
