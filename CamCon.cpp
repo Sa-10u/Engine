@@ -13,7 +13,6 @@ CamCon::CamCon(GOBJ* parent):GOBJ(parent,"CamCon"),count_val(10)
 void CamCon::Initialize()
 {
 	ray = CAM::GetTarget();
-	XMStoreFloat3(&prem_tgt, (CAM::GetTarget()));
 	trans.rot.x = rotX;
 
 	XMFLOAT3 temp = { 6.5,5,-7 };
@@ -21,6 +20,8 @@ void CamCon::Initialize()
 	CAM::SetTarget(XMLoadFloat3(&temp) + CAM::GetPosition());
 
 	XMStoreFloat3(&prem_pos, CAM::GetPosition());
+	XMStoreFloat3(&prem_tgt, XMVector3Normalize((CAM::GetTarget())));
+
 }
 
 void CamCon::Update()
@@ -151,7 +152,7 @@ void CamCon::SetPrem()
 		isSetting_ = true;
 
 		XMStoreFloat3(&bef_pos,CAM::GetPosition());
-		XMStoreFloat3(&bef_tgt,(CAM::GetTarget() ));
+		XMStoreFloat3(&bef_tgt,XMVector3Normalize((CAM::GetTarget()) ));
 
 		count = 0;
 
