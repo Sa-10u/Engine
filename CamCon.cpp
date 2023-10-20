@@ -19,8 +19,9 @@ void CamCon::Initialize()
 	CAM::SetPosition(temp);
 	CAM::SetTarget(XMLoadFloat3(&temp) + CAM::GetPosition());
 
+	Roll();
 	XMStoreFloat3(&prem_pos, CAM::GetPosition());
-	XMStoreFloat3(&prem_tgt, XMVector3Normalize((CAM::GetTarget())));
+	XMStoreFloat3(&prem_tgt, (CAM::GetTarget()));
 
 }
 
@@ -50,6 +51,8 @@ void CamCon::Release()
 
 void CamCon::Move()
 {
+	prem_tgt;
+
 	XMVECTOR way;
 	way = CAM::GetTarget() - CAM::GetPosition();
 	way = XMVector3Normalize(way);
@@ -111,11 +114,11 @@ void CamCon::Move()
 		CAM::SetPosition(CAM::GetPosition() - Temp * val);
 		CAM::SetTarget(CAM::GetTarget() - Temp * val);
 	}
-
 }
 
 void CamCon::Roll()
 {
+	prem_tgt;
 	{
 		trans.rot.y += Input::GetMouseMove().x * 0.005  * (Input::IsMouseButton(1)* !Input::IsKey(DIK_LALT));
 		trans.rot.x += Input::GetMouseMove().y * -0.005 * (Input::IsMouseButton(1)* !Input::IsKey(DIK_LALT));
@@ -152,7 +155,7 @@ void CamCon::SetPrem()
 		isSetting_ = true;
 
 		XMStoreFloat3(&bef_pos,CAM::GetPosition());
-		XMStoreFloat3(&bef_tgt,XMVector3Normalize((CAM::GetTarget()) ));
+		XMStoreFloat3(&bef_tgt,(CAM::GetTarget() ));
 
 		count = 0;
 
@@ -203,12 +206,14 @@ void CamCon::ToPrem()
 		return;
 	}
 
-	//XMFLOAT3 nowpos = ((bef_pos * (count_val - count)) + (prem_pos * (count_val - (count_val - count)))) / count_val;
-	//CAM::SetPosition(nowpos);
+	XMFLOAT3 nowpos = ((bef_pos * (count_val - count)) + (prem_pos * (count_val - (count_val - count)))) / count_val;
+	CAM::SetPosition(nowpos);
+
+	XMFLOAT3 temp = {};
 
 	XMFLOAT3 nowtgt = ((bef_tgt * (count_val - count)) + (prem_tgt * (count_val - (count_val - count)))) / count_val;
 	CAM::SetTarget(nowtgt);
-
+	
 	count++;
 
 	
